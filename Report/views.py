@@ -8,17 +8,23 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework.views import APIView
 from Training.models import *
-# from Report.models import Package54Alignment , Package12Alignment
+
 
 
 ''' --------------------------Labour Camp Report View----------------------------'''
 
 
+# The `LabourcampReportPackageView` class is a view in a Django REST framework that retrieves previous
+# and latest data for a given package and labour camp name.
 class LabourcampReportPackageView(ListAPIView):
     serializer_class = LabourcampReportSerializer
     parser_classes = [MultiPartParser]
 
     def get(self, request, packages, labourCampName ,*args, **kwargs):
+        """
+        This function retrieves the previous and latest data for a given package and labour camp name.
+
+        """
         try:
             previous = LabourCamp.objects.filter(packages=packages, labourCampName=labourCampName ).order_by('-id')[1:]
            
@@ -37,18 +43,26 @@ class LabourcampReportPackageView(ListAPIView):
             return Response({'Message': 'There is no data available for this Package or Quarter',
                             'status' : 'Failed'}, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+# The `LabourCampReportQuarterView` class is a Django view that retrieves data from the `LabourCamp`
+# model based on the specified quarter, labour camp name, and year, and returns the previous and
+# latest data in a response.
 class LabourCampReportQuarterView(ListAPIView):
 
     serializer_class = LabourcampReportSerializer
     parser_classes = [MultiPartParser]
 
     def get(self, request, quarter, labourCampName, year, *args, **kwarges):
+        """
+        This function retrieves data from the LabourCamp model based on the specified quarter, labour
+        camp name, and year, and returns the previous and latest data in a response.
+        
+        """
         try:
-            previous = LabourCamp.objects.filter(
-                quarter=quarter, labourCampName=labourCampName, dateOfMonitoring__year=year).order_by('-id')[1:]
+            previous = LabourCamp.objects.filter(quarter=quarter, labourCampName=labourCampName, dateOfMonitoring__year=year).order_by('-id')[1:]
 
-            latest = LabourCamp.objects.filter(
-                quarter=quarter, labourCampName=labourCampName , dateOfMonitoring__year=year).latest('id')
+            latest = LabourCamp.objects.filter( quarter=quarter, labourCampName=labourCampName , dateOfMonitoring__year=year).latest('id')
             previousData = self.serializer_class(previous, many=True).data
             latestData = self.serializer_class(latest).data
 
@@ -423,8 +437,7 @@ class TreeMangementReportPackage(ListAPIView):
 
     def get(self, request, packages, *args, **kwargs):
         try:
-            data = ExistingTreeManagment.objects.filter(
-                packages=packages).order_by('-id')
+            data = ExistingTreeManagment.objects.filter(packages=packages).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
                                  'status' : 'success'},  status=status.HTTP_200_OK)

@@ -10,6 +10,7 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from django.db.models import Count
 from Training.models import *
+from .models import *
 import math
 # Create your views here.
 
@@ -86,7 +87,6 @@ class package09AlignmentView(generics.GenericAPIView):
                             'data': serializer},
                              status= 200)
       
-
 class package08AlignmentView(generics.GenericAPIView):
     serializer_class = Package08AlignmentSerializer  
     #permission_classes = [IsAuthenticated]
@@ -99,6 +99,31 @@ class package08AlignmentView(generics.GenericAPIView):
                             'data': serializer.data},
                              status= 200)
 
+class projectAffectedPersonsView(generics.GenericAPIView):
+    serializer_class = projectAffectedPersonsSerializer  
+    #permission_classes = [IsAuthenticated]
+    def get(self , request):
+        
+            Affected_data = Projectaffectedperson.objects.all()
+            serializer = self.get_serializer(Affected_data , many = True).data
+            return Response({'status': 'success',
+                            'message' : 'data was successfully fetched',
+                            'data': serializer},
+                             status= 200)
+    
+
+class RehabilitatedPapView(generics.GenericAPIView):
+    serializer_class = RehabilitatedPapSerializer  
+    #permission_classes = [IsAuthenticated]
+    def get(self , request):
+        
+            rehab_data = RehabilitatedPap.objects.all()
+            serializer = self.get_serializer(rehab_data , many = True).data
+            return Response({'status': 'success',
+                            'message' : 'data was successfully fetched',
+                            'data': serializer},
+                             status= 200)
+    
 
 class MetroStationView(generics.GenericAPIView):
     serializer_class = MetroStationSerializer   
@@ -188,7 +213,6 @@ class MaterialManagementStorageGISQuarterView(ListAPIView):
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
         
-
 
 class MaterialManagementSourceGISQuarterView(ListAPIView):
 

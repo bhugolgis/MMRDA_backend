@@ -5,6 +5,7 @@ from rest_framework.validators import ValidationError
 from Report.models import *
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from Training.models import *
+from .models import *
 from rest_framework.serializers import ModelSerializer
 
 
@@ -71,6 +72,21 @@ class ProjectAffectedTreesSerializer(GeoFeatureModelSerializer):
         geo_field= ('geom')
 
 
+class projectAffectedPersonsSerializer(GeoFeatureModelSerializer):
+    class Meta:
+        model = Projectaffectedperson
+        fields = ('gid' , 'pap_id','name' , 'category' , 'date')
+        geo_field= ('geom')
+
+
+
+class RehabilitatedPapSerializer(GeoFeatureModelSerializer):
+    class Meta:
+        model = RehabilitatedPap
+        fields = ('gid' , 'pap_id','name' , 'category' , 'date_ident')
+        geo_field= ('geom')
+
+        
 
 class PAPGISSerializer(GeoFeatureModelSerializer):
     class Meta:

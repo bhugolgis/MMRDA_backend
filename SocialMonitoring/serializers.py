@@ -7,6 +7,12 @@ from django.core.validators import MinLengthValidator, MaxLengthValidator
 
 
 def validate_coordinate(value):
+    """
+    The function `validate_coordinate` checks if a coordinate value has at most 6 digits after the
+    decimal point.
+    
+    :param value: The `value` parameter is a string representing a coordinate value
+    """
     if '.' in value:
         integer_part, decimal_part = value.split('.')
         if len(decimal_part) > 6:
@@ -16,6 +22,9 @@ def validate_coordinate(value):
 
 #---------------Labour camp Serializer for GEO jason Format--------------------------------
 
+# The `labourCampDetailSerializer` class is a serializer for the `labourcampDetails` model in Python,
+# which includes validation for longitude and latitude fields and a create method that excludes those
+# fields.
 class labourCampDetailSerializer(serializers.ModelSerializer):
     longitude = serializers.CharField(max_length=10, required=False )
     latitude = serializers.CharField(max_length=8, required=False )
@@ -24,6 +33,10 @@ class labourCampDetailSerializer(serializers.ModelSerializer):
         fields = ('LabourCampName' , 'LabourCampId' , 'longitude' , 'latitude')
 
     def validate(self,data):
+        """
+        The function validates the longitude and latitude values in a given data dictionary, ensuring
+        that they have at most 6 digits after the decimal point.
+        """
         long = data['longitude'].split('.')[-1]
         if len(long) > 6:
             raise serializers.ValidationError("longitude must have at most 6 digits after the decimal point.")
@@ -33,6 +46,12 @@ class labourCampDetailSerializer(serializers.ModelSerializer):
         return data
     
     def create(self, data):
+        """
+        The function creates a new instance of the labourcampDetails model by removing the 'longitude'
+        and 'latitude' keys from the data dictionary and passing the remaining data as keyword
+        arguments.
+        
+        """
         data.pop('longitude')
         data.pop('latitude')
         return labourcampDetails.objects.create(**data) 
@@ -69,6 +88,11 @@ class PapSerailzer(serializers.ModelSerializer):
                    'actionTaken', 'notAgreedReason','presentPhotograph','remarks' )
 
     def validate(self,data):
+
+        """
+        The function validates the longitude and latitude values in a given data dictionary, ensuring
+        that they have at most 6 digits after the decimal point.
+        """
         long = data['longitude'].split('.')[-1]
         if len(long) > 6:
             raise serializers.ValidationError("longitude must have at most 6 digits after the decimal point.")
@@ -78,6 +102,12 @@ class PapSerailzer(serializers.ModelSerializer):
         return data
 
     def create(self, data):
+        """
+        The function creates a new instance of the labourcampDetails model by removing the 'longitude'
+        and 'latitude' keys from the data dictionary and passing the remaining data as keyword
+        arguments.
+        
+        """
         data.pop('longitude')
         data.pop('latitude')
         return PAP.objects.create(**data)
@@ -94,6 +124,10 @@ class PapUpdateSerialzier(serializers.ModelSerializer):
                   'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
                    'actionTaken', 'notAgreedReason','presentPhotograph','remarks')
     def validate(self,data):
+        """
+        The function validates the longitude and latitude values in a given data dictionary, ensuring
+        that they have at most 6 digits after the decimal point.
+        """
         long = data['longitude'].split('.')[-1]
         if len(long) > 6:
             raise serializers.ValidationError("longitude must have at most 6 digits after the decimal point.")
@@ -114,6 +148,8 @@ class papviewserialzer(GeoFeatureModelSerializer):
 
 
 # ------------------------ Rehabiliation Serializer ----------------------------------------
+# The RehabilitationSerializer class is a serializer for the Rehabilitation model in a Python Django
+# application, with various fields for data serialization and file uploads.
 class RehabilitationSerializer(serializers.ModelSerializer):
 
     longitude = serializers.CharField(max_length=50, required=True  )
@@ -135,6 +171,11 @@ class RehabilitationSerializer(serializers.ModelSerializer):
                    'financialSupportAmount','isCommunityEngagement','isEngagementType', 'photographs' , 'documents','remarks')
 
     def validate(self,data):
+        """
+        The function validates the longitude and latitude values in a given data dictionary, ensuring
+        that they have at most 6 digits after the decimal point.
+        
+        """
         long = data['longitude'].split('.')[-1]
         if len(long) > 6:
             raise ValidationError("longitude must have at most 6 digits after the decimal point.")
@@ -144,6 +185,11 @@ class RehabilitationSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, data):
+        """
+        The function creates a new instance of the Rehabilitation model using the provided data,
+        excluding the 'longitude' and 'latitude' fields.
+        
+        """
         data.pop('longitude')
         data.pop('latitude')
         Rehabilitation_data = Rehabilitation.objects.create(**data)
@@ -164,6 +210,8 @@ class RehabilatedPAPIDSerializer(serializers.ModelSerializer):
         fields = ('id', 'PAPID' , 'nameOfPAP' , 'categoryOfPap'  , "actionTaken")
 
 # -------------------------------- Labour camp details Serialzier --------------------------------      
+# The `LabourCampDetailSerializer` class is a serializer for the `LabourCamp` model in Python, which
+# includes various fields and nested fields for serialization and deserialization.
 class LabourCampDetailSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     dateOfMonitoring = serializers.DateField(required=True)
@@ -194,17 +242,25 @@ class LabourCampDetailSerializer(serializers.ModelSerializer):
 
 
     def validate(self,data):
+        """
+        The function validates the longitude and latitude values in a given data dictionary, ensuring
+        that they have at most 6 digits after the decimal point.
+
+        """
         long = data['longitude'].split('.')[-1]
         if len(long) > 6:
             raise serializers.ValidationError("longitude must have at most 6 digits after the decimal point.")
         lat =  data['latitude'].split('.')[-1]
         if len(lat) > 6:
             raise serializers.ValidationError("latitude must have at most 6 digits after the decimal point.")
-        
-
         return data
     
     def create(self,data):
+        """
+        The function creates a new instance of the LabourCamp model using the provided data, excluding
+        the 'longitude' and 'latitude' fields.
+        
+        """
         data.pop('longitude')
         data.pop('latitude')
         return LabourCamp.objects.create(**data)
@@ -233,6 +289,8 @@ class LabourCampUpdateSerialzier(serializers.ModelSerializer):
 
 
 # ----------------------------- Construction site serializer -----------------------------------
+# The `constructionSiteSerializer` class is a serializer for the `ConstructionSiteDetails` model in
+# Python, which includes various fields and validations for construction site data.
 class constructionSiteSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     quarter = serializers.CharField(validators=[MinLengthValidator(3)] , required=True)
@@ -257,6 +315,11 @@ class constructionSiteSerializer(serializers.ModelSerializer):
                     'genralphotographs','documents','remarks')
     
     def validate(self,data):
+        """
+        The function validates the longitude and latitude values in a given data dictionary, ensuring
+        that they have at most 6 digits after the decimal point.
+        
+        """
         long = data['longitude'].split('.')[-1]
         if len(long) > 6:
             raise serializers.ValidationError("longitude must have at most 6 digits after the decimal point.")
@@ -266,6 +329,11 @@ class constructionSiteSerializer(serializers.ModelSerializer):
         return data
 
     def create(self,data):
+        """
+        The create function removes the 'longitude' and 'latitude' keys from the data dictionary and
+        creates a new ConstructionSiteDetails object with the remaining data.
+        
+        """
         data.pop('longitude', None)
         data.pop('latitude', None)
         return ConstructionSiteDetails.objects.create(**data)

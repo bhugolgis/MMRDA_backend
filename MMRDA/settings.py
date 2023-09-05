@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'drf_yasg',
     'rest_framework',
     'Dashboard',
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'SocialMonitoring',
     'Training.apps.TrainingConfig' ,
     'Report',
+    'GIS',
     "corsheaders",
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',

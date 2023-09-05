@@ -14,13 +14,18 @@ from .utils import save_multiple_files
 
 # Create your views here.
 
+# The below class is a view for handling the creation of training data with file uploads in a Django
+# RThe post() method of the TraningView class first validates the data submitted by the user. 
+# If the data is valid, the method then creates a new Point object from the latitude and longitude values submitted by the user.
+#  It then saves the record to the database and returns a success message. Otherwise, the view returns an error message.
+
 class TraningView(generics.GenericAPIView):
     serializer_class = TraningSerializer
     permission_classes = [IsAuthenticated]
     #parser_classes = [MultiPartParser]
 
     def post(self, request):
-        # try:
+        
         serializer = TraningSerializer(data=request.data)
         if serializer.is_valid():
             lat = float(serializer.validated_data['latitude'])
@@ -46,33 +51,20 @@ class TraningView(generics.GenericAPIView):
             error_message = key+" ,"+ value[0]
             return Response({'status': 'error',
                             'Message' : error_message} , status = status.HTTP_400_BAD_REQUEST)
-        # except:
-        #     return Response({'Please Enetr a valid data'}, status=400)
 
 
+
+# The below code is gives all of the object in a list from Traning table
 class TrainingListView(generics.ListAPIView):
     serializer_class = TraningSerializer
     permission_classes = [IsAuthenticated, IsConsultant]
     queryset = traning.objects.all()
 
 
-class TrainingupdateView(generics.UpdateAPIView):
-    serializer_class = TraningSerializer
-    #parser_classes = [MultiPartParser]
-    queryset = traning.objects.all()
 
-    def update(self, request, pk, *args, **kwargs):
-        try:
-            instance = traning.objects.get(id=pk)
-            serializer = TraningSerializer(
-                instance, data=request.data, partial=True)
-            if serializer.is_valid(raise_exception=True):
-                serializer.save()
-                return Response(serializer.data)
-        except:
-            return Response({'Message': 'Matching Id DoesNotExist'})
-
-
+# The post() method of the PhotographsView class first validates the data submitted by the user.
+# If the data is valid, the method then creates a new Point object from the latitude and longitude values submitted by the user.
+#  It then saves the record to the database and returns the record. Otherwise, the view returns an error message.
 class PhotographsView(generics.GenericAPIView):
     serializer_class = photographsSerializer
     # permission_classes = [IsAuthenticated, IsConsultant]
@@ -94,7 +86,7 @@ class PhotographsView(generics.GenericAPIView):
             return Response({'status': 'error',
                             'Message' : error_message} , status = status.HTTP_400_BAD_REQUEST)
 
-
+# The below code is gives all of the object in a list from photograph table
 class photographsListView(generics.GenericAPIView):
     serializer_class = photographsViewSerializer
     # permission_classes = [IsAuthenticated, IsConsultant]
@@ -106,22 +98,10 @@ class photographsListView(generics.GenericAPIView):
         return Response({'message':serializer.data})
 
 
-class updatephotographview(generics.UpdateAPIView):
-    serializer_class = photographsViewSerializer
-    #parser_classes = [MultiPartParser]
-    queryset = photographs.objects.all()
 
-    def update(self, request, pk, *args, **kwargs):
-        try:
-            instance = photographs.objects.get(id=pk)
-            serializer = photographsViewSerializer(
-                instance, data=request.data, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return Response(serializer.data, status=200)
-        except:
-            return Response({"message": "Matching id does not exist"})
-
+# This code defines an API view that allows authenticated users to create new occupational health and safety records.
+# The view first validates the data submitted by the user. If the data is valid, the view saves the record to the database and returns a success message.
+#  Otherwise, the view returns an error message.
 
 class occupationalHealthSafety (generics.GenericAPIView):
     serializer_class = occupationalHealthSafetySerialziers
@@ -201,14 +181,16 @@ class ContactUsView(generics.GenericAPIView):
                             'Message' : serializer.errors} , status = status.HTTP_400_BAD_REQUEST)
         
 
-
 class ContactusListView(generics.ListAPIView):
     queryset = Contactus.objects.all()
     serializer_class = ContactusViewSerialzier
     filter_backends = [filters.SearchFilter]
     search_fields = ['^name' , '^email']
 
-
+# The serializer_class attribute of the PreConstructionStageComplianceView class is set to the PreConstructionStageComplianceSerialzier class. This class is used to serialize and deserialize the data submitted by the user.
+# The permission_classes attribute of the PreConstructionStageComplianceView class is set to the IsAuthenticated class. This class ensures that only authenticated users can use the view.
+# The post() method of the PreConstructionStageComplianceView class first validates the data submitted by the user.
+# If the data is valid, the method then saves the record to the database and returns a success message. Otherwise, the view returns an error message.
 class PreConstructionStageComplianceView(generics.GenericAPIView):
     serializer_class = PreConstructionStageComplianceSerialzier
     #parser_classes = [MultiPartParser]
@@ -226,8 +208,12 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
             error_message = key+" ,"+ value[0]
             return Response({'status': 'error',
                             'Message' : error_message } , status = status.HTTP_400_BAD_REQUEST)
-                    
+    
 
+# The serializer_class attribute of the ConstructionStageComplainceView class is set to the ConstructionStageComplainceSerializer class. This class is used to serialize and deserialize the data submitted by the user.
+# The permission_classes attribute of the ConstructionStageComplainceView class is set to the IsAuthenticated class. This class ensures that only authenticated users can use the view.
+# The post() method of the ConstructionStageComplainceView class first validates the data submitted by the user.
+# If the data is valid, the method then saves the record to the database and returns a success message. Otherwise, the view returns an error message.
 class ConstructionStageComplainceView(generics.CreateAPIView):
     serializer_class = ConstructionStageComplainceSerializer
     permission_classes = [IsAuthenticated]
@@ -246,8 +232,3 @@ class ConstructionStageComplainceView(generics.CreateAPIView):
             return Response({'status': 'error',
                             'Message' : error_message} , status = status.HTTP_400_BAD_REQUEST)
 
-
-class ContactUsimagesCompress(generics.CreateAPIView):
-    serializer_class =  ContactusImagesSeilizer
-    #parser_classes = [MultiPartParser]
-    queryset = ContactusImage.objects.all()

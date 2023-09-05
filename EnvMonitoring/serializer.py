@@ -4,6 +4,9 @@ from .models import *
 
 
 
+# The class `PostSensorLocationDetailsSerializer` is a serializer in Python that is used to serialize
+# and deserialize sensor location details, and it includes a `create` method to create a new sensor
+# object.
 class PostSensorLocationDetailsSerializer(serializers.ModelSerializer):
     longitude=serializers.CharField(max_length=50,required=True )
     latitude=serializers.CharField(max_length=50,required=True)
@@ -18,13 +21,17 @@ class PostSensorLocationDetailsSerializer(serializers.ModelSerializer):
         return sensors.objects.create(**data)
     
 
-
+# The class `PostSensorLocationDetailsViewSerializer` is a serializer for the `sensors` model that
+# includes all fields and a geo field for location.
 class PostSensorLocationDetailsViewSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = sensors
         fields = '__all__'
         geo_field = 'location'
 
+
+# The `AirSerializer` class is a serializer in Python that is used to serialize and validate data for
+# the `Air` model, and it includes custom validation for the `longitude` and `latitude` fields.
 class AirSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     longitude=serializers.CharField(max_length=50,required=True )
@@ -58,6 +65,10 @@ class AirViewSerializer(GeoFeatureModelSerializer):
         fields='__all__'
         geo_field='location'
 
+
+
+# The WaterSerializer class is a serializer for the Water model, with fields for longitude, latitude,
+# and other water-related information.
 class WaterSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     longitude=serializers.CharField(max_length=50,required=True)
@@ -99,6 +110,9 @@ class waterviewserializer(GeoFeatureModelSerializer):
         geo_field='location'
 
 
+# The `NoiseSerializer` class is a serializer for the `Noise` model in Django, which includes
+# validation for longitude and latitude fields and a create method that excludes latitude and
+# longitude when creating a new instance of the model.
 class NoiseSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     longitude=serializers.CharField(max_length=50,required=False)
@@ -131,6 +145,9 @@ class Noiseviewserializer(GeoFeatureModelSerializer):
 
 
 
+# The TreeManagementSerializer class is a serializer for the ExistingTreeManagement model in a Django
+# application, which includes fields for longitude, latitude, documents, photographs, and other
+# attributes, and also includes validation and creation methods.
 class TreeManagementSerailizer(serializers.ModelSerializer):
     longitude=serializers.CharField(max_length=50,required=True)
     latitude=serializers.CharField(max_length=50,required=True)
@@ -164,6 +181,8 @@ class TreeManagmentviewserializer(GeoFeatureModelSerializer):
         geo_field = 'location'
 
 
+# The above class is a serializer for the NewTreeManagement model in Python, which includes validation
+# for longitude and latitude fields and a create method.
 class NewTreeManagmentSerializer(serializers.ModelSerializer):
     longitude = serializers.CharField(max_length=50,required=True)
     latitude = serializers.CharField(max_length=50,required=True)
@@ -199,6 +218,9 @@ class NewTreeManagmentviewserializer(GeoFeatureModelSerializer):
 
 
 
+# The WasteTreatmentsSerializer class is a serializer in Python that is used to validate and serialize
+# data for waste treatments, including fields for longitude, latitude, waste longitude, waste
+# latitude, documents, photographs, and other relevant information.
 class WasteTreatmentsSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     longitude=serializers.CharField(max_length=50,required=True)
@@ -247,6 +269,9 @@ class wastetreatmentsViewserializer(GeoFeatureModelSerializer):
         geo_field= 'location'
 
 
+# The MaterialManagmentSerializer class is a serializer for the MaterialManegmanet model in Python,
+# which includes various fields for storing and managing materials, such as longitude, latitude,
+# documents, photographs, and approvals.
 class MaterialManagmentSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     longitude=serializers.CharField(max_length=50,required=True)

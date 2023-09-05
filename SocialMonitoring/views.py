@@ -14,7 +14,7 @@ from Training.utils import save_multiple_files
 
 # ---------------Labour camp Serializer for GEO jason Format--------------------------------
 
-# The above class is a view for creating and saving post-labour camp details with latitude and
+# The below class is a view for creating and saving labour camp details with latitude and
 # longitude coordinates.
 class PostlabourCampdetails(generics.GenericAPIView):
     serializer_class = labourCampDetailSerializer
@@ -22,7 +22,11 @@ class PostlabourCampdetails(generics.GenericAPIView):
     queryset = labourcampDetails.objects.all()
 
     def post(self, request):
-        
+        """
+        The above function is a POST request handler that saves data to a labour camp detail serializer
+        and returns a response with the saved data or an error message.
+
+        """
         try:
             serializer = labourCampDetailSerializer(data=request.data)
             if serializer.is_valid():
@@ -43,23 +47,34 @@ class PostlabourCampdetails(generics.GenericAPIView):
             return Response({'status': 'failed',
                             'Message': 'Something Went Wrong'}, status=400)
 
+
+# The `labourCampdetailsView` class is a generic list API view that retrieves all instances of the
+# `labourcampDetails` model and serializes them using the `labourCampDetailGetviewSerializer`.
 class labourCampdetailsView(generics.ListAPIView):
     queryset = labourcampDetails.objects.all()
     serializer_class = labourCampDetailGetviewSerializer
     # filter_backends = [filters.SearchFilter]
     # search_fields = ['LabourCampName' ,'LabourCampID']
 
+
+# The `labourCampdetailsViewSearch` class is a generic list API view that allows searching for labour
+# camp details by the name of the labour camp.
 class labourCampdetailsViewSearch(generics.ListAPIView):
     queryset = labourcampDetails.objects.all()
     serializer_class = labourCampDetailGetviewSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ['LabourCampName']
 
-# ---------------------------- PAP View--------------------------------------------------
-# The `PapView` class is a view in a Django REST framework API that handles the creation of a PAP
-# (Personal Assistance Program) object, with different validation and permission checks based on the
-# user's group.
 
+
+
+# ---------------------------- PAP View--------------------------------------------------
+
+
+
+# The `PapView` class is a view in a Django REST framework API that handles the creation of a PAP
+# (Project Affected persons) object, with different validation and permission checks based on the
+# user's group.
 class PapView(generics.GenericAPIView):
     renderer_classes = [ErrorRenderer]
     serializer_class = PapSerailzer
@@ -131,7 +146,6 @@ class PapView(generics.GenericAPIView):
                 return Response({'status': 'error',
                                 'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
         else:
-        # except Exception:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
 
     
@@ -163,7 +177,7 @@ class PapListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     queryset = PAP.objects.all()
 
-
+# This below class is view which handels takes the PAP-ID and gives the PAP singel obejct
 class RehabilatedPAPIDView(generics.GenericAPIView):
     serializer_class = RehabilatedPAPIDSerializer
     #parser_classes = [MultiPartParser]
@@ -185,8 +199,11 @@ class RehabilatedPAPIDView(generics.GenericAPIView):
         
 
 # ------------------------------ Rehabilitation View ------------------------------
+
+
 # The `RehabilitationView` class is a view in a Django REST framework API that handles the creation of
 # rehabilitation data, with different validation and permission checks based on the user's group.
+
 class RehabilitationView(generics.GenericAPIView):
     serializer_class = RehabilitationSerializer
     #parser_classes = [MultiPartParser]
@@ -270,6 +287,7 @@ class RehabilitationView(generics.GenericAPIView):
 # The `LabourCampDetailsView` class is a view in a Django REST framework API that allows authenticated
 # users who are either consultants or contractors to submit data for a labour camp, with different
 # validation and response logic based on the user's role.
+
 class LabourCampDetailsView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
     # parser_classes = [FormParser]
@@ -372,6 +390,7 @@ class labourCampUpdateView(generics.UpdateAPIView):
 
 # The `constructionSiteView` class is a view in a Django REST framework API that handles the creation
 # of construction site data, with different validation and permission checks based on the user's role.
+
 class constructionSiteView(generics.GenericAPIView):
     renderer_classes = [ErrorRenderer]
     #parser_classes = [MultiPartParser]
@@ -446,8 +465,7 @@ class constructionSiteView(generics.GenericAPIView):
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
 
 
-# The ConstructionSiteUpdateView class is a view in a Python Django application that handles updating
-# construction site data.
+# The ConstructionSiteUpdateView class is a view in a Python Django application that handles updating construction site data.
 class ConstructionSiteUpdateView(generics.GenericAPIView):
     serializer_class = constructionSiteSerializer
     renderer_classes = [ErrorRenderer]
@@ -473,6 +491,8 @@ class ConstructionSiteUpdateView(generics.GenericAPIView):
                             'status' : 'failed'}, status= 400)
 
 
+# The ConstructionSiteListView class is a generic ListAPIView that uses the constructionSiteSerializer
+# to serialize the queryset of ConstructionSiteDetails objects.
 class ConstructionSiteListView(generics.ListAPIView):
     serializer_class = constructionSiteSerializer
     queryset = ConstructionSiteDetails.objects.all()
