@@ -15,6 +15,10 @@ class Baseclass(models.Model):
         abstract = True
 
 
+# The `traning` class is a subclass of `Baseclass` and represents a training session with various
+# attributes such as user, category, training title, number of attendees, number of times training
+# conducted, male and female participants, incharge person, training initiator, conduct date, training
+# date, photographs, and documents.
 class traning(Baseclass):
     user = models.ForeignKey(
         User, related_name='training_User', on_delete=models.CASCADE)
@@ -38,6 +42,8 @@ class traning(Baseclass):
 
 # #----------------------------- PHOTOGRAPHS MODEL-----------------------------------------
 
+# The class "photographs" is a model in Python that represents a collection of photographs with
+# various attributes such as title, uploader, location, date, and the actual image file.
 class photographs(models.Model):
     # site_name = models.CharField(max_length=255, null=True, blank=True)
     # incharge_person = models.CharField(max_length=244, null=True, blank=True)
@@ -53,9 +59,10 @@ class photographs(models.Model):
 
 
 # ---------------------Occupational Health & safety Model --------------------
+# The `occupationalHealthSafety` class represents a model for tracking occupational health and safety
+# information, including various conditions, remarks, and incident details.
 class occupationalHealthSafety(Baseclass):
-    choices = [('Complied' , 'Complied'),
-                ('Not-Complied' ,'Not-Complied')]
+    choices = [('Complied' , 'Complied'),('Not-Complied' ,'Not-Complied')]
     
     user = models.ForeignKey(User, related_name='occupational_health_safety_User', on_delete=models.CASCADE, blank=True)
     location = PointField(blank=True)
@@ -124,6 +131,9 @@ class occupationalHealthSafety(Baseclass):
     remarks = models.TextField(max_length=255, blank=True, null=True)
 
 
+# The Contactus class represents a contact form with fields for name, email, message, location,
+# documents, and image, while the ContactusImage class represents images associated with a Contactus
+# instance.
 class Contactus(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     email = models.EmailField(max_length=255, verbose_name='Email')
@@ -138,6 +148,8 @@ class ContactusImage(models.Model):
     images2 = models.ImageField(upload_to='contactus/images' , max_length=255, blank=True, null = True )
 
 
+# The `PreConstructionStage` class represents the pre-construction stage of a project and includes
+# fields for various permissions and clearances required.
 class PreConstructionStage(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='user')
@@ -173,6 +185,8 @@ class PreConstructionStage(models.Model):
         max_length=255, blank=True, null=True)
 
 
+# The above class represents a construction stage with various permissions, rules, responsibilities,
+# and current statuses related to environmental regulations and waste management.
 class ConstructionStage(models.Model):
     user = models.ForeignKey(User,  on_delete=models.CASCADE,
                              related_name='user_ConstructionStage', null=True)  # User profile

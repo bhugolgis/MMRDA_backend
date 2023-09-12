@@ -27,10 +27,11 @@ def validate_coordinate(value):
 # fields.
 class labourCampDetailSerializer(serializers.ModelSerializer):
     longitude = serializers.CharField(max_length=10, required=False )
-    latitude = serializers.CharField(max_length=8, required=False )
+    latitude = serializers.CharField(max_length=10, required=False )
+    image = serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True ,  required=False)
     class Meta:
         model = labourcampDetails
-        fields = ('LabourCampName' , 'LabourCampId' , 'longitude' , 'latitude')
+        fields = ('LabourCampName' , 'LabourCampId' , 'longitude' , 'latitude' ,'capacity' , 'image')
 
     def validate(self,data):
         """
@@ -221,8 +222,20 @@ class LabourCampDetailSerializer(serializers.ModelSerializer):
     labourCampName = serializers.CharField(validators=[MinLengthValidator(3)] , required=True)
     labourCampId = serializers.CharField(validators=[MinLengthValidator(3)] , required=True)
     
-    photographs= serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True)
-    documents  = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True)
+    toiletPhotograph = serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    drinkingWaterPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    demarkationOfPathwaysPhotographs= serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    signagesLabelingPhotographs= serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    kitchenAreaPhotographs= serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    fireExtinguishPhotographs=serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    roomsOrDomsPhotographs= serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    segregationOfWastePhotographs= serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    regularHealthCheckupPhotographs= serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    availabilityOfDoctorPhotographs= serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    firstAidKitPhotographs=serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    photographs =serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True ,  required=False)
+    documents  = serializers.FileField(allow_empty_file=True, use_url=False,write_only=True , required=False)
+
     class Meta:
         model = LabourCamp
         fields = ('quarter', 'packages','dateOfMonitoring','longitude', 'latitude', 'labourCampName', 'labourCampId',
@@ -300,8 +313,16 @@ class constructionSiteSerializer(serializers.ModelSerializer):
     latitude = serializers.CharField(max_length=10, required=True)
     constructionSiteId = serializers.CharField(max_length = 255 , required = True)
     constructionSiteName = serializers.CharField(max_length = 255 , required = True)
-    genralphotographs= serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True)
-    documents  = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True)
+
+    demarkationOfPathwaysPhotographs= serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    signagesLabelingPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    regularHealthCheckupPhotographs= serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    availabilityOfDoctorPhotographs= serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    firstAidKitPhotographs= serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    drinkingWaterPhotographs= serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    toiletPhotograph = serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    genralphotographs= serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True , required=False)
+    documents  = serializers.FileField(allow_empty_file=True, use_url=False,write_only=True , required=False)
     class Meta:
         model = ConstructionSiteDetails
         fields = ('quarter', 'packages','dateOfMonitoring' ,'longitude', 'latitude', 'constructionSiteName' , 'constructionSiteId',

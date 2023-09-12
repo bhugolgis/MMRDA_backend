@@ -6,6 +6,8 @@ from Report.models import *
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from Training.models import *
 
+# The above class is a serializer in Python that is used to serialize and validate data for a
+# LabourCampReport model.
 class LabourcampReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = LabourCamp
@@ -33,11 +35,15 @@ class LabourcampReportSerializer(GeoFeatureModelSerializer):
         if data['labourCampName'] == '' or data['labourCampName'] ==None:
             raise ValidationError('labourCampName can not be empty')
         return data
+    
+
 class LabourCampDeatilViewSerialzier(ModelSerializer):
     class Meta:
         model = LabourCamp
         fields = "__all__"
 
+# The ConstructionCampReportSerializer class is a serializer for the ConstructionSiteDetails model
+# with specific fields and a geo_field for location.
 class ConstructionCampReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = ConstructionSiteDetails
@@ -54,6 +60,8 @@ class ConstructionCampReportSerializer(GeoFeatureModelSerializer):
 
                     
 
+# The PAPReportSerializer class is a serializer for the PAP model that includes specific fields and a
+# geo_field for location.
 class PAPReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = PAP
@@ -79,6 +87,8 @@ class RehabilitationReportSerializer(GeoFeatureModelSerializer):
         
 
 '''----------------------- Env Monitoring Report Serilaizer------------------------------'''
+# The AirReportSerializer class is a serializer for the Air model that includes specific fields and a
+# geo_field for location.
 
 class AirReportSerializer(GeoFeatureModelSerializer):
     class Meta:
@@ -87,12 +97,16 @@ class AirReportSerializer(GeoFeatureModelSerializer):
                    'standardSO2','O3','standardO3','NOx', 'standardNOx','AQI' , 'Remarks')
         geo_field= ('location')
 
+# The NoiseReportSerializer class is a serializer for the Noise model that includes specific fields
+# and a geo_field for location.
 class NoiseReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Noise
         fields = ('id','location' ,'quarter','month','packages','dateOfMonitoringThree' ,'noiseLevel' , 'monitoringPeriod', )
         geo_field= ('location')
 
+# The waterReportSerializer class is a serializer for the water model that includes specific fields
+# and a geo_field for location.
 class waterReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = water
@@ -100,6 +114,8 @@ class waterReportSerializer(GeoFeatureModelSerializer):
         geo_field= ('location')
 
 
+# The class `wasteTreatmentsSerializer` is a serializer for the `WasteTreatments` model that includes
+# specific fields and a geo field.
 class wasteTreatmentsSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = WasteTreatments
@@ -108,6 +124,8 @@ class wasteTreatmentsSerializer(GeoFeatureModelSerializer):
         geo_field= ('location')
 
 
+# The class `materialManagementSerializer` is a serializer class in Python that is used for
+# serializing and deserializing data related to material management.
 class materialManagementSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = MaterialManegmanet
@@ -118,6 +136,8 @@ class materialManagementSerializer(GeoFeatureModelSerializer):
         geo_field= ('location')
 
 
+# The `treeManagementSerializer` class is a serializer for the `ExistingTreeManagment` model with
+# specific fields and a geo field.
 class treeManagementSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = ExistingTreeManagment
@@ -129,6 +149,8 @@ class treeManagementSerializer(GeoFeatureModelSerializer):
 
 
 
+# The class MetroLine4AlignmentSerializer is a serializer for the MmrdaNew model with fields gid and
+# name, and a geo_field geom.
 class MetroLine4AlignmentSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = MmrdaNew

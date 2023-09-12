@@ -19,13 +19,13 @@ from Training.utils import save_multiple_files
 class PostlabourCampdetails(generics.GenericAPIView):
     serializer_class = labourCampDetailSerializer
     parser_classes = (MultiPartParser, )
+    permission_classes = [IsAuthenticated]
     queryset = labourcampDetails.objects.all()
 
     def post(self, request):
         """
         The above function is a POST request handler that saves data to a labour camp detail serializer
         and returns a response with the saved data or an error message.
-
         """
         try:
             serializer = labourCampDetailSerializer(data=request.data)
@@ -33,7 +33,16 @@ class PostlabourCampdetails(generics.GenericAPIView):
                 lat = float(serializer.validated_data['latitude'])
                 long = float(serializer.validated_data['longitude'])
                 location = Point(long, lat, srid=4326)
-                pap = serializer.save(location=location)
+
+                file_fields = { 'image': 'Labour Camp/LabourCamp_image' }
+
+                file_mapping = {}
+                for field, file_path in file_fields.items():
+                    files = request.FILES.getlist(field)
+                    file_mapping[field] = []
+                    save_multiple_files(files, file_mapping, file_path , field)
+
+                pap = serializer.save(location=location ,user = request.user , **file_mapping )
                 data = labourCampDetailviewSerializer(pap).data
                 return Response({'status': 'success',
                                 'Message': 'Data saved successfully',
@@ -46,6 +55,9 @@ class PostlabourCampdetails(generics.GenericAPIView):
         except:
             return Response({'status': 'failed',
                             'Message': 'Something Went Wrong'}, status=400)
+
+
+
 
 
 # The `labourCampdetailsView` class is a generic list API view that retrieves all instances of the
@@ -70,8 +82,6 @@ class labourCampdetailsViewSearch(generics.ListAPIView):
 
 # ---------------------------- PAP View--------------------------------------------------
 
-
-
 # The `PapView` class is a view in a Django REST framework API that handles the creation of a PAP
 # (Project Affected persons) object, with different validation and permission checks based on the
 # user's group.
@@ -82,6 +92,16 @@ class PapView(generics.GenericAPIView):
    
 
     def post(self, request):
+        """
+        The function handles the POST request for saving data, including file uploads, based on the
+        user's group membership.
+        
+        :param request: The `request` parameter is an object that represents the HTTP request made by
+        the client. It contains information such as the request method (GET, POST, etc.), headers, user
+        authentication, and the data sent in the request body
+        :return: The code returns a response object with a message and status code. The specific
+        response depends on the conditions in the code.
+        """
         if "RNR" in request.user.groups.values_list("name", flat=True):
             serializer = self.get_serializer(data=request.data, context={'request': request})
             if serializer.is_valid():
@@ -95,10 +115,10 @@ class PapView(generics.GenericAPIView):
                     long = float(serializer.validated_data['longitude'])
                     location = Point(long, lat, srid=4326)
 
-                    
+    
                     file_fields = {
                         'legalDocuments': 'PAP/PAP_legalDocuments',
-                        'presentPhotograph': 'PAP/presentphotograph' }
+                        'presentPhotograph': 'PAP/presentphotograph' , }
 
                     file_mapping = {}
                     for field, file_path in file_fields.items():
@@ -158,6 +178,11 @@ class papupdateView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def update(self, request, id,  **kwargs):
+        """
+        The function updates a PAP object with the given ID and user ID, using the provided request data
+        and a serializer.
+        
+        """
         try:
             instance = PAP.objects.get(PAPID=id, user=request.user.id)
         except Exception:
@@ -183,6 +208,24 @@ class RehabilatedPAPIDView(generics.GenericAPIView):
     #parser_classes = [MultiPartParser]
 
     def get(self, request, PAPID):
+        """
+        The function retrieves data for a given PAPID and checks if the person is agreed for
+        rehabilitation, returning an appropriate response.
+        
+        :param request: The request object contains information about the HTTP request made by the
+        client, such as the headers, body, and method
+        :param PAPID: PAPID is the unique identifier for a PAP (Person Affected by Project). It is used
+        to retrieve data for a specific PAP from the database
+        :return: a response object. If the PAPID is not found in the database, it returns a success
+        message with a status code of 200. If the person with the given PAPID is not agreed for
+        rehabilitation, it returns an error message with a status code of 400. Otherwise, it returns the
+        serialized data for the PAPID with a status code of 200.
+        """
+        """
+        The function retrieves data for a given PAPID and checks if the person is agreed for
+        rehabilitation, returning an appropriate response.
+    
+        """
         try:
             papdata = PAP.objects.get(PAPID=PAPID)
         except:
@@ -210,6 +253,16 @@ class RehabilitationView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
+        """
+        The above function is a view function in Django that handles the POST request for saving data
+        related to rehabilitation, with different logic based on the user's group.
+        
+        :param request: The `request` parameter is an object that represents the HTTP request made by
+        the client. It contains information such as the request method (GET, POST, etc.), headers, user
+        authentication, and the data sent in the request body
+        :return: The code is returning a response object with a message and status. The specific message
+        and status depend on the conditions in the code.
+        """
      
         
         if "RNR" in request.user.groups.values_list("name", flat=True):
@@ -260,7 +313,7 @@ class RehabilitationView(generics.GenericAPIView):
                         'trainingPhotograph': 'rehabitation/trainingPhotograph' ,
                         'tenamentsPhotograph' : 'rehabitation/tenamentsPhotograph',
                         'photographs' : 'rehabitation/Rehabitationphotographs',
-                        'documents' : 'rehabitation/documents'
+                        'documents' : 'rehabitation/documents',
                         }
 
                 file_mapping = {}
@@ -290,10 +343,16 @@ class RehabilitationView(generics.GenericAPIView):
 
 class LabourCampDetailsView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
-    # parser_classes = [FormParser]
+    # parser_classes = [MultiPartParser]
     serializer_class = LabourCampDetailSerializer
 
     def post(self, request):
+        """
+        The above function is a view function in a Django REST framework API that handles the POST
+        request for saving data related to a labour camp, with different logic based on the user's group
+        (contractor or consultant).
+    
+        """
     
         if "contractor" in request.user.groups.values_list("name", flat=True):
             serializer = self.get_serializer(data=request.data )
@@ -309,9 +368,23 @@ class LabourCampDetailsView(generics.GenericAPIView):
                     long = float(serializer.validated_data['longitude'])
                     location = Point(long, lat, srid=4326)
 
+                    # The above code is defining a dictionary called `file_fields` which maps field
+                    # names to file paths. It then initializes an empty dictionary called
+                    # `file_mapping`.
                     file_fields = {
+                        'toiletPhotograph' : 'Labour Camp/toilet_photographs' ,
+                        'drinkingWaterPhotographs' : 'Labour Camp/drinkingWater_photographs',
+                        'demarkationOfPathwaysPhotographs': 'Labour Camp/demarkingPathways_photographs' ,
+                        'signagesLabelingPhotographs': 'Labour Camp/signagesLabeling_Photographs',
+                        'kitchenAreaPhotographs': 'Labour Camp/KitchenArea _photographs' ,
+                        'fireExtinguishPhotographs': 'Labour Camp/fireExtinguish_photographs' ,
+                        'roomsOrDomsPhotographs': 'Labour Camp/rooms_photographs',
+                        'segregationOfWastePhotographs': 'labour Camp/segrigationOfWaste_Photographs',
+                        'regularHealthCheckupPhotographs': 'Labour Camp/RegularHealthCheckup_Photographs',
+                        'availabilityOfDoctorPhotographs': 'Labour Camp/AvailabilityOfDoctor_photographs' ,
+                        'firstAidKitPhotographs': 'Labour Camp/FirstAidKit_photographs' ,
                         'documents': 'labourcamp_documents',
-                        'photographs': 'Labour Camp/GenralPhotographs'  }
+                        'photographs': 'Labour Camp/GenralPhotographs' , }
 
                     file_mapping = {}
                     for field, file_path in file_fields.items():
@@ -338,8 +411,20 @@ class LabourCampDetailsView(generics.GenericAPIView):
                 location = Point(long, lat, srid=4326)
 
                 file_fields = {
+                        'toiletPhotograph' : 'Labour Camp/toilet_photographs' ,
+                        'drinkingWaterPhotographs' : 'Labour Camp/drinkingWater_photographs',
+                        'demarkationOfPathwaysPhotographs': 'Labour Camp/demarkingPathways_photographs' ,
+                        'signagesLabelingPhotographs': 'Labour Camp/signagesLabeling_Photographs',
+                        'kitchenAreaPhotographs': 'Labour Camp/KitchenArea _photographs' ,
+                        'fireExtinguishPhotographs': 'Labour Camp/fireExtinguish_photographs' ,
+                        'roomsOrDomsPhotographs': 'Labour Camp/rooms_photographs',
+                        'segregationOfWastePhotographs': 'labour Camp/segrigationOfWaste_Photographs',
+                        'regularHealthCheckupPhotographs': 'Labour Camp/RegularHealthCheckup_Photographs',
+                        'availabilityOfDoctorPhotographs': 'Labour Camp/AvailabilityOfDoctor_photographs' ,
+                        'firstAidKitPhotographs': 'Labour Camp/FirstAidKit_photographs' ,
                         'documents': 'labourcamp_documents',
-                        'photographs': 'Labour Camp/GenralPhotographs' ,}
+                        'photographs': 'Labour Camp/GenralPhotographs' , }
+
 
                 file_mapping = {}
                 for field, file_path in file_fields.items():
@@ -398,6 +483,12 @@ class constructionSiteView(generics.GenericAPIView):
     serializer_class = constructionSiteSerializer
 
     def post(self, request):
+        """
+        The above function is a view function in Django that handles the POST request for saving
+        construction site data, with different logic based on the user's group (contractor or
+        consultant).
+        
+        """
         if "contractor" in request.user.groups.values_list("name", flat=True):
             serialzier = constructionSiteSerializer( data=request.data, context={'request': request})
             if serialzier.is_valid():
@@ -413,8 +504,14 @@ class constructionSiteView(generics.GenericAPIView):
                     location = Point(long, lat, srid=4326)
 
                     file_fields = {
-            
-                        'documents': 'constructionSite/documents',
+                        'demarkationOfPathwaysPhotographs' : 'constructionSite/demarkingPathways_photographs' ,
+                        'signagesLabelingPhotographs' : 'constructionSite/signagesLabeling_Photographs' ,
+                        'regularHealthCheckupPhotographs' : 'constructionSite/RegularHealthCheckup_Photographs' ,
+                        'availabilityOfDoctorPhotographs' : 'constructionSite/AvailabilityOfDoctor_photographs' ,
+                        'firstAidKitPhotographs' :  'constructionSite/FirstAidKit_photographs' ,
+                        'drinkingWaterPhotographs' : 'constructionSite/drinkingWater_photographs' ,
+                        'toiletPhotograph' : 'constructionSite/toilet_photographs' ,
+                        'documents': 'constructionSite/documents', 
                         'genralphotographs': 'constructionSite/genral_photograph' , }
 
                     file_mapping = {}
@@ -442,8 +539,15 @@ class constructionSiteView(generics.GenericAPIView):
                 location = Point(long, lat, srid=4326)
 
                 file_fields = {
-                        'documents': 'constructionSite/documents',
-                        'genralphotographs': 'constructionSite/genral_photograph',  }
+                        'demarkationOfPathwaysPhotographs' : 'constructionSite/demarkingPathways_photographs' ,
+                        'signagesLabelingPhotographs' : 'constructionSite/signagesLabeling_Photographs' ,
+                        'regularHealthCheckupPhotographs' : 'constructionSite/RegularHealthCheckup_Photographs' ,
+                        'availabilityOfDoctorPhotographs' : 'constructionSite/AvailabilityOfDoctor_photographs' ,
+                        'firstAidKitPhotographs' :  'constructionSite/FirstAidKit_photographs' ,
+                        'drinkingWaterPhotographs' : 'constructionSite/drinkingWater_photographs' ,
+                        'toiletPhotograph' : 'constructionSite/toilet_photographs' ,
+                        'documents': 'constructionSite/documents', 
+                        'genralphotographs': 'constructionSite/genral_photograph' , }
 
                 file_mapping = {}
                 for field, file_path in file_fields.items():
@@ -473,6 +577,11 @@ class ConstructionSiteUpdateView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated, IsConsultant]
 
     def update(self, request, id,  **kwargs):
+        """
+        The function updates a construction site record with the provided data if it exists, and returns a
+        success message if the update is successful, or an error message if the data is invalid.
+        
+        """
         try:
             instance = ConstructionSiteDetails.objects.get(
                 id=id, user=request.user.id)

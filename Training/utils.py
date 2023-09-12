@@ -6,6 +6,11 @@ from django.conf import settings
 
 
 def save_multiple_files(files, file_mapping, file_path , field):
+    """
+    The function saves multiple files to a specified file path and updates a file mapping dictionary
+    with the file paths.
+    
+    """
 
     file_list = []
     for file in files:

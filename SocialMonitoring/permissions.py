@@ -22,6 +22,10 @@ def _has_group_permission(user, required_group):
 
 class IsConsultant(BasePermission):
     required_group = ["consultant"]
+    """
+    The function checks if the user has the required group permission.
+
+    """
 
     def has_permission(self, request, view):
         has_group_permission = _has_group_permission(
@@ -33,6 +37,10 @@ class IsContractor(BasePermission):
     required_group = ["contractor"]
 
     def has_permission(self, request, view):
+        """
+        The function checks if the user has a specific group permission.
+        
+        """
         has_group_permission = _has_group_permission(
             request.user, self.required_group)
         return request.user and has_group_permission
@@ -41,6 +49,10 @@ class IsRNR(BasePermission):
     required_group = ["RNR"]
 
     def has_permission(self, request, view):
+        """
+        The function checks if the user has a specific group permission.
+        
+        """
         has_group_permission = _has_group_permission(
             request.user, self.required_group)
         return request.user and has_group_permission

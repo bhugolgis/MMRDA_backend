@@ -2,6 +2,7 @@
 from django.contrib.gis.db import models
 
 
+# The class `MmrdaNew` represents a model for a database table named `mmrda_new` with various fields.
 class MmrdaNew(models.Model):
     gid = models.AutoField(primary_key=True)
     field_gid = models.DecimalField(db_column='__gid', max_digits=65535, decimal_places=65535, blank=True, null=True)  # Field renamed because it contained more than one '_' in a row. Field renamed because it started with '_'.
@@ -17,6 +18,8 @@ class MmrdaNew(models.Model):
 
 
         
+# The `Station` class represents a metro station with attributes such as `gid`, `name`, `icon`, and
+# `geom`.
 # class MetroStation(models.Model):
 class Station(models.Model):
     gid = models.AutoField(primary_key=True)
@@ -29,6 +32,8 @@ class Station(models.Model):
         db_table = 'station'
 
 
+# The `Package08Alignment` class represents a model for a database table called 'package08Alignment'
+# with fields for gid, id, name, and geom.
 class Package08Alignment(models.Model):
     gid = models.AutoField(primary_key=True)
     id = models.FloatField(blank=True, null=True)
@@ -40,6 +45,7 @@ class Package08Alignment(models.Model):
         db_table = 'package08Alignment'
 
 
+# The class Package09Alignment represents a table in the database with fields gid, id, name, and geom.
 class Package09Alignment(models.Model):
     gid = models.AutoField(primary_key=True)
     id = models.FloatField(blank=True, null=True)
@@ -51,6 +57,8 @@ class Package09Alignment(models.Model):
         db_table = 'package09Alignment'
 
 
+# The `Package10Alignment` class represents a model for a database table called 'package10Alignment'
+# with fields for gid, id, name, and geom.
 class Package10Alignment(models.Model):
     gid = models.AutoField(primary_key=True)
     id = models.FloatField(blank=True, null=True)
@@ -62,6 +70,7 @@ class Package10Alignment(models.Model):
         db_table = 'package10Alignment'
 
 
+# The class Package11Alignment represents a table in the database with fields gid, id, name, and geom.
 class Package11Alignment(models.Model):
     gid = models.AutoField(primary_key=True)
     id = models.FloatField(blank=True, null=True)
@@ -73,6 +82,8 @@ class Package11Alignment(models.Model):
         db_table = 'package11Alignment'
 
 
+# The `Package12Alignment` class is a model in Django that represents a table called
+# `package12Alignment` in the database.
 class Package12Alignment(models.Model):
     gid = models.AutoField(primary_key=True)
     id = models.FloatField(blank=True, null=True)
@@ -84,6 +95,8 @@ class Package12Alignment(models.Model):
         db_table = 'package12Alignment'
 
 
+# The `Package54Alignment` class represents a model for a database table called 'package54Alignment'
+# with fields for gid, id, name, and geom.
 class Package54Alignment(models.Model):
     gid = models.AutoField(primary_key=True)
     id = models.FloatField(blank=True, null=True)
@@ -94,6 +107,10 @@ class Package54Alignment(models.Model):
         managed = False
         db_table = 'package54Alignment'
 
+
+
+# The above class represents a model for a database table called "ProjectAffectedTrees" with various
+# fields to store information about trees affected by a project.
 class ProjectAffectedTrees(models.Model):
     gid = models.AutoField(primary_key=True)
     tree_no_field = models.CharField(db_column='tree no.', max_length=254, blank=True, null=True) 

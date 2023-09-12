@@ -5,6 +5,8 @@ from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from itertools import zip_longest
 
 
+# The below class is a serializer in Python that is used to serialize and deserialize data for the
+# 'traning' model, including handling file fields for documents and photographs.
 class TraningSerializer(serializers.ModelSerializer):
     longitude=serializers.CharField(max_length=10,required=True)
     latitude=serializers.CharField(max_length=10,required=True)
@@ -24,6 +26,9 @@ class TraningSerializer(serializers.ModelSerializer):
         return traning.objects.create(**data)
 
 
+# The `photographsSerializer` class is a serializer for the `photographs` model in Python, which
+# includes fields for longitude and latitude and a create method that removes latitude and longitude
+# from the data before creating a new `photographs` object.
 class photographsSerializer(serializers.ModelSerializer):
     longitude=serializers.CharField(max_length=10,required=False)
     latitude=serializers.CharField(max_length=10,required=False)
@@ -46,6 +51,9 @@ class photographsViewSerializer(serializers.ModelSerializer):
                    'date' , 'site_photographs'  ]
 
 
+# The `occupationalHealthSafetySerialziers` class is a serializer class in Python that defines the
+# fields and behavior for serializing and deserializing data related to occupational health and safety
+# incidents.
 class occupationalHealthSafetySerialziers(serializers.ModelSerializer):
     longitude = serializers.CharField(max_length= 255 , required = False) # longitude
     incidentlongitude = serializers.CharField(max_length= 255 , required = False) # longitude
@@ -83,6 +91,8 @@ class ContactusImageSerializers(serializers.ModelSerializer):
         model = Contactus
         fields = "__all__"
 
+# The ContactusSerializezr class is a serializer in Python that is used to serialize and deserialize
+# Contactus objects, including fields for longitude, latitude, documents, and images.
 class ContactusSerializezr(serializers.ModelSerializer):
     # images =  ContactusImageSerializers(many=True, read_only=True)
     longitude = serializers.CharField(max_length= 255 , required = False) # longitude
@@ -112,7 +122,8 @@ class ContactusViewSerialzier(GeoFeatureModelSerializer):
         fields = '__all__'
         geo_field = 'location'
 
-
+# The class PreConstructionStageComplianceSerialzier is a serializer for the PreConstructionStage
+# model with specific fields.
 class PreConstructionStageComplianceSerialzier(serializers.ModelSerializer):
     class Meta:
         model =  PreConstructionStage
@@ -122,6 +133,8 @@ class PreConstructionStageComplianceSerialzier(serializers.ModelSerializer):
                    'ForestClearance' , 'ResponsibilityOfForestClearance', 'CurrentStatusOfForestClearance')
 
 
+# The class ConstructionStageComplainceSerializer is a serializer for the ConstructionStage model,
+# excluding certain fields.
 class ConstructionStageComplainceSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConstructionStage 

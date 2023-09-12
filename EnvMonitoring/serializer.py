@@ -290,7 +290,6 @@ class MaterialManagmentSerializer(serializers.ModelSerializer):
                 'documents','remarks')
 
 
-
     def create(self,data):
         data.pop('longitude')
         data.pop('latitude')

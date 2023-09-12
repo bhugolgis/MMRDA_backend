@@ -25,6 +25,10 @@ class TraningView(generics.GenericAPIView):
     #parser_classes = [MultiPartParser]
 
     def post(self, request):
+        """
+        The above function is a POST request handler that saves data and files to the database.
+        
+        """
         
         serializer = TraningSerializer(data=request.data)
         if serializer.is_valid():
@@ -71,6 +75,11 @@ class PhotographsView(generics.GenericAPIView):
     #parser_classes = [MultiPartParser]
 
     def post(self, request):
+        """
+        The above function is a POST request handler that saves a photograph object with latitude and
+        longitude coordinates and returns the serialized data.
+        
+        """
         serializer = photographsSerializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             lat = float(serializer.validated_data['latitude'])
@@ -109,6 +118,11 @@ class occupationalHealthSafety (generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
+        """
+        The above function is a POST request handler that saves data and files related to occupational
+        health and safety incidents.
+        
+        """
         
         serializer = self.get_serializer(data = request.data )
         if serializer.is_valid():
@@ -149,6 +163,11 @@ class ContactUsView(generics.GenericAPIView):
     serializer_class = ContactusSerializezr
     # parser_classes = (FormParser,) 
     def post(self, request):
+        """
+        This function handles a POST request by validating the serializer data, processing file uploads,
+        saving the data to the database, and returning a response.
+        
+        """
 
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
@@ -197,6 +216,11 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
     
     def post(self , request):
+        """
+        The above function is a POST request handler that saves data using a serializer and returns a
+        success message if the data is valid, or an error message if the data is invalid.
+        
+        """
         data = request.data
         serializer= PreConstructionStageComplianceSerialzier (data = data)
         if serializer.is_valid():
@@ -220,6 +244,11 @@ class ConstructionStageComplainceView(generics.CreateAPIView):
     #parser_classes = [MultiPartParser]
 
     def post(self , request):
+        """
+        The function `post` receives a request, validates the data using a serializer, saves the data if
+        valid, and returns a response with a success message or an error message if the data is invalid.
+        
+        """
         data = request.data
         serializer= ConstructionStageComplainceSerializer(data = data)
         if serializer.is_valid(raise_exception= True):
