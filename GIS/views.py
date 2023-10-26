@@ -12,6 +12,7 @@ from django.db.models import Count
 from Training.models import *
 from .models import *
 import math
+from Report.serializers import LabourcampReportSerializer
 # Create your views here.
 
 class MetroLine4View(generics.GenericAPIView):
@@ -294,3 +295,31 @@ class occupationalHealthSafetyGISView(APIView):
 
 
 
+# The `LabourcampReportPackageView` class is a view in a Django REST framework that retrieves previous
+# and latest data for a given package and labour camp name.
+class LabourcampReportPackageView(ListAPIView):
+    serializer_class = LabourcampReportSerializer
+    parser_classes = [MultiPartParser]
+
+    def get(self, request, packages, labourCampName ,*args, **kwargs):
+        """
+        This function retrieves the previous and latest data for a given package and labour camp name.
+
+        """
+        try:
+            previous = LabourCamp.objects.filter(packages=packages, labourCampName=labourCampName ).order_by('-id')[1:]
+           
+            latest = LabourCamp.objects.filter(packages=packages, labourCampName=labourCampName).latest('id')
+            # latest_serializer = LabourcampReportSerializer(latest).data
+           
+            previousData = self.serializer_class(previous, many=True)
+            latestData = self.serializer_class(latest)
+
+            return Response({'Message': 'data Fetched Successfully',
+                            'status' : 'success' , 
+                            'Previous': previousData.data,
+                             'latest': latestData.data}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'Message': 'There is no data available for this Package or Quarter',
+                            'status' : 'Failed'}, status=status.HTTP_400_BAD_REQUEST) 

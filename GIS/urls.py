@@ -20,5 +20,6 @@ urlpatterns = [
      path('MaterialManagementSourceGISQuarterView',MaterialManagementSourceGISQuarterView.as_view(), name='Material Management Package'),
      path('IncidentTypeGISQuarterView/<str:typeOfIncident>/<str:quarter>',IncidentTypeGISQuarterView.as_view(), name='Material Management Package'),
      path('occupationalHealthSafetyGISView/<int:year>/<str:quarter>/<str:package>',occupationalHealthSafetyGISView.as_view(), name='Material Management Package'),
+     path('labourcampreportpackage/<str:packages>/<str:labourCampName>',LabourcampReportPackageView.as_view(), name='Labourcamp Report View package'),
               
 ]

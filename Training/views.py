@@ -131,10 +131,14 @@ class occupationalHealthSafety (generics.GenericAPIView):
 
             location = Point(long, lat, srid=4326)
 
-            incidentlatitude = float(serializer.validated_data['incidentlatitude'])
-            incidentlongitude = float(serializer.validated_data['incidentlongitude'])
-            
-            incidentLocation = Point(incidentlongitude, incidentlatitude, srid=4326)
+            try: 
+                incidentlatitude = float(serializer.validated_data['incidentlatitude'])
+                incidentlongitude = float(serializer.validated_data['incidentlongitude'])
+                incidentLocation = Point(incidentlongitude, incidentlatitude, srid=4326)
+                
+            except:
+                incidentLocation = None
+
 
             file_fields = {
                         'documents': 'OccupationalHealth&Safety',
