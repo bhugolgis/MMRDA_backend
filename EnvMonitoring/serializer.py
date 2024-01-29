@@ -4,9 +4,6 @@ from .models import *
 
 
 
-# The class `PostSensorLocationDetailsSerializer` is a serializer in Python that is used to serialize
-# and deserialize sensor location details, and it includes a `create` method to create a new sensor
-# object.
 class PostSensorLocationDetailsSerializer(serializers.ModelSerializer):
     longitude=serializers.CharField(max_length=50,required=True )
     latitude=serializers.CharField(max_length=50,required=True)
@@ -21,17 +18,13 @@ class PostSensorLocationDetailsSerializer(serializers.ModelSerializer):
         return sensors.objects.create(**data)
     
 
-# The class `PostSensorLocationDetailsViewSerializer` is a serializer for the `sensors` model that
-# includes all fields and a geo field for location.
+
 class PostSensorLocationDetailsViewSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = sensors
         fields = '__all__'
         geo_field = 'location'
 
-
-# The `AirSerializer` class is a serializer in Python that is used to serialize and validate data for
-# the `Air` model, and it includes custom validation for the `longitude` and `latitude` fields.
 class AirSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     longitude=serializers.CharField(max_length=50,required=True )
@@ -39,7 +32,7 @@ class AirSerializer(serializers.ModelSerializer):
     class Meta:
         model = Air
         fields = ('quarter','packages','month','longitude','latitude','dateOfMonitoring','PM10','SO2',
-                   'O3','NOx','AQI' , 'Remarks')
+                   'O3','NOx', 'CO', 'AQI' , 'Remarks')
         # geo_field='location'
     def validate(self,data):
         if data['quarter']=="" or data['quarter']==None:
@@ -65,10 +58,6 @@ class AirViewSerializer(GeoFeatureModelSerializer):
         fields='__all__'
         geo_field='location'
 
-
-
-# The WaterSerializer class is a serializer for the Water model, with fields for longitude, latitude,
-# and other water-related information.
 class WaterSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     longitude=serializers.CharField(max_length=50,required=True)
@@ -110,16 +99,13 @@ class waterviewserializer(GeoFeatureModelSerializer):
         geo_field='location'
 
 
-# The `NoiseSerializer` class is a serializer for the `Noise` model in Django, which includes
-# validation for longitude and latitude fields and a create method that excludes latitude and
-# longitude when creating a new instance of the model.
 class NoiseSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     longitude=serializers.CharField(max_length=50,required=False)
     latitude=serializers.CharField(max_length=50,required=False)
     class Meta:
         model = Noise
-        fields = ('quarter','month','packages','longitude','latitude' ,'dateOfMonitoringThree','noiseLevel' , 'monitoringPeriod', )
+        fields = ('quarter','month','packages','longitude','latitude' ,'dateOfMonitoringThree','noiseLevel_day', 'noiseLevel_night' , 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea')
 
     def validate(self,data):
         long = data['longitude'].split('.')[-1]
@@ -145,14 +131,10 @@ class Noiseviewserializer(GeoFeatureModelSerializer):
 
 
 
-# The TreeManagementSerializer class is a serializer for the ExistingTreeManagement model in a Django
-# application, which includes fields for longitude, latitude, documents, photographs, and other
-# attributes, and also includes validation and creation methods.
 class TreeManagementSerailizer(serializers.ModelSerializer):
     longitude=serializers.CharField(max_length=50,required=True)
     latitude=serializers.CharField(max_length=50,required=True)
-    documents = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    photographs = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+
 
     class Meta:
         model = ExistingTreeManagment
@@ -181,14 +163,9 @@ class TreeManagmentviewserializer(GeoFeatureModelSerializer):
         geo_field = 'location'
 
 
-# The above class is a serializer for the NewTreeManagement model in Python, which includes validation
-# for longitude and latitude fields and a create method.
 class NewTreeManagmentSerializer(serializers.ModelSerializer):
     longitude = serializers.CharField(max_length=50,required=True)
     latitude = serializers.CharField(max_length=50,required=True)
-    documents = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    photographs = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-
     class Meta:
         model = NewTreeManagement
         fields = ('tree','quarter','month','dateOfMonitoring','packages','longitude','latitude',
@@ -218,18 +195,19 @@ class NewTreeManagmentviewserializer(GeoFeatureModelSerializer):
 
 
 
-# The WasteTreatmentsSerializer class is a serializer in Python that is used to validate and serialize
-# data for waste treatments, including fields for longitude, latitude, waste longitude, waste
-# latitude, documents, photographs, and other relevant information.
+
+
+
+
+
+
+
 class WasteTreatmentsSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     longitude=serializers.CharField(max_length=50,required=True)
     latitude=serializers.CharField(max_length=50,required=True)
     waste_longitude = serializers.CharField(max_length=50,required=True)
     waste_latitude = serializers.CharField(max_length=50,required=True)
-    documents = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    photographs = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-
     class Meta:
         model  = WasteTreatments
         fields = ('quarter','month','packages','longitude','latitude'  ,'dateOfMonitoring' , 'wastetype' ,'quantity',
@@ -253,12 +231,12 @@ class WasteTreatmentsSerializer(serializers.ModelSerializer):
 
         return data
 
+
     def create(self,data):
         data.pop('longitude')
         data.pop('latitude')
         data.pop('waste_longitude')
         data.pop('waste_latitude')
-
         return WasteTreatments.objects.create(**data)
 
 
@@ -269,25 +247,20 @@ class wastetreatmentsViewserializer(GeoFeatureModelSerializer):
         geo_field= 'location'
 
 
-# The MaterialManagmentSerializer class is a serializer for the MaterialManegmanet model in Python,
-# which includes various fields for storing and managing materials, such as longitude, latitude,
-# documents, photographs, and approvals.
 class MaterialManagmentSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     longitude=serializers.CharField(max_length=50,required=True)
     latitude=serializers.CharField(max_length=50,required=True)
     storageLongitude = serializers.CharField(max_length=50,required=True)
     storageLatitude = serializers.CharField(max_length=50,required=True)
-    documents = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    photographs = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    approvals = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    materialStoragePhotograph = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+
     class Meta:
         model = MaterialManegmanet
         fields = ('quarter','month','packages','longitude','dateOfMonitoring','latitude' ,
                 'typeOfMaterial','source','sourceOfQuarry','materialStorageType','storageLongitude' ,'storageLatitude',
                 'materialStorageCondition','materialStoragePhotograph','approvals' ,'photographs',
                 'documents','remarks')
+
 
 
     def create(self,data):
@@ -337,3 +310,9 @@ class WatermanamentSerializer(serializers.ModelSerializer):
     class Meta:
         model = water
         fields = ['qualityOfWater','sourceOfWater','location','packages','quarter']
+
+
+class GetAQISerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Air
+        fields = ['PM10', 'SO2', 'O3', 'NOx', 'CO']

@@ -18,6 +18,7 @@ urlpatterns = [
     path('noise' , NoiseView.as_view() , name = "Noise Details"),
     path('noise<int:id>' , NoiseupdateView.as_view() , name = "Noise Details"),
     path('noiseList' ,NoiseListView.as_view() , name = "Noise"),
+    path('noiseWhithinLimit' ,NoiseWhithinLimitAPI.as_view() , name = "noiseWhithinLimit"),
 
     # path('envview' , envMonitoringView.as_view() , name = 'EnvQualityMonitoring'),
     path('IdentifiedTree' , ExistingTreeManagementView.as_view() , name = "Tree Management"),
@@ -31,7 +32,7 @@ urlpatterns = [
     path('materialmanagement' , MaterialSourcingView.as_view() , name = "Material Sourcing") ,
     path('materialManagement<int:id>' , materialmanagemantUpdate.as_view() , name = "Material Sourcing") ,
     
-     path('treemanagement/<str:packages>' , TreemanagmentAPI.as_view() , name = "TreemanagmentAPI"),
+    path('treemanagement/<str:packages>' , TreemanagmentAPI.as_view() , name = "TreemanagmentAPI"),
     path('Airmanagement/<str:packages>' , AirAPI.as_view() , name = "AirAPI"),
     path('Noisemanagement/<str:packages>' , NoiseAPI.as_view() , name = "NoiseAPI"),
     path('wastemanagement/<str:packages>' , WasteTreatmentsAPI.as_view() , name = "NoiseAPI"),
