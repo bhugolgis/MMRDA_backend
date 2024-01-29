@@ -51,3 +51,11 @@ class AirChartSerializer(serializers.ModelSerializer):
         model = Air
         fields = ('month','PM10','standardPM10','SO2',
                    'standardSO2','O3','standardO3','NOx', 'standardNOx','AQI' )
+        
+
+
+
+class SocialMonitoringCountDashboardViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PAP
+        fields = ('PAPID' ,'eligibility',)

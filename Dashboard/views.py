@@ -16,13 +16,35 @@ class PAPCategoryDashboardView(ListAPIView):
     queryset = PAP.objects.all()
 
     def get(self, request, *args, **kwargs):
-        categoryOfPap = PAP.objects.values('categoryOfPap').annotate(count=Count('categoryOfPap'))
-        Rehabilitations = Rehabilitation.objects.values('categoryOfPap').annotate(count=Count('categoryOfPap'))
-       
-        dataset_Rehabilitations = [count['count'] for count in Rehabilitations]
-        lable = [count['categoryOfPap'] for count in categoryOfPap]
-        dataset_PAP = [count['count'] for count in categoryOfPap]
-        print(dataset_PAP)
+        land_use_type = [
+    "Residential Land",
+    "Private Land",
+    "Other",
+    "Institutional Land",
+    "Government Land",
+    "Commercial Land"
+        ]
+        packages = self.request.query_params.get("packages")
+        quarter = self.request.query_params.get("quarter")
+        if packages and quarter:
+            categoryOfPap = PAP.objects.filter(packages = packages , quarter = quarter).values('categoryOfPap').annotate(count=Count('categoryOfPap'))
+            print(categoryOfPap)
+
+            lable = [count['categoryOfPap'] for count in categoryOfPap]
+            dataset_PAP = [count['count'] for count in categoryOfPap]
+            # # if no values when filtered
+            # for value in land_use_type:
+            #     if value not in lable:
+            #         lable.append(value)
+            #         dataset_PAP.append(0)
+        else:
+            categoryOfPap = PAP.objects.values('categoryOfPap').annotate(count=Count('categoryOfPap'))
+            print(categoryOfPap)
+            lable = [count['categoryOfPap'] for count in categoryOfPap]
+            lable.sort(reverse=True)
+            dataset_PAP = [count['count'] for count in categoryOfPap]
+            dataset_PAP.sort(reverse=True)
+            # print(dataset_PAP)
         # lable_PAP = [count['categoryOfPap'] for count in categoryOfPap]
 
         # dataset_PAP = [22 , 22 , 20 , 25 , 23 , 22]
@@ -89,18 +111,30 @@ class RehabilitatedPAPDashboardView(GenericAPIView):
     serializer_class = RehabilationDashboardSerializer
 
     def get(self, request):
-        counts = Rehabilitation.objects.values('compensationStatus').annotate(count=Count('compensationStatus'))
-        label = [count['compensationStatus'] for count in counts]
-        print(label)
-        totalcount = Rehabilitation.objects.all().count()
+        packages = self.request.query_params.get("packages")
+        quarter = self.request.query_params.get("quarter")
+        print("before if")
+        if packages and quarter:
+            print("inside if")
+            counts = Rehabilitation.objects.filter(packages = packages , quarter = quarter).values('compensationStatus').annotate(count=Count('compensationStatus'))
+            label = [count['compensationStatus'] for count in counts]
+            print(label)
+            totalcount = Rehabilitation.objects.all().count()
 
-        dataset = [count['count'] for count in counts]
+            dataset = [count['count'] for count in counts]
+        else:
+            counts = Rehabilitation.objects.values('compensationStatus').annotate(count=Count('compensationStatus'))
+            label = [count['compensationStatus'] for count in counts]
+            print(label)
+            totalcount = Rehabilitation.objects.all().count()
+
+            dataset = [count['count'] for count in counts]
         return Response({'status': 'success',
                         'Message': 'Data fetched successfully',
                          'dataset': dataset,
                          'label' : label , 
                          'totalcount' : totalcount ,
-                         
+                        #  'Counts': counts,
                           } , status= 200)
 
 
@@ -109,14 +143,15 @@ class LabourCampFacilitiesDashboardView(GenericAPIView):
 
     def get(self, request, labourCampName , quarter ,  *args, **kwargs):
 
-        labour = LabourCamp.objects.filter(labourCampName=labourCampName , quarter = quarter)
+        labour = LabourCamp.objects.filter(
+            labourCampName=labourCampName , quarter = quarter)
         if labour:
             data = LabourcampDashboardSerializer(labour.latest('id')).data
             values = list(data.values())
             
             dataset = []
-            dataset.append(values.count('Good')),
-            dataset.append(values.count('Average'))
+            dataset.append(values.count('Good')), dataset.append(
+                values.count('Average'))
             dataset.append(values.count('Bad'))
 
             return Response({'status': 'success',
@@ -382,4 +417,40 @@ class AirChartView(generics.GenericAPIView):
                         #  'AQI': serializers.get('AQI')})
 
 
+# API for PAP count
+class SocialMonitoringCountDashboardView(APIView):
+    serializer_class = SocialMonitoringCountDashboardViewSerializer
+    #Need to be optimized
+    def get(self, request,quarter, packages, *args, **kwargs):
 
+        PAPCount = PAP.objects.all().filter(packages=packages, quarter=quarter).count()
+        EligiblePAPCount = PAP.objects.filter(eligibility='Eligible', packages=packages, quarter=quarter).count()
+        NonEligiblePAPCount = PAP.objects.filter(eligibility='Not Eligible', packages=packages, quarter=quarter).count()
+        ReallocateCount = Rehabilitation.objects.all().filter(packages=packages, quarter=quarter).count()
+        NonReallocateCount = PAPCount - ReallocateCount
+
+
+        print('eligible_count:', EligiblePAPCount, 'none_count:', NonEligiblePAPCount)
+
+        # for obj in queryset:
+        #   print(obj.__dict__)
+
+        # # Serialize the queryset using your custom serializer
+        # serializer = SocialMonitoringCountDashboardViewSerializer(queryset, many=True)
+        # serialized_data = serializer.data
+
+        # for obj in serialized_data:
+        #   print(obj)
+
+        if PAPCount == 0:
+            return Response({'Message': 'No data Found',
+                            'status': 'success'})
+
+        return Response({'status': 'success',
+                        'Message': 'Data Fetched successfully',
+                         'PAPcount': PAPCount,
+                         'EligiblePAPCount': EligiblePAPCount,
+                         'NonEligiblePAPCount': NonEligiblePAPCount,
+                         'ReallocateCount': ReallocateCount,
+                         'NonReallocateCount': NonReallocateCount,
+                         }, status=200)
