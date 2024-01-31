@@ -3,7 +3,7 @@ from django.contrib.auth.models import Group
 from Auth.models import User 
 from .serializers import (
     LoginSerializer, RegisterSerializer , LogoutSerializer , ChangePasswordSerializer ,
-    PasswordRestSerializer,PasswordResetEmailSerializer)
+    PasswordRestSerializer,PasswordResetEmailSerializer,NewLoginSerializer)
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework import generics
@@ -123,6 +123,45 @@ class LoginView(generics.GenericAPIView):
                             'Message': "Invalid Credentials"} , status=status.HTTP_404_NOT_FOUND)
             
             user1 = User.objects.filter(email=email)
+            user2 = User.objects.filter(email=email).values("id","email")
+            print(user2)
+            print(user.groups.values_list("name",flat=True))
+            serializer2 = RegisterSerializer(user1 ,many=True)
+            if user is not None:
+                token = get_tokens_for_user(user)
+                return Response({'Token':token,
+                                'status': 'success',
+                                'Message':'Login sucessfull', 
+                                'user': serializer2.data[0].get('email'),
+                                'username': serializer2.data[0].get('username'),
+                                # 'user_group' : user.groups.values_list("name",flat=True)[0]
+                                } , 
+                                status=status.HTTP_200_OK)
+        else:
+            return Response({'status': 'failed',
+                            'Message': "Invalid Credentials"} , status=status.HTTP_404_NOT_FOUND)
+    
+
+
+
+
+
+class NewLoginView(generics.GenericAPIView):
+    serializer_class = NewLoginSerializer
+    parser_classes = [MultiPartParser]
+
+    def post(self , request):
+        
+        serializer = self.get_serializer(data= request.data)
+        if serializer.is_valid():
+            email = serializer.data.get('email')
+            password = serializer.data.get('password')
+            user = authenticate(email=email , password=password)
+            # if user is None:
+            #     return Response({'status': 'failed',
+            #                 'Message': "Invalid Credentials"} , status=status.HTTP_404_NOT_FOUND)
+            
+            user1 = User.objects.filter(email=email)
             serializer2 = RegisterSerializer(user1 ,many=True)
             if user is not None:
                 token = get_tokens_for_user(user)
@@ -135,8 +174,11 @@ class LoginView(generics.GenericAPIView):
                                 status=status.HTTP_200_OK)
         else:
             return Response({'status': 'failed',
-                            'Message': "Invalid Credentials"} , status=status.HTTP_404_NOT_FOUND)
-    
+                            'Message':serializer.errors["non_field_errors"][0]} , status=status.HTTP_404_NOT_FOUND)
+
+
+
+
 
 
 # The `ChangePasswordView` class is a view in a Python Django application that handles the logic for

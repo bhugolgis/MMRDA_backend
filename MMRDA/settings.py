@@ -7,10 +7,10 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # # use this if setting up on Windows 10 with GDAL installed from OSGeo4W using defaults
-# if os.name == 'nt':
-#     VIRTUAL_ENV_BASE = os.environ['VIRTUAL_ENV']
-#     os.environ['PATH'] = os.path.join(VIRTUAL_ENV_BASE, r'.\Lib\site-packages\osgeo') + ';' + os.environ['PATH']
-#     os.environ['PROJ_LIB'] = os.path.join(VIRTUAL_ENV_BASE, r'.\Lib\site-packages\osgeo\data\proj') + ';' + os.environ['PATH']
+if os.name == 'nt':
+    VIRTUAL_ENV_BASE = os.environ['VIRTUAL_ENV']
+    os.environ['PATH'] = os.path.join(VIRTUAL_ENV_BASE, r'.\Lib\site-packages\osgeo') + ';' + os.environ['PATH']
+    os.environ['PROJ_LIB'] = os.path.join(VIRTUAL_ENV_BASE, r'.\Lib\site-packages\osgeo\data\proj') + ';' + os.environ['PATH']
 
 
 # Quick-start development settings - unsuitable for production
@@ -113,6 +113,17 @@ DATABASES={
     }
 }
 
+
+# DATABASES={
+#     'default': {
+#         'ENGINE': 'django.contrib.gis.db.backends.postgis',
+#         'NAME':'Mdb',
+#         'USER':'postgres',
+#         'PASSWORD':'password',
+#         'HOST':'localhost',
+#         'PORT':'5432',
+#     }
+# }
 
 # DATABASES = {
 #     'default': {
@@ -223,5 +234,5 @@ SIMPLE_JWT = {
 
 TIME_ZONE =  'Asia/Kolkata'
 
-GDAL_LIBRARY_PATH = r"C:\OSGeo4W\bin\gdal308.dll"
+GDAL_LIBRARY_PATH = r"C:\OSGeo4W64\bin\gdal301.dll"
 
