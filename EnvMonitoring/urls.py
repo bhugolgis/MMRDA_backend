@@ -7,6 +7,7 @@ urlpatterns = [
 
     path('PostSensorLocationDetails' , PostSensorLocationDetails.as_view() , name = 'PostSensorLocationDetails'),
     path('GetsensorLocationDetails' , GetSensorLocationDetails.as_view() , name = 'PostSensorLocationDetails'),
+    path('generate-aqi' , GenerateAQI.as_view() , name = 'GenerateAQI'),
     path('air' , AirView.as_view() , name = 'Air Details'),
     path('air<int:id>' , AirUpdateView.as_view() , name = 'Air Details'),
     path('airList', AirListView.as_view() , name = 'ListAirView'),
@@ -31,7 +32,7 @@ urlpatterns = [
     path('waste' , WasteTreatmentsView.as_view() , name = "Waste Management"),
     path('materialmanagement' , MaterialSourcingView.as_view() , name = "Material Sourcing") ,
     path('materialManagement<int:id>' , materialmanagemantUpdate.as_view() , name = "Material Sourcing") ,
-    
+
     path('treemanagement/<str:packages>' , TreemanagmentAPI.as_view() , name = "TreemanagmentAPI"),
     path('Airmanagement/<str:packages>' , AirAPI.as_view() , name = "AirAPI"),
     path('Noisemanagement/<str:packages>' , NoiseAPI.as_view() , name = "NoiseAPI"),

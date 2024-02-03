@@ -2,6 +2,7 @@ from rest_framework import serializers
 from SocialMonitoring.models import *
 from EnvMonitoring.models import *
 from Training.models import *
+from MMRDA.constants.air_constants import *
 
 
 class PAPDashboardSerializer(serializers.ModelSerializer):
@@ -38,20 +39,19 @@ class ExistingTreeSerializer(serializers.ModelSerializer):
 
 class OccupationalHealthSafetySerializer(serializers.ModelSerializer):
     class Meta:
-        model = occupationalHealthSafety 
+        model = occupationalHealthSafety
         fields = '__all__'
 
 class waterserializer(serializers.ModelSerializer):
     class Meta:
-        model = water   
+        model = water
         fields = '__all__'
 
 class AirChartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Air
-        fields = ('month','PM10','standardPM10','SO2',
-                   'standardSO2','O3','standardO3','NOx', 'standardNOx','AQI' )
-        
+        fields = ('month','PM10','PM2_5','SO2','NOx','CO','AQI')
+
 
 
 

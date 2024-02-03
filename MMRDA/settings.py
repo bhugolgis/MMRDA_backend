@@ -20,7 +20,7 @@ if os.name == 'nt':
 SECRET_KEY = 'django-insecure-=idl@@6e_f-wsi#l0%4af02&xht!-7ppi23dt_wo2_6i&fnsca'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True 
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -30,7 +30,7 @@ AUTH_USER_MODEL = 'Auth.User'
 # Application definition
 
 INSTALLED_APPS = [
-    
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     'rest_framework_gis',
     'django_filters',
     'GIS'
-    
+
 ]
 
 MIDDLEWARE = [
@@ -90,7 +90,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'MMRDA.wsgi.application'
 
 PASSWORD_RESET_TIMEOUT = 900  # 900 SEC = 15 min
-# Email Configuarations 
+# Email Configuarations
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
@@ -177,9 +177,9 @@ MEDIA_URL = "/media/"
 # DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # AUTHENTICATION_BACKENDS = [
-  
+
 #     "django.contrib.auth.backends.ModelBackend",
- 
+
 # ]
 
 
@@ -188,12 +188,12 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
 
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        
+
     ),
 
     # 'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
 
-   
+
 }
 
 
@@ -207,16 +207,16 @@ SWAGGER_SETTINGS = {
             "in": "header",
         }
     },
-    
+
 }
 
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),   # 2 Hours 
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),   # 2 Hours
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
-  
+
 
 
     'AUTH_HEADER_TYPES': ('Bearer',),
@@ -234,5 +234,4 @@ SIMPLE_JWT = {
 
 TIME_ZONE =  'Asia/Kolkata'
 
-GDAL_LIBRARY_PATH = r"C:\OSGeo4W64\bin\gdal301.dll"
-
+# GDAL_LIBRARY_PATH = r"C:\OSGeo4W64\bin\gdal301.dll"

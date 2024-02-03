@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 # Create your models here.
 
 def validate_location_precision(value):
-  
+
     if isinstance(value, tuple) and len(value) == 2:
         lat, lon = value
         if isinstance(lat, float) and isinstance(lon, float):
@@ -35,18 +35,14 @@ class sensors(models.Model):
 
 class  Air(Baseclass):
     # sensor = models.ForeignKey(sensors , related_name="sensor_name" , on_delete=models.CASCADE , null = True , blank = True)
-    user = models.ForeignKey( User, related_name='airs_user', on_delete=models.CASCADE , null= True   , blank=True)
-    PM10 = models.CharField(max_length= 50 , blank= True , default= 0, null= True)
-    standardPM10 = models.FloatField(blank= True , default=100.00 , null= True)
-    SO2 = models.CharField(max_length= 50 , blank= True , default= 0, null= True)
-    standardSO2 = models.FloatField(blank= True , default = 80.00 , null= True)
-    O3 = models.CharField(max_length= 50 , blank= True , default= 0, null= True)
-    standardO3 = models.FloatField(blank= True , default = 100.00 , null= True)
-    NOx = models.CharField( max_length= 50 , blank= True , default= 0, null = True)
-    standardNOx = models.FloatField(blank= True , default = 80.00 , null= True)
-    CO = models.CharField(max_length=50, blank= True, null=True)
-    AQI = models.CharField(max_length= 50 , blank= True , default= 0, null = True) 
-    Remarks = models.TextField ( blank = True, max_length  = 255, null = True )
+    user = models.ForeignKey(User, related_name='airs_user', on_delete=models.CASCADE, null=True, blank=True)
+    PM10 = models.FloatField(blank=True, default=0, null=True)
+    PM2_5 = models.FloatField(blank=True, default=0, null=True)
+    SO2 = models.FloatField(blank=True, default=0, null=True)
+    NOx = models.FloatField(blank=True, default=0, null=True)
+    CO = models.FloatField(blank=True, default=0, null=True)
+    AQI = models.FloatField(blank=True, default=0, null=True)
+    Remarks = models.TextField(blank=True, max_length=255, null=True)
 
 class water(Baseclass):
     dateOfMonitoring = None
@@ -71,9 +67,9 @@ class Noise(Baseclass):
     monitoringPeriod_night = models.CharField(
         max_length=255, null=True, blank=True)
     typeOfArea = models.CharField( max_length = 255, null=True, blank=True)
-    
 
-   
+
+
 
 
 class ExistingTreeManagment(Baseclass):
@@ -87,7 +83,7 @@ class ExistingTreeManagment(Baseclass):
     photographs = models.ImageField(upload_to="Existingtree_photos/", null=True, blank=True)
     documents = models.FileField(upload_to='existingTree_documents/', null = True , blank=True)
     remarks = models.TextField(blank=True, null=True )
-    
+
 
 class NewTreeManagement(Baseclass):
     user = models.ForeignKey(User , related_name="newTree_users" , on_delete=models.CASCADE , blank = True )
@@ -95,11 +91,11 @@ class NewTreeManagement(Baseclass):
     location = models.PointField(null = True , blank=True)
     commanName = models.CharField(max_length=255, blank=True, null=True)
     botanicalName = models.CharField(max_length=255, null=True, blank=True)
-    condition = models.CharField(max_length=255, null=True, blank=True)   
+    condition = models.CharField(max_length=255, null=True, blank=True)
     photographs = models.ImageField(upload_to="newTree_photographs/", null=True, blank=True)
     documents = models.FileField(upload_to="newTree_documents/", null  = True, blank=True  )
     remarks = models.TextField(max_length= 255 , null = True , blank = True)
-   
+
 
 
 class WasteTreatments(Baseclass):
@@ -128,7 +124,7 @@ class MaterialManegmanet(Baseclass):
     materialStoragePhotograph = models.ImageField(upload_to = 'MaterialManegment/materailStorage_Photograph' , blank = True , null = True)
 
     approvals = models.FileField(null=True, blank=True)
-    
+
     photographs = models.ImageField(upload_to='MaterialManegment/materialsourcing_photographs/',null=True, blank=True)
     documents = models.FileField(upload_to='MaterialManegment/materialsourcing_documents', null=True, blank=True)
     remarks = models.CharField(max_length=255, null=True, blank=True)

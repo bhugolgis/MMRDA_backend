@@ -35,7 +35,7 @@ class LabourcampReportSerializer(GeoFeatureModelSerializer):
         if data['labourCampName'] == '' or data['labourCampName'] ==None:
             raise ValidationError('labourCampName can not be empty')
         return data
-    
+
 
 class LabourCampDeatilViewSerialzier(ModelSerializer):
     class Meta:
@@ -58,15 +58,15 @@ class ConstructionCampReportSerializer(GeoFeatureModelSerializer):
                         'genralphotographs','documents','remarks')
         geo_field= ('location')
 
-                    
+
 
 # The PAPReportSerializer class is a serializer for the PAP model that includes specific fields and a
 # geo_field for location.
 class PAPReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = PAP
-        fields = ('id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','nameOfPAP', 
-                  'addressLine1','streetName','pincode','eligibility', 'categoryOfPap', 
+        fields = ('id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','nameOfPAP',
+                  'addressLine1','streetName','pincode','eligibility', 'categoryOfPap',
                   'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
                    'actionTaken', 'notAgreedReason','remarks' )
         geo_field= ('location')
@@ -84,7 +84,7 @@ class RehabilitationReportSerializer(GeoFeatureModelSerializer):
         #            'financialSupportAmount','isCommunityEngagement','isEngagementType', 'photographs' , 'documents','remarks')
         geo_field= ('location')
 
-        
+
 
 '''----------------------- Env Monitoring Report Serilaizer------------------------------'''
 # The AirReportSerializer class is a serializer for the Air model that includes specific fields and a
@@ -93,8 +93,8 @@ class RehabilitationReportSerializer(GeoFeatureModelSerializer):
 class AirReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Air
-        fields =('id','quarter','packages','month','dateOfMonitoring','PM10','standardPM10','SO2',
-                   'standardSO2','O3','standardO3','NOx', 'standardNOx','AQI' , 'Remarks')
+        fields =('id','quarter','packages','month','dateOfMonitoring','PM10','PM2_5',
+                 'SO2','NOx','CO','AQI','Remarks')
         geo_field= ('location')
 
 # The NoiseReportSerializer class is a serializer for the Noise model that includes specific fields
@@ -143,7 +143,7 @@ class treeManagementSerializer(GeoFeatureModelSerializer):
         model = ExistingTreeManagment
         fields = ('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
                     'condition', 'noOfTreeCut','actionTaken', 'photographs', 'documents','remarks')
-        
+
         geo_field= ('location')
 
 

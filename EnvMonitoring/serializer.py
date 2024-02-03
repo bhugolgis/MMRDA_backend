@@ -1,4 +1,4 @@
-from rest_framework import serializers 
+from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from .models import *
 
@@ -8,15 +8,15 @@ class PostSensorLocationDetailsSerializer(serializers.ModelSerializer):
     longitude=serializers.CharField(max_length=50,required=True )
     latitude=serializers.CharField(max_length=50,required=True)
     class Meta:
-        model = sensors 
+        model = sensors
         fields = ('Name' , 'ID' , 'longitude' , 'latitude')
 
-    
+
     def create(self,data):
         data.pop('latitude')
         data.pop('longitude')
         return sensors.objects.create(**data)
-    
+
 
 
 class PostSensorLocationDetailsViewSerializer(GeoFeatureModelSerializer):
@@ -31,8 +31,8 @@ class AirSerializer(serializers.ModelSerializer):
     latitude=serializers.CharField(max_length=50,required=True)
     class Meta:
         model = Air
-        fields = ('quarter','packages','month','longitude','latitude','dateOfMonitoring','PM10','SO2',
-                   'O3','NOx', 'CO', 'AQI' , 'Remarks')
+        fields = ('quarter','packages','month','longitude','latitude','dateOfMonitoring','PM10',
+                  'PM2_5','SO2','NOx','CO','AQI','Remarks')
         # geo_field='location'
     def validate(self,data):
         if data['quarter']=="" or data['quarter']==None:
@@ -44,14 +44,14 @@ class AirSerializer(serializers.ModelSerializer):
         if len(lat) > 6:
             raise serializers.ValidationError("latitude must have at most 6 digits after the decimal point.")
         return data
-    
+
     def create(self,data):
         data.pop('latitude')
         data.pop('longitude')
         return Air.objects.create(**data)
 
-    
-        
+
+
 class AirViewSerializer(GeoFeatureModelSerializer):
     class Meta:
         model=Air
@@ -75,7 +75,7 @@ class WaterSerializer(serializers.ModelSerializer):
         lat =  data['latitude'].split('.')[-1]
         if len(lat) > 6:
             raise serializers.ValidationError("latitude must have at most 6 digits after the decimal point.")
-        
+
         # if data['quarter']=="" or data['quarter']==None:
         #     raise serializers.ValidationError("quarter cannot be empty!!")
         # if data['packages'] == "" or data['packages'] == None:
@@ -85,7 +85,7 @@ class WaterSerializer(serializers.ModelSerializer):
         # if data['sourceOfWater'] == "" or data['sourceOfWater'] == None:
         #     raise serializers.ValidationError('source_of_water cannot be empty!!')
         return data
-    
+
 
     def create(self,data):
         data.pop('latitude')
@@ -121,7 +121,7 @@ class NoiseSerializer(serializers.ModelSerializer):
         data.pop('longitude')
         return Noise.objects.create(**data)
 
-    
+
 
 class Noiseviewserializer(GeoFeatureModelSerializer):
     class Meta:
@@ -170,7 +170,7 @@ class NewTreeManagmentSerializer(serializers.ModelSerializer):
         model = NewTreeManagement
         fields = ('tree','quarter','month','dateOfMonitoring','packages','longitude','latitude',
                    'commanName' ,'botanicalName', 'condition', 'photographs', 'documents','remarks' )
-        
+
     def validate(self,data):
         long = data['longitude'].split('.')[-1]
         if len(long) > 6:
@@ -220,11 +220,11 @@ class WasteTreatmentsSerializer(serializers.ModelSerializer):
         lat =  data['latitude'].split('.')[-1]
         if len(lat) > 6:
             raise serializers.ValidationError("latitude must have at most 6 digits after the decimal point.")
-        
+
         waste_longitude = data["waste_longitude"].split('.')[-1]
         if len(waste_longitude) > 6:
             raise serializers.ValidationError("waste_longitude must have at most 6 digits after the decimal point.")
-        
+
         waste_latitude = data["waste_latitude"].split('.')[-1]
         if len(waste_latitude) > 6:
             raise serializers.ValidationError("waste_latitude must have at most 6 digits after the decimal point.")
@@ -241,7 +241,7 @@ class WasteTreatmentsSerializer(serializers.ModelSerializer):
 
 
 class wastetreatmentsViewserializer(GeoFeatureModelSerializer):
-    class Meta: 
+    class Meta:
         model = WasteTreatments
         fields = '__all__'
         geo_field= 'location'
@@ -270,7 +270,7 @@ class MaterialManagmentSerializer(serializers.ModelSerializer):
         data.pop('storageLatitude')
         return MaterialManegmanet.objects.create(**data)
 
-    
+
 
 class MaterialSourcingViewserializer(GeoFeatureModelSerializer):
     class Meta:
@@ -312,7 +312,16 @@ class WatermanamentSerializer(serializers.ModelSerializer):
         fields = ['qualityOfWater','sourceOfWater','location','packages','quarter']
 
 
-class GetAQISerializer(serializers.ModelSerializer):
+class GenerateAQISerializer(serializers.ModelSerializer):
     class Meta:
         model = Air
-        fields = ['PM10', 'SO2', 'O3', 'NOx', 'CO']
+        fields = ['PM10', 'PM2_5', 'SO2', 'NOx', 'CO']
+
+    def validate(self, data):
+
+        if len(data.keys())<3 or tuple(data.values()).count(0)>=3:
+            raise serializers.ValidationError("Concentrations of minimum three pollutants are required")
+        if (not data.get('PM10',None) and not data.get('PM2_5',None)) or (data.get('PM10') == 0 and data.get('PM2_5') == 0):
+            raise serializers.ValidationError("Either PM10 or PM2.5 data are required for AQI Generation")
+
+        return data
