@@ -14,6 +14,8 @@ from .serializer import *
 from .permissions import IsConsultant , IsContractor
 from MMRDA.utils import error_simplifier
 
+from .utils import SubIndices
+
 class PostSensorLocationDetails(generics.GenericAPIView):
     serializer_class = PostSensorLocationDetailsSerializer
     parser_classes = (MultiPartParser, )
@@ -52,11 +54,34 @@ class GenerateAQI(generics.GenericAPIView):
         serializer = self.get_serializer(data = request.data)
         if serializer.is_valid():
             measures = serializer.validated_data.values()
-            AQI = max(measures)
+            #     PM10 = sub_indices_calculator.get_PM10_subindex(serializer.validated_data['PM10'])
+            print(serializer.validated_data.keys())
+            print(request.data)
+           
+            sub_indices_calculator = SubIndices()
+            # PM10 = sub_indices_calculator.get_PM10_subindex(serializer.validated_data['PM10'])
+        
+            # checking if parameter empty or not if empty return 0 else calculate subindex
+            PM10 = sub_indices_calculator.get_PM10_subindex(serializer.validated_data['PM10']) if "PM10" in serializer.validated_data.keys() else 0
+            PM2_5 = sub_indices_calculator.get_PM2_5_subindex(serializer.validated_data['PM2_5']) if "PM2_5" in serializer.validated_data.keys() else 0
+            SO2 = sub_indices_calculator.get_SO2_subindex(serializer.validated_data['SO2']) if "SO2" in serializer.validated_data.keys() else 0
+            NOx = sub_indices_calculator.get_NOx_subindex(serializer.validated_data['NOx']) if "NOx" in serializer.validated_data.keys() else 0
+            CO = sub_indices_calculator.get_CO_subindex(serializer.validated_data['CO']) if "CO" in serializer.validated_data.keys() else 0
+            
+
+            # print(NOx)
+            # AQI = max(measures)
+            sub_indices = [PM10, PM2_5, NOx, SO2, CO]
+            print(sub_indices)
+            AQI = max(PM10, PM2_5, NOx, SO2, CO)
+
+            quality = sub_indices_calculator.check_air_quality(AQI)
+
             return Response({
                 "message":"AQI generated successfully",
                 "status":"success",
-                "data":AQI
+                "data":AQI,
+                "quality": quality
             })
         else:
             error = error_simplifier(serializer.errors)
@@ -754,3 +779,96 @@ class NoiseWhithinLimitAPI(generics.GenericAPIView):
 
         return Response({'status': 200, 'data': isWhithinLimit,
                                       'message': 'successfully'})
+
+
+
+# ## PM10 Sub-Index calculation
+# def get_PM10_subindex(x):
+#     if x <= 50:
+#         return x
+#     elif x <= 100:
+#         return x
+#     elif x <= 250:
+#         return 100 + (x - 100) * 100 / 150
+#     elif x <= 350:
+#         return 200 + (x - 250)
+#     elif x <= 430:
+#         return 300 + (x - 350) * 100 / 80
+#     elif x > 430:
+#         return 400 + (x - 430) * 100 / 80
+#     else:
+#         return 0
+    
+
+# ## SO2 Sub-Index calculation
+# def get_SO2_subindex(x):
+#     if x <= 40:
+#         return x * 50 / 40
+#     elif x <= 80:
+#         return 50 + (x - 40) * 50 / 40
+#     elif x <= 380:
+#         return 100 + (x - 80) * 100 / 300
+#     elif x <= 800:
+#         return 200 + (x - 380) * 100 / 420
+#     elif x <= 1600:
+#         return 300 + (x - 800) * 100 / 800
+#     elif x > 1600:
+#         return 400 + (x - 1600) * 100 / 800
+#     else:
+#         return 0
+
+
+# ## NOx Sub-Index calculation
+# def get_NOx_subindex(x):
+#     if x <= 40:
+#         return x * 50 / 40
+#     elif x <= 80:
+#         return 50 + (x - 40) * 50 / 40
+#     elif x <= 180:
+#         return 100 + (x - 80) * 100 / 100
+#     elif x <= 280:
+#         return 200 + (x - 180) * 100 / 100
+#     elif x <= 400:
+#         return 300 + (x - 280) * 100 / 120
+#     elif x > 400:
+#         return 400 + (x - 400) * 100 / 120
+#     else:
+#         return 0
+    
+
+
+# ## CO Sub-Index calculation
+# def get_CO_subindex(x):
+#     if x <= 1:
+#         return x * 50 / 1
+#     elif x <= 2:
+#         return 50 + (x - 1) * 50 / 1
+#     elif x <= 10:
+#         return 100 + (x - 2) * 100 / 8
+#     elif x <= 17:
+#         return 200 + (x - 10) * 100 / 7
+#     elif x <= 34:
+#         return 300 + (x - 17) * 100 / 17
+#     elif x > 34:
+#         return 400 + (x - 34) * 100 / 17
+#     else:
+#         return 0
+
+
+
+# ## PM2.5 Sub-Index calculation
+# def get_PM2_5_subindex(x):
+#     if x <= 30:
+#         return x * 50 / 30
+#     elif x <= 60:
+#         return 50 + (x - 30) * 50 / 30
+#     elif x <= 90:
+#         return 100 + (x - 60) * 100 / 30
+#     elif x <= 120:
+#         return 200 + (x - 90) * 100 / 30
+#     elif x <= 250:
+#         return 300 + (x - 120) * 100 / 130
+#     elif x > 250:
+#         return 400 + (x - 250) * 100 / 130
+#     else:
+#         return 0
