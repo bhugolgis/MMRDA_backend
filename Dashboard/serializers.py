@@ -58,4 +58,13 @@ class AirChartSerializer(serializers.ModelSerializer):
 class SocialMonitoringCountDashboardViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = PAP
-        fields = ('PAPID' ,'eligibility',)
+        fields = ('PAPID' ,'eligibility','package','quarter')
+
+        def validate(self, data):
+            package = data.get('package')
+            quarter = data.get('quarter')
+
+            if not package and not quarter:
+                raise ValidationError("Both 'package' and 'quarter' must be provided.")
+
+            return data
