@@ -325,3 +325,7 @@ class GenerateAQISerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Either PM10 or PM2.5 data are required for AQI Generation")
 
         return data
+    
+
+
+

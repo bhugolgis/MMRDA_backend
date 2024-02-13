@@ -7,6 +7,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.parsers import MultiPartParser
+from MMRDA.utils import error_simplifier
+from rest_framework import status
+
 
 
 # Create your views here.
@@ -362,9 +365,9 @@ class MaterialConditionChart(APIView):
 
 
 class IncidenttypeCountchart(APIView):
-
-    def get(self, request):
-        counts = occupationalHealthSafety.objects.values('typeOfIncident').annotate(count = Count('typeOfIncident'))
+# need proper response for no data available like only CA-08 and July September data is available
+    def get(self, request, packages, quarter):
+        counts = occupationalHealthSafety.objects.values('typeOfIncident').filter(packages=packages, quarter=quarter).annotate(count = Count('typeOfIncident'))
         label = [count['typeOfIncident'] for count in counts]
         dataset = [count['count'] for count in counts]
         
@@ -454,3 +457,27 @@ class SocialMonitoringCountDashboardView(APIView):
                          'ReallocateCount': ReallocateCount,
                          'NonReallocateCount': NonReallocateCount,
                          }, status=200)
+    
+
+
+class AirAQIChartDashboardView(APIView):
+    serializer_class = DashboardAQISerializer
+    
+    def get(self, request,quarter, packages, *args, **kwargs):
+
+        air = Air.objects.all().filter(packages=packages, quarter=quarter)
+        serializer = DashboardAQISerializer(air, many=True)
+        serializer_data = serializer.data
+     
+        aqi_list = []
+        for object in serializer_data:
+            aqi_list.append(object['AQI'])
+            
+        avg_aqi = sum(aqi_list) / len(aqi_list)
+        
+        return Response({
+            "message":"AQI generated successfully",
+            "status":"success",
+            "data":avg_aqi,
+            # "quality": quality
+        })

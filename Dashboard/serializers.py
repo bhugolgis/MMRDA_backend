@@ -68,3 +68,10 @@ class SocialMonitoringCountDashboardViewSerializer(serializers.ModelSerializer):
                 raise ValidationError("Both 'package' and 'quarter' must be provided.")
 
             return data
+        
+
+
+class DashboardAQISerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Air
+        fields = ['PM10', 'PM2_5', 'SO2', 'NOx', 'CO','packages', 'quarter', 'AQI']
