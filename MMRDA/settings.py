@@ -107,8 +107,8 @@ DATABASES={
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME':'MMRDA',
         'USER':'postgres',
-        'PASSWORD':'admin',
-        'HOST':'10.202.100.7',
+        'PASSWORD':'Bhugol@123',
+        'HOST':'localhost',
         'PORT':'5432',
     }
 }
@@ -125,12 +125,12 @@ DATABASES={
 #     }
 # }
 
-# DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.sqlite3',
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
-# }
+# }# DATABASES = {
+
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators

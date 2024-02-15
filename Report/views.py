@@ -8,6 +8,8 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework import generics
 from rest_framework.views import APIView
 from Training.models import *
+from openpyxl import Workbook
+
 
 
 
@@ -668,4 +670,17 @@ class OccupationalHealthPackageView(generics.GenericAPIView):
                             'status' : 'success' , 
                              "training_data": training_data},
                             status=200)
+
+
+
+class ExcelWorkbook(generics.GenericAPIView):
+    serializer_class = LabourcampReportSerializer
+
+    def get(self, request):
+        wb = Workbook()
+        ws = wb.active
+
+        ws['A1'] = "Pranav"
+        wb.save("sample1")
+        
 

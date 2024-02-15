@@ -60,6 +60,7 @@ urlpatterns = [
     
      path('OccupationalHealthQuarter/<str:quarter>/<int:year>' , OccupationalHealthQuarterView.as_view() , name = ' PreConstructionStageCompliance'),
      path('OccupationalHealthPackage/<str:packages>' , OccupationalHealthPackageView.as_view() , name = ' PreConstructionStageCompliance'),
+     path('excel' , ExcelWorkbook.as_view() , name = 'sample excel'),
      
      
      # path('MetroLine4Aligment' , MetroLine4View.as_view() , name = 'MetroLine4'),
