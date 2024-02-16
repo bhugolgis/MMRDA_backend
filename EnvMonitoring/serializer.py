@@ -65,7 +65,7 @@ class WaterSerializer(serializers.ModelSerializer):
     class Meta:
         model = water
         fields = ('quarter','packages','month', 'dateOfMonitoringTwo','longitude','latitude',
-                    'qualityOfWater' , 'sourceOfWater' ,'waterDisposal')
+                    'qualityOfWater' , 'sourceOfWater' ,'waterDisposal','pH', 'trueColor', 'turbidity', 'odour', 'totalDissolvedSolids', 'totalAlkalinityAsCaCO3', 'totalHardnessAsCaCO3', 'calcium', 'magnesium', 'chlorides', 'fluoride', 'sulphate', 'nitrate', 'iron', 'zinc', 'copper', 'aluminum', 'nickel', 'manganese', 'phenolicCompounds', 'sulphide', 'cadmium', 'cyanide', 'lead', 'mercury', 'totalArsenic', 'totalChromium', 'totalColiform', 'eColi')
 
 
     def validate(self,data):
@@ -108,6 +108,10 @@ class NoiseSerializer(serializers.ModelSerializer):
         fields = ('quarter','month','packages','longitude','latitude' ,'dateOfMonitoringThree','noiseLevel_day', 'noiseLevel_night' , 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea')
 
     def validate(self,data):
+        required_fields = ['quarter', 'month', 'packages', 'longitude', 'latitude', 'dateOfMonitoringThree']
+        for field in required_fields:
+            if field not in data:
+                raise serializers.ValidationError(f"{field} is required")
         long = data['longitude'].split('.')[-1]
         if len(long) > 6:
             raise serializers.ValidationError("longitude must have at most 6 digits after the decimal point.")

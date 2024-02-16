@@ -44,6 +44,7 @@ class  Air(Baseclass):
     AQI = models.FloatField(blank=True, default=0, null=True)
     Remarks = models.TextField(blank=True, max_length=255, null=True)
 
+
 class water(Baseclass):
     dateOfMonitoring = None
     dateOfMonitoringTwo =  models.DateField(null=True, blank=True)
@@ -51,6 +52,35 @@ class water(Baseclass):
     qualityOfWater = models.CharField(max_length=255, null=True, blank=True)
     sourceOfWater = models.CharField(max_length=255, null=True, blank=True)
     waterDisposal = models.CharField(max_length=255, null=True, blank=True)
+    pH = models.CharField(max_length=255, null=True, blank=True)
+    trueColor = models.CharField(max_length=255, null=True, blank=True)
+    turbidity = models.CharField(max_length=255, null=True, blank=True)
+    odour = models.CharField(max_length=255, null=True, blank=True)
+    totalDissolvedSolids = models.CharField(max_length=255, null=True, blank=True)
+    totalAlkalinityAsCaCO3 = models.CharField(max_length=255, null=True, blank=True)
+    totalHardnessAsCaCO3 = models.CharField(max_length=255, null=True, blank=True)
+    calcium = models.CharField(max_length=255, null=True, blank=True)
+    magnesium = models.CharField(max_length=255, null=True, blank=True)
+    chlorides = models.CharField(max_length=255, null=True, blank=True)
+    fluoride = models.CharField(max_length=255, null=True, blank=True)
+    sulphate = models.CharField(max_length=255, null=True, blank=True)
+    nitrate = models.CharField(max_length=255, null=True, blank=True)
+    iron = models.CharField(max_length=255, null=True, blank=True)
+    zinc = models.CharField(max_length=255, null=True, blank=True)
+    copper = models.CharField(max_length=255, null=True, blank=True)
+    aluminum = models.CharField(max_length=255, null=True, blank=True)
+    nickel = models.CharField(max_length=255, null=True, blank=True)
+    manganese = models.CharField(max_length=255, null=True, blank=True)
+    phenolicCompounds = models.CharField(max_length=255, null=True, blank=True)
+    sulphide = models.CharField(max_length=255, null=True, blank=True)
+    cadmium = models.CharField(max_length=255, null=True, blank=True)
+    cyanide = models.CharField(max_length=255, null=True, blank=True)
+    lead = models.CharField(max_length=255, null=True, blank=True)
+    mercury = models.CharField(max_length=255, null=True, blank=True)
+    totalArsenic = models.CharField(max_length=255, null=True, blank=True)
+    totalChromium = models.CharField(max_length=255, null=True, blank=True)
+    totalColiform = models.CharField(max_length=255, null=True, blank=True)
+    eColi = models.CharField(max_length=255, null=True, blank=True)
 
 
 class Noise(Baseclass):
