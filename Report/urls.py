@@ -19,7 +19,7 @@ urlpatterns = [
 
     path('constructioncampreportPackage/<str:packages>/<str:constructionSiteName>',
          ConstructionCampReportPackageView.as_view(), name='ConstructionSite Report'),
-#     path('ConstructionCampReportPackageExcelDownload/', ConstructionCampReportPackageExcelDownload.as_view(), name='labourQuarterExcelDownload'),
+    path('ConstructionCampReportPackageExcelDownload/', ConstructionCampReportPackageExcelDownload.as_view(), name='labourQuarterExcelDownload'),
     
     
     
