@@ -43,6 +43,7 @@ class  Air(Baseclass):
     CO = models.FloatField(blank=True, default=0, null=True)
     AQI = models.FloatField(blank=True, default=0, null=True)
     Remarks = models.TextField(blank=True, max_length=255, null=True)
+    place_location = models.CharField(max_length=255, null=True, blank=True)
 
 
 class water(Baseclass):
