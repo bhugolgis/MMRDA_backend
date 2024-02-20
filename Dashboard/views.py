@@ -73,27 +73,49 @@ class PAPCategoryDashboardView(ListAPIView):
 
 
 class CategoryWiseCompensationChart(APIView):
-    
-    def get(self, request, *args , **kwargs):
-        Rehabilitations = Rehabilitation.objects.values('categoryOfPap').annotate(count=Count('categoryOfPap'))
-        dataset_Rehabilitations = [count['count'] for count in Rehabilitations]
-        label = [count['categoryOfPap'] for count in Rehabilitations]
-        print(label)
-        Compensation_Status = Rehabilitation.objects.values('compensationStatus').annotate(count=Count('compensationStatus'))
-      
+    # not working when not passing parameters
+    def get(self, request, *args , **kwargs,):
+        packages = self.request.query_params.get("packages")
+        quarter = self.request.query_params.get("quarter")
+        print(packages)
+        print(quarter)
+        # Rehabilitations = Rehabilitation.objects.filter(packages = packages , quarter = quarter).values('categoryOfPap').annotate(count=Count('categoryOfPap'))
+        # dataset_Rehabilitations = [count['count'] for count in Rehabilitations]
+        # print(Rehabilitations)
+        # label = [count['categoryOfPap'] for count in Rehabilitations]
+        # print(label)
 
-        label_Compensation_Status = [count['compensationStatus'] for count in Compensation_Status]
-        print(label_Compensation_Status)
-        dataset_Compensation_Status = [count['count'] for count in Compensation_Status]
-        print(dataset_Compensation_Status)
+        if packages and quarter:
+            Compensation_Status = Rehabilitation.objects.filter(packages=packages, quarter=quarter).values('compensationStatus').annotate(count=Count('compensationStatus'))
+            
 
-        return Response({'status': 'success',
-                        'Message': 'Data Fetched successfully',
-                        'label' : label ,
-                        'dataset_Rehabilitations': dataset_Rehabilitations,
-                        'label_Compensation_Status' : label_Compensation_Status ,
-                        'dataset_Compensation_Status': dataset_Compensation_Status
-                        })
+            label_Compensation_Status = [count['compensationStatus'] for count in Compensation_Status]
+            # print(label_Compensation_Status)
+            dataset_Compensation_Status = [count['count'] for count in Compensation_Status]
+            # print(dataset_Compensation_Status)
+
+            return Response({'status': 'success',
+                            'Message': 'Data Fetched successfully',
+                            # 'label' : label ,
+                            # 'dataset_Rehabilitations': dataset_Rehabilitations,
+                            'label_Compensation_Status' : label_Compensation_Status ,
+                            'dataset_Compensation_Status': dataset_Compensation_Status
+                            })
+        else:
+            Compensation_Status = Rehabilitation.objects.values('compensationStatus').annotate(count=Count('compensationStatus'))
+
+            label_Compensation_Status = [count['compensationStatus'] for count in Compensation_Status]
+            # print(label_Compensation_Status)
+            dataset_Compensation_Status = [count['count'] for count in Compensation_Status]
+            # print(dataset_Compensation_Status)
+
+            return Response({'status': 'success',
+                            'Message': 'Data Fetched successfully',
+                            # 'label' : label ,
+                            # 'dataset_Rehabilitations': dataset_Rehabilitations,
+                            'label_Compensation_Status' : label_Compensation_Status ,
+                            'dataset_Compensation_Status': dataset_Compensation_Status
+                            })
 
 
 class IdentifiedPAPDashboardView(APIView):
@@ -367,7 +389,7 @@ class MaterialConditionChart(APIView):
 class IncidenttypeCountchart(APIView):
 # need proper response for no data available like only CA-08 and July September data is available
     def get(self, request, packages, quarter):
-        counts = occupationalHealthSafety.objects.values('typeOfIncident').filter(packages=packages, quarter=quarter).annotate(count = Count('typeOfIncident'))
+        counts = occupationalHealthSafety.objects.values('typeOfIncident').filter(packages=packages, quarter=quarter).exclude(typeOfIncident="Man Days Lost").annotate(count = Count('typeOfIncident'))
         label = [count['typeOfIncident'] for count in counts]
         dataset = [count['count'] for count in counts]
         
@@ -481,3 +503,16 @@ class AirAQIChartDashboardView(APIView):
             "data":avg_aqi,
             # "quality": quality
         })
+    
+
+
+
+class ManDaysLostCountchart(APIView):
+# how to improve it more    
+    def get(self, request, packages, quarter):
+        count = occupationalHealthSafety.objects.filter(packages=packages, quarter=quarter, typeOfIncident="Man Days Lost").count()
+        
+        return Response({'status': 'success',
+                        'Message': 'Data was successfully fetched',
+                        'count': count,
+                        })
