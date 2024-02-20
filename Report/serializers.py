@@ -3,6 +3,7 @@ from SocialMonitoring.models import *
 from EnvMonitoring.models import *
 from rest_framework.validators import ValidationError
 from Report.models import *
+from rest_framework import serializers
 from rest_framework_gis.serializers import GeoFeatureModelSerializer
 from Training.models import *
 
@@ -27,8 +28,6 @@ class LabourcampReportSerializer(GeoFeatureModelSerializer):
                     'photographs' ,'documents','remarks')
         geo_field= ('location')
 
-
-
     def validate(self, data):
         if data['packages'] == '' or data['packages'] == None:
             raise ValidationError('packages can not be empty')
@@ -36,6 +35,26 @@ class LabourcampReportSerializer(GeoFeatureModelSerializer):
             raise ValidationError('labourCampName can not be empty')
         return data
 
+
+
+class LabourcampExcelReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LabourCamp
+        fields =('id','quarter', 'packages','dateOfMonitoring', 'labourCampName', 'labourCampId',
+                  'isToilet', 'toiletCondition','toiletPhotograph','toiletRemarks',
+                  'isDrinkingWater','drinkingWaterCondition' ,'drinkingWaterPhotographs','drinkingWaterRemarks',
+                    'isDemarkationOfPathways','demarkationOfPathwaysCondition','demarkationOfPathwaysPhotographs','demarkationOfPathwaysRemark' ,
+                    'isSignagesLabeling','signagesLabelingCondition' ,'signagesLabelingPhotographs','signagesLabelingRemarks',
+                    'isKitchenArea','kitchenAreaCondition','kitchenAreaPhotographs','kitchenAreaRemarks',
+                    'isFireExtinguish','fireExtinguishCondition','fireExtinguishPhotographs','fireExtinguishRemarks',
+                     'isRoomsOrDoms' ,'roomsOrDomsCondition','roomsOrDomsPhotographs' ,'roomsOrDomsRemarks',
+                     'isSegregationOfWaste','segregationOfWasteCondition','segregationOfWastePhotographs','segregationOfWasteRemarks',
+                    'isRegularHealthCheckup','regularHealthCheckupCondition','regularHealthCheckupPhotographs','regularHealthCheckupRemarks',
+                     'isAvailabilityOfDoctor', 'availabilityOfDoctorCondition','availabilityOfDoctorPhotographs','availabilityOfDoctorRemarks',
+                      'isFirstAidKit','firstAidKitCondition' ,'firstAidKitPhotographs','firstAidKitRemarks',
+                    'transportationFacility' ,'transportationFacilityCondition', 'modeOfTransportation','distanceFromSite',
+                    'photographs' ,'documents','remarks')
+        # geo_field= ('location')
 
 class LabourCampDeatilViewSerialzier(ModelSerializer):
     class Meta:
@@ -59,6 +78,20 @@ class ConstructionCampReportSerializer(GeoFeatureModelSerializer):
         geo_field= ('location')
 
 
+class ConstructionCampReportExcelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConstructionSiteDetails
+        fields = ('id','quarter', 'packages','dateOfMonitoring' ,'constructionSiteName' , 'constructionSiteId',
+                    'isDemarkationOfPathways','demarkationOfPathwaysCondition','demarkationOfPathwaysPhotographs','demarkationOfPathwaysRemark' ,
+                    'isSignagesLabelingCheck','signagesLabelingCondition' ,'signagesLabelingPhotographs','signagesLabelingRemarks',
+                    'isRegularHealthCheckup','regularHealthCheckupCondition','regularHealthCheckupPhotographs','regularHealthCheckupRemarks',
+                    'isAvailabilityOfDoctor', 'availabilityOfDoctorCondition','availabilityOfDoctorPhotographs','availabilityOfDoctorRemarks',
+                        'isFirstAidKit','firstAidKitCondition' ,'firstAidKitPhotographs','firstAidKitRemarks',
+                    'isDrinkingWaterCheck','drinkingWaterCondition' ,'drinkingWaterPhotographs','drinkingWaterRemarks',
+                        'isToilet', 'toiletCondition','toiletPhotograph','toiletRemarks',
+                        'genralphotographs','documents','remarks')
+        # geo_field= ('location')
+
 
 # The PAPReportSerializer class is a serializer for the PAP model that includes specific fields and a
 # geo_field for location.
@@ -70,6 +103,17 @@ class PAPReportSerializer(GeoFeatureModelSerializer):
                   'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
                    'actionTaken', 'notAgreedReason','remarks' )
         geo_field= ('location')
+
+
+class PAPReportExcelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PAP
+        fields = ('id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','nameOfPAP',
+                  'addressLine1','streetName','pincode','eligibility', 'categoryOfPap',
+                  'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
+                   'actionTaken', 'notAgreedReason','remarks' )
+        # geo_field= ('location')
+
 
 class RehabilitationReportSerializer(GeoFeatureModelSerializer):
     class Meta:
@@ -86,6 +130,20 @@ class RehabilitationReportSerializer(GeoFeatureModelSerializer):
 
 
 
+class RehabilitationReportExcelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Rehabilitation
+        fields = "__all__"
+        # fields =  ('id','ID','dateOfRehabilitation' ,'PAPID', 'PAPName' ,'cashCompensation', 'compensationStatus',
+        #            'typeOfCompensation', 'otherCompensationType' ,'addressLine1','streetName','pincode',
+        #            'isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport', 'livelihoodSupportAmount','livelihoodSupportCondition',
+        #            'livelihoodSupportPhotograph','livelihoodSupportRemarks','isTraining','trainingCondition',
+        #            'trainingPhotograph' ,'trainingRemarks' , 'typeOfTenaments'  ,'areaOfTenament' , 'tenamentsPhotograph',
+        #             'isRelocationAllowance' ,'RelocationAllowanceAmount' ,'isfinancialSupport',
+        #            'financialSupportAmount','isCommunityEngagement','isEngagementType', 'photographs' , 'documents','remarks')
+        # geo_field= ('location')
+
+
 '''----------------------- Env Monitoring Report Serilaizer------------------------------'''
 # The AirReportSerializer class is a serializer for the Air model that includes specific fields and a
 # geo_field for location.
@@ -97,6 +155,13 @@ class AirReportSerializer(GeoFeatureModelSerializer):
                  'SO2','NOx','CO','AQI','Remarks')
         geo_field= ('location')
 
+
+class AirReportExcelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Air
+        fields =('id','quarter','packages','month','dateOfMonitoring','PM10','PM2_5',
+                 'SO2','NOx','CO','AQI','Remarks')
+        # geo_field= ('location')
 # The NoiseReportSerializer class is a serializer for the Noise model that includes specific fields
 # and a geo_field for location.
 class NoiseReportSerializer(GeoFeatureModelSerializer):
@@ -105,6 +170,13 @@ class NoiseReportSerializer(GeoFeatureModelSerializer):
         fields = ('id','location' ,'quarter','month','packages','dateOfMonitoringThree' ,'noiseLevel' , 'monitoringPeriod', )
         geo_field= ('location')
 
+
+
+class NoiseReportExcelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Noise
+        fields = ('id','location' ,'quarter','month','packages','dateOfMonitoringThree' ,'noiseLevel' , 'monitoringPeriod', )
+        # geo_field= ('location')
 # The waterReportSerializer class is a serializer for the water model that includes specific fields
 # and a geo_field for location.
 class waterReportSerializer(GeoFeatureModelSerializer):
@@ -112,6 +184,14 @@ class waterReportSerializer(GeoFeatureModelSerializer):
         model = water
         fields =('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' ,'waterDisposal')
         geo_field= ('location')
+
+
+class waterExcelReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = water
+        fields =('id','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' ,'waterDisposal')
+        # geo_field= ('location')
+
 
 
 # The class `wasteTreatmentsSerializer` is a serializer for the `WasteTreatments` model that includes
@@ -123,7 +203,12 @@ class wasteTreatmentsSerializer(GeoFeatureModelSerializer):
                     'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
         geo_field= ('location')
 
-
+class wasteTreatmentsExcelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WasteTreatments
+        fields = ('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' ,'quantity',
+                    'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
+        # geo_field= ('location')
 # The class `materialManagementSerializer` is a serializer class in Python that is used for
 # serializing and deserializing data related to material management.
 class materialManagementSerializer(GeoFeatureModelSerializer):
@@ -135,7 +220,14 @@ class materialManagementSerializer(GeoFeatureModelSerializer):
           'documents','remarks')
         geo_field= ('location')
 
-
+class materialManagementExcelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MaterialManegmanet
+        fields = ('id','quarter','month','packages','dateOfMonitoring',
+         'typeOfMaterial','source','sourceOfQuarry','materialStorageType','storageLocation',
+         'materialStorageCondition','materialStoragePhotograph','approvals' ,'photographs',
+          'documents','remarks')
+        # geo_field= ('location')
 # The `treeManagementSerializer` class is a serializer for the `ExistingTreeManagment` model with
 # specific fields and a geo field.
 class treeManagementSerializer(GeoFeatureModelSerializer):
@@ -147,6 +239,14 @@ class treeManagementSerializer(GeoFeatureModelSerializer):
         geo_field= ('location')
 
 
+class treeManagementExcelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExistingTreeManagment
+        fields = ('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
+                    'condition', 'noOfTreeCut','actionTaken', 'photographs', 'documents','remarks')
+
+        # geo_field= ('location')
+
 
 
 # The class MetroLine4AlignmentSerializer is a serializer for the MmrdaNew model with fields gid and
@@ -157,6 +257,12 @@ class MetroLine4AlignmentSerializer(GeoFeatureModelSerializer):
         fields = ('gid' ,'name' )
         geo_field= ('geom')
 
+
+class MetroLine4AlignmentExcelSerializer(GeoFeatureModelSerializer):
+    class Meta:
+        model = MmrdaNew
+        fields = ('gid' ,'name' )
+        # geo_field= ('geom')
 
 class Package54AlignmentSerializer(GeoFeatureModelSerializer):
     class Meta:
@@ -225,6 +331,15 @@ class TrainnigReportSerializer(GeoFeatureModelSerializer):
         geo_field = ('location')
 
 
+class TrainnigReportExcelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model= traning
+        fields = ('quarter' , 'packages' , 'dateOfMonitoring',
+                  'category' , 'traningTitle' , 'noOfAttends' , 'noOfTimesTrainingConducted',
+                  'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
+                  'traningDate' , 'photographs' , 'documents')
+        # geo_field = ('location')
+
 class OccupationalHealthQuarterSeialzier(GeoFeatureModelSerializer):
     class Meta:
         model = occupationalHealthSafety
@@ -232,6 +347,13 @@ class OccupationalHealthQuarterSeialzier(GeoFeatureModelSerializer):
         exclude = ['user' ]
         geo_field = ('location')
 
+
+class ExcelOccupationalHealthQuarterSeialzier(serializers.ModelSerializer):
+    class Meta:
+        model = occupationalHealthSafety
+        # fields = '__all__'
+        exclude = ['user' ]
+        # geo_field = ('location')
 
 
 

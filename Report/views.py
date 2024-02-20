@@ -9,7 +9,14 @@ from rest_framework import generics
 from rest_framework.views import APIView
 from Training.models import *
 from openpyxl import Workbook
-
+from rest_framework.viewsets import ReadOnlyModelViewSet
+from drf_excel.mixins import XLSXFileMixin
+from drf_excel.renderers import XLSXRenderer
+from django_filters.rest_framework import DjangoFilterBackend
+import pandas as pd
+from django.http import StreamingHttpResponse
+from django.http import HttpResponse
+# from django_excel_response import ExcelResponse
 
 
 
@@ -47,10 +54,67 @@ class LabourcampReportPackageView(ListAPIView):
 
 
 
+
+
+
+
+class labourcampreportpackageExcelDownloadView(generics.ListAPIView):
+    serializer_class = LabourcampExcelReportSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages', 'labourCampName']
+
+    def get_queryset(self):
+        queryset = LabourCamp.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values(
+            'id','quarter', 'packages','dateOfMonitoring', 'labourCampName', 'labourCampId',
+                  'isToilet', 'toiletCondition','toiletPhotograph','toiletRemarks',
+                  'isDrinkingWater','drinkingWaterCondition' ,'drinkingWaterPhotographs','drinkingWaterRemarks',
+                    'isDemarkationOfPathways','demarkationOfPathwaysCondition','demarkationOfPathwaysPhotographs','demarkationOfPathwaysRemark' ,
+                    'isSignagesLabeling','signagesLabelingCondition' ,'signagesLabelingPhotographs','signagesLabelingRemarks',
+                    'isKitchenArea','kitchenAreaCondition','kitchenAreaPhotographs','kitchenAreaRemarks',
+                    'isFireExtinguish','fireExtinguishCondition','fireExtinguishPhotographs','fireExtinguishRemarks',
+                     'isRoomsOrDoms' ,'roomsOrDomsCondition','roomsOrDomsPhotographs' ,'roomsOrDomsRemarks',
+                     'isSegregationOfWaste','segregationOfWasteCondition','segregationOfWastePhotographs','segregationOfWasteRemarks',
+                    'isRegularHealthCheckup','regularHealthCheckupCondition','regularHealthCheckupPhotographs','regularHealthCheckupRemarks',
+                     'isAvailabilityOfDoctor', 'availabilityOfDoctorCondition','availabilityOfDoctorPhotographs','availabilityOfDoctorRemarks',
+                      'isFirstAidKit','firstAidKitCondition' ,'firstAidKitPhotographs','firstAidKitRemarks',
+                    'transportationFacility' ,'transportationFacilityCondition', 'modeOfTransportation','distanceFromSite',
+                    'photographs' ,'documents','remarks'
+            # Add more fields as needed
+        )
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=labour_camp_report.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+    
+    
+        
+
+
+
+
+
+
+
 # The `LabourCampReportQuarterView` class is a Django view that retrieves data from the `LabourCamp`
 # model based on the specified quarter, labour camp name, and year, and returns the previous and
-# latest data in a response.
-class LabourCampReportQuarterView(ListAPIView):
+# latest data in a response.LabourCampReportQuarterView
+class LabourCampReportQuarterView(generics.ListAPIView):
 
     serializer_class = LabourcampReportSerializer
     parser_classes = [MultiPartParser]
@@ -77,6 +141,66 @@ class LabourCampReportQuarterView(ListAPIView):
             return Response({'Message': 'There is no data available for this Package or Quarter',
                             'status' : 'Failed'}, status=400)
 
+
+
+import django_filters
+
+class LabourCampFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+
+    class Meta:
+        model = LabourCamp
+        fields = ['quarter', 'year', 'labourCampName']
+
+
+
+# class labourQuarterExcelDownload(generics.ListAPIView):
+class labourQuarterExcelDownload(generics.ListAPIView):
+    serializer_class = LabourcampExcelReportSerializer
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'labourCampName']
+    filterset_class = LabourCampFilter
+
+    def get_queryset(self):
+        queryset = LabourCamp.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values(
+            'id','quarter', 'packages','dateOfMonitoring', 'labourCampName', 'labourCampId',
+                  'isToilet', 'toiletCondition','toiletPhotograph','toiletRemarks',
+                  'isDrinkingWater','drinkingWaterCondition' ,'drinkingWaterPhotographs','drinkingWaterRemarks',
+                    'isDemarkationOfPathways','demarkationOfPathwaysCondition','demarkationOfPathwaysPhotographs','demarkationOfPathwaysRemark' ,
+                    'isSignagesLabeling','signagesLabelingCondition' ,'signagesLabelingPhotographs','signagesLabelingRemarks',
+                    'isKitchenArea','kitchenAreaCondition','kitchenAreaPhotographs','kitchenAreaRemarks',
+                    'isFireExtinguish','fireExtinguishCondition','fireExtinguishPhotographs','fireExtinguishRemarks',
+                     'isRoomsOrDoms' ,'roomsOrDomsCondition','roomsOrDomsPhotographs' ,'roomsOrDomsRemarks',
+                     'isSegregationOfWaste','segregationOfWasteCondition','segregationOfWastePhotographs','segregationOfWasteRemarks',
+                    'isRegularHealthCheckup','regularHealthCheckupCondition','regularHealthCheckupPhotographs','regularHealthCheckupRemarks',
+                     'isAvailabilityOfDoctor', 'availabilityOfDoctorCondition','availabilityOfDoctorPhotographs','availabilityOfDoctorRemarks',
+                      'isFirstAidKit','firstAidKitCondition' ,'firstAidKitPhotographs','firstAidKitRemarks',
+                    'transportationFacility' ,'transportationFacilityCondition', 'modeOfTransportation','distanceFromSite',
+                    'photographs' ,'documents','remarks'
+            # Add more fields as needed
+        )
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=labour_camp_report.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+    
+
 # ----------------------------------------------------------------
 
 class ConstructionCampReportPackageView(ListAPIView):
@@ -102,6 +226,52 @@ class ConstructionCampReportPackageView(ListAPIView):
             return Response({'Message': 'There is no data available for the Package or Quarter',
                             'status' : 'Failed'}, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+class ConstructionCampReportPackageExcelDownload(generics.ListAPIView):
+    serializer_class = ConstructionCampReportExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages', 'constructionSiteName']
+    # filterset_class = LabourCampFilter
+
+    def get_queryset(self):
+        queryset = ConstructionSiteDetails.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values(
+'id','quarter', 'packages','dateOfMonitoring' ,'constructionSiteName' , 'constructionSiteId',
+                    'isDemarkationOfPathways','demarkationOfPathwaysCondition','demarkationOfPathwaysPhotographs','demarkationOfPathwaysRemark' ,
+                    'isSignagesLabelingCheck','signagesLabelingCondition' ,'signagesLabelingPhotographs','signagesLabelingRemarks',
+                    'isRegularHealthCheckup','regularHealthCheckupCondition','regularHealthCheckupPhotographs','regularHealthCheckupRemarks',
+                    'isAvailabilityOfDoctor', 'availabilityOfDoctorCondition','availabilityOfDoctorPhotographs','availabilityOfDoctorRemarks',
+                        'isFirstAidKit','firstAidKitCondition' ,'firstAidKitPhotographs','firstAidKitRemarks',
+                    'isDrinkingWaterCheck','drinkingWaterCondition' ,'drinkingWaterPhotographs','drinkingWaterRemarks',
+                        'isToilet', 'toiletCondition','toiletPhotograph','toiletRemarks',
+                        'genralphotographs','documents','remarks'
+            # Add more fields as needed
+        )
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=ConstructionCampReport.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
+
+
 class ConstructionCampReportQuarterView(ListAPIView):
     serializer_class = ConstructionCampReportSerializer
     parser_classes = [MultiPartParser]
@@ -126,6 +296,60 @@ class ConstructionCampReportQuarterView(ListAPIView):
                             'status' : 'Failed'}, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+
+class ConstructionCampFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+
+    class Meta:
+        model = ConstructionSiteDetails
+        fields = ['quarter', 'year', 'constructionSiteName']
+
+
+
+class ConstructionCampReportQuaterExcelDownload(generics.ListAPIView):
+    serializer_class = ConstructionCampReportExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'constructionSiteName']
+    filterset_class = ConstructionCampFilter
+
+    def get_queryset(self):
+        queryset = ConstructionSiteDetails.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values(
+'id','quarter', 'packages','dateOfMonitoring' ,'constructionSiteName' , 'constructionSiteId',
+                    'isDemarkationOfPathways','demarkationOfPathwaysCondition','demarkationOfPathwaysPhotographs','demarkationOfPathwaysRemark' ,
+                    'isSignagesLabelingCheck','signagesLabelingCondition' ,'signagesLabelingPhotographs','signagesLabelingRemarks',
+                    'isRegularHealthCheckup','regularHealthCheckupCondition','regularHealthCheckupPhotographs','regularHealthCheckupRemarks',
+                    'isAvailabilityOfDoctor', 'availabilityOfDoctorCondition','availabilityOfDoctorPhotographs','availabilityOfDoctorRemarks',
+                        'isFirstAidKit','firstAidKitCondition' ,'firstAidKitPhotographs','firstAidKitRemarks',
+                    'isDrinkingWaterCheck','drinkingWaterCondition' ,'drinkingWaterPhotographs','drinkingWaterRemarks',
+                        'isToilet', 'toiletCondition','toiletPhotograph','toiletRemarks',
+                        'genralphotographs','documents','remarks'
+            # Add more fields as needed
+        )
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=ConstructionCampReport.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
+
 # -------------------------------------------------------------------------
 
 class PAPReportPackageView(ListAPIView):
@@ -148,6 +372,45 @@ class PAPReportPackageView(ListAPIView):
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
+
+class PAPReportPackageExcelDownload(generics.ListAPIView):
+    serializer_class = PAPReportExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages']
+    # filterset_class = ConstructionCampFilter
+
+    def get_queryset(self):
+        queryset = PAP.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values(
+            'id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','nameOfPAP',
+                            'addressLine1','streetName','pincode','eligibility', 'categoryOfPap',
+                            'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
+                            'actionTaken', 'notAgreedReason','remarks'
+            # Add more fields as needed
+        )
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=PAPReportPackage.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
 class PAPReportQuarterView(ListAPIView):
     serializer_class = PAPReportSerializer
     parser_classes = [MultiPartParser]
@@ -168,6 +431,53 @@ class PAPReportQuarterView(ListAPIView):
             return Response({'Message': 'There is no data available for the Package or Quarter',
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class PAPReportExcelQuaterFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+
+    class Meta:
+        model = PAP
+        fields = ['quarter', 'year']
+
+
+
+class PAPReportExcelQuaterExcelDownload(generics.ListAPIView):
+    serializer_class = PAPReportExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'constructionSiteName']
+    filterset_class = PAPReportExcelQuaterFilter
+
+    def get_queryset(self):
+        queryset = PAP.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values(
+            'id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','nameOfPAP',
+                            'addressLine1','streetName','pincode','eligibility', 'categoryOfPap',
+                            'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
+                            'actionTaken', 'notAgreedReason','remarks'
+            # Add more fields as needed
+        )
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=PAPReportExcelQuater.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
 
 
 # ------------------------------------------------------------
@@ -194,6 +504,44 @@ class RehabilitationReportPackageView(ListAPIView):
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
+
+
+
+class RehabilitationReportPackageExcelDownload(generics.ListAPIView):
+    serializer_class = RehabilitationReportExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages']
+    # filterset_class = ConstructionCampFilter
+
+    def get_queryset(self):
+        queryset = Rehabilitation.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('ID','dateOfRehabilitation','PAPID','categoryOfPap','PAPName','cashCompensation','compensationStatus','typeOfCompensation','otherCompensationType','addressLine1','streetName','pincode','isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport','livelihoodSupportAmount','livelihoodSupportCondition','livelihoodSupportRemarks','isTraining','trainingCondition','trainingRemarks','typeOfStructure','areaOfTenament','isRelocationAllowance','RelocationAllowanceAmount','isfinancialSupport','financialSupportAmount','isCommunityEngagement','isEngagementType','documents', 
+                                'remarks','livelihoodSupportPhotograph','trainingPhotograph',
+                                'tenamentsPhotograph','photographs')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=RehabilitationReport.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
+
 class RehabilitationReportQuarterView(ListAPIView):
     serializer_class = RehabilitationReportSerializer
     parser_classes = [MultiPartParser]
@@ -216,6 +564,55 @@ class RehabilitationReportQuarterView(ListAPIView):
             return Response({'Message': 'There is no data available for the Quarter',
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class RehabilitationReportQuarterFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+
+    class Meta:
+        model = Rehabilitation
+        fields = ['quarter', 'year']
+
+
+
+class RehabilitationReportQuarterExcelDownload(generics.ListAPIView):
+    serializer_class = RehabilitationReportExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'constructionSiteName']
+    filterset_class = RehabilitationReportQuarterFilter
+
+    def get_queryset(self):
+        queryset = Rehabilitation.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('ID','dateOfRehabilitation','PAPID','categoryOfPap','PAPName','cashCompensation',
+                               'compensationStatus','typeOfCompensation','otherCompensationType','addressLine1',
+                               'streetName','pincode','isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport',
+                               'livelihoodSupportAmount','livelihoodSupportCondition','livelihoodSupportRemarks','isTraining',
+                               'trainingCondition','trainingRemarks','typeOfStructure','areaOfTenament','isRelocationAllowance',
+                               'RelocationAllowanceAmount','isfinancialSupport','financialSupportAmount','isCommunityEngagement',
+                               'isEngagementType','documents','remarks','livelihoodSupportPhotograph','trainingPhotograph',
+                               'tenamentsPhotograph','photographs')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=RehabilitationReportQuater.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
 
 
 '''----------------------- Env Monitoring Report View------------------------------'''
@@ -241,6 +638,43 @@ class AirReportPackageView(ListAPIView):
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
+
+
+class AirReportReportPackageExcelDownload(generics.ListAPIView):
+    serializer_class = AirReportExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages']
+    # filterset_class = ConstructionCampFilter
+
+    def get_queryset(self):
+        queryset = Air.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id','quarter','packages','month','dateOfMonitoring','PM10','PM2_5',
+                 'SO2','NOx','CO','AQI','Remarks')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=AirReport.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
+
+
 class AirReportQuarterView(ListAPIView):
     serializer_class = AirReportSerializer
     parser_classes = [MultiPartParser]
@@ -263,6 +697,49 @@ class AirReportQuarterView(ListAPIView):
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
+
+class AirReportQuarterFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+    # month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+
+    class Meta:
+        model = Air
+        fields = [ 'month','year']
+
+
+
+class AirReportQuarterExcelDownload(generics.ListAPIView):
+    serializer_class = AirReportExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'constructionSiteName']
+    filterset_class = AirReportQuarterFilter
+
+    def get_queryset(self):
+        queryset = Air.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id','quarter','packages','month','dateOfMonitoring','PM10','PM2_5',
+                 'SO2','NOx','CO','AQI','Remarks')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=AirReportQuater.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
 class NoiseReportpackageView(ListAPIView):
     serializer_class = NoiseReportSerializer
     parser_classes = [MultiPartParser]
@@ -283,6 +760,42 @@ class NoiseReportpackageView(ListAPIView):
             return Response({'Message': 'There is no data available for the Package',
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class NoiseReportReportPackageExcelDownload(generics.ListAPIView):
+    serializer_class = NoiseReportExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages']
+    # filterset_class = ConstructionCampFilter
+
+    def get_queryset(self):
+        queryset = Noise.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id','location' ,'quarter','month','packages','dateOfMonitoringThree' ,'noiseLevel' , 'monitoringPeriod', )
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=NoiseReport.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
+
+
 
 class NoiseReportQuarterView(ListAPIView):
     serializer_class = NoiseReportSerializer
@@ -306,6 +819,51 @@ class NoiseReportQuarterView(ListAPIView):
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
+
+
+
+class NoiseReportQuarterFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+    month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+
+    class Meta:
+        model = Noise
+        fields = ['month', 'year']
+
+
+
+class NoiseReportQuarterExcelDownload(generics.ListAPIView):
+    serializer_class = NoiseReportExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'constructionSiteName']
+    filterset_class = NoiseReportQuarterFilter
+
+    def get_queryset(self):
+        queryset = Noise.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id','location' ,'quarter','month','packages','dateOfMonitoringThree' ,'noiseLevel' , 'monitoringPeriod', )
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=NoiseReportQuater.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
 class waterReportPackageView(ListAPIView):
     serializer_class = waterReportSerializer
     parser_classes = [MultiPartParser]
@@ -325,6 +883,44 @@ class waterReportPackageView(ListAPIView):
             return Response({'Message': 'There is no data available for the Package',
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+class waterReportReportPackageExcelDownload(generics.ListAPIView):
+    serializer_class = waterExcelReportSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages']
+    # filterset_class = ConstructionCampFilter
+
+    def get_queryset(self):
+        queryset = water.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' ,'waterDisposal')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=WaterReport.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
+
+
+
+
+
 
 class waterReportQuarterView(ListAPIView):
     serializer_class = waterReportSerializer
@@ -346,6 +942,50 @@ class waterReportQuarterView(ListAPIView):
         #     return Response({'Message': 'There is no data available for the Quarter',
         #                     'status' : 'Failed'},
         #                     status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class WaterReportQuarterFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+    month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+
+    class Meta:
+        model = water
+        fields = ['month', 'year']
+
+
+
+class WaterReportQuarterExcelDownload(generics.ListAPIView):
+    serializer_class = WaterReportQuarterFilter
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'constructionSiteName']
+    filterset_class = WaterReportQuarterFilter
+
+    def get_queryset(self):
+        queryset = water.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' ,'waterDisposal')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=WaterReportQuater.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
 
 class WasteTreatmentsPackageView(ListAPIView):
     serializer_class = wasteTreatmentsSerializer
@@ -369,6 +1009,40 @@ class WasteTreatmentsPackageView(ListAPIView):
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
+class wasteTreatmentReportPackageExcelDownload(generics.ListAPIView):
+    serializer_class = wasteTreatmentsExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages']
+    # filterset_class = ConstructionCampFilter
+
+    def get_queryset(self):
+        queryset = WasteTreatments.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' ,'quantity',
+                    'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=wasteTreatmentReport.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
+
 class WasteTreatmentsQuarterView(ListAPIView):
     serializer_class = wasteTreatmentsSerializer
     parser_classes = [MultiPartParser]
@@ -388,6 +1062,51 @@ class WasteTreatmentsQuarterView(ListAPIView):
         except:
             return Response({'Message': 'There is no data available for the Quarter',
                             'status' : 'Failed'} , status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+class WasteTreatmentsQuarterFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+    month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+
+    class Meta:
+        model = WasteTreatments
+        fields = ['month', 'year']
+
+
+
+class wasteTreatmentQuarterExcelDownload(generics.ListAPIView):
+    serializer_class = wasteTreatmentsExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'constructionSiteName']
+    filterset_class = WasteTreatmentsQuarterFilter
+
+    def get_queryset(self):
+        queryset = WasteTreatments.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' ,'quantity',
+                    'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=WasteTreatmentQuater.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
 
 class MaterialManagementReporetpackageView(ListAPIView):
     serializer_class = materialManagementSerializer
@@ -411,6 +1130,42 @@ class MaterialManagementReporetpackageView(ListAPIView):
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
+
+class MaterialManegmanetReportPackageExcelDownload(generics.ListAPIView):
+    serializer_class = materialManagementExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages']
+    # filterset_class = ConstructionCampFilter
+
+    def get_queryset(self):
+        queryset = MaterialManegmanet.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id','quarter','month','packages','dateOfMonitoring',
+         'typeOfMaterial','source','sourceOfQuarry','materialStorageType','storageLocation',
+         'materialStorageCondition','materialStoragePhotograph','approvals' ,'photographs',
+          'documents','remarks')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=MaterialManagementReport.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
 class MaterialManagementReporetQuarterView(ListAPIView):
     serializer_class = materialManagementSerializer
     parser_classes = [MultiPartParser]
@@ -433,6 +1188,53 @@ class MaterialManagementReporetQuarterView(ListAPIView):
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
+
+
+class materialManagementQuarterFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+    month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+
+    class Meta:
+        model = MaterialManegmanet
+        fields = ['month', 'year']
+
+
+
+class materialManagementQuarterExcelDownload(generics.ListAPIView):
+    serializer_class = materialManagementExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'constructionSiteName']
+    filterset_class = materialManagementQuarterFilter
+
+    def get_queryset(self):
+        queryset = MaterialManegmanet.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id','quarter','month','packages','dateOfMonitoring',
+         'typeOfMaterial','source','sourceOfQuarry','materialStorageType','storageLocation',
+         'materialStorageCondition','materialStoragePhotograph','approvals' ,'photographs',
+          'documents','remarks')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=MaterialManegmanetQuater.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
 class TreeMangementReportPackage(ListAPIView):
     serializer_class = treeManagementSerializer
     parser_classes = [MultiPartParser]
@@ -453,6 +1255,39 @@ class TreeMangementReportPackage(ListAPIView):
             return Response({'Message': 'There is no data available for the Package',
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class treeManagementReportPackageExcelDownload(generics.ListAPIView):
+    serializer_class = treeManagementExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages']
+    # filterset_class = ConstructionCampFilter
+
+    def get_queryset(self):
+        queryset = ExistingTreeManagment.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
+                    'condition', 'noOfTreeCut','actionTaken', 'photographs', 'documents','remarks')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=ExistingTreeManagmentReport.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
 
 class TreeManagementReportQuarterView(ListAPIView):
     serializer_class = treeManagementSerializer
@@ -476,6 +1311,52 @@ class TreeManagementReportQuarterView(ListAPIView):
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
 
+
+
+class ExistingTreeManagmentQuarterFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+    month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+
+    class Meta:
+        model = ExistingTreeManagment
+        fields = ['month', 'year']
+
+
+
+class TreeManagementQuarterExcelDownload(generics.ListAPIView):
+    serializer_class = treeManagementExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'constructionSiteName']
+    filterset_class = ExistingTreeManagmentQuarterFilter
+
+    def get_queryset(self):
+        queryset = ExistingTreeManagment.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
+                    'condition', 'noOfTreeCut','actionTaken', 'photographs', 'documents','remarks')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=TreeManegmanetQuater.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
+
+
 class MetroLine4View(generics.GenericAPIView):
     serializer_class = MetroLine4AlignmentSerializer
 
@@ -492,6 +1373,38 @@ class MetroLine4View(generics.GenericAPIView):
             return Response({'status' : 'failed',
                             'message' : 'Something went wrong !! Please try again'}, status = 400)
         
+
+class MetroLine4AlignmentReportPackageExcelDownload(generics.ListAPIView):
+    serializer_class = MetroLine4AlignmentExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages']
+    # filterset_class = ConstructionCampFilter
+
+    def get_queryset(self):
+        queryset = MmrdaNew.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
+                    'condition', 'noOfTreeCut','actionTaken', 'photographs', 'documents','remarks')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=ExistingTreeManagmentReport.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
 class Package54AlignmentView(generics.GenericAPIView):
     serializer_class = Package54AlignmentSerializer
 
@@ -626,6 +1539,51 @@ class TrainnigReportQuarterView(APIView):
                              "training_data": training_data},
                             status=200)
 
+
+class TrainingQuarterFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+    month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+
+    class Meta:
+        model = traning
+        fields = ['month', 'year']
+
+
+
+class TrainningManagementQuarterExcelDownload(generics.ListAPIView):
+    serializer_class = TrainnigReportExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'constructionSiteName']
+    filterset_class = TrainingQuarterFilter
+
+    def get_queryset(self):
+        queryset = traning.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('quarter' , 'packages' , 'dateOfMonitoring',
+                  'category' , 'traningTitle' , 'noOfAttends' , 'noOfTimesTrainingConducted',
+                  'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
+                  'traningDate' , 'photographs' , 'documents')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=TrainningQuater.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
 class TrainnigReportPackageView(APIView):
     def get(self , request , packages):
    
@@ -640,6 +1598,45 @@ class TrainnigReportPackageView(APIView):
                             'status' : 'success' , 
                              "training_data": training_data},
                             status=200)
+
+
+
+class TrainnigReportPackageExcelDownload(generics.ListAPIView):
+    serializer_class = TrainnigReportExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages']
+    # filterset_class = ConstructionCampFilter
+
+    def get_queryset(self):
+        queryset = traning.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('quarter' , 'packages' , 'dateOfMonitoring',
+                  'category' , 'traningTitle' , 'noOfAttends' , 'noOfTimesTrainingConducted',
+                  'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
+                  'traningDate' , 'photographs' , 'documents')
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=training.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
+
+
+
     
 class OccupationalHealthQuarterView(generics.GenericAPIView):
     serializer_class = OccupationalHealthQuarterSeialzier
@@ -656,6 +1653,41 @@ class OccupationalHealthQuarterView(generics.GenericAPIView):
                              "training_data": training_data},
                             status=200)
 
+
+
+
+
+
+class OccupationalHealthQuarterExcelDownload(generics.ListAPIView):
+    serializer_class = ExcelOccupationalHealthQuarterSeialzier
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages']
+    # filterset_class = ConstructionCampFilter
+
+    def get_queryset(self):
+        queryset = occupationalHealthSafety.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values()
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=OccupationalHealthQuarter.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
+
+
 class OccupationalHealthPackageView(generics.GenericAPIView):
     serializer_class = OccupationalHealthQuarterSeialzier
     def get(self , request , packages):
@@ -671,6 +1703,47 @@ class OccupationalHealthPackageView(generics.GenericAPIView):
                              "training_data": training_data},
                             status=200)
 
+
+
+
+class ExcelOccupationalHealthQuarterFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+    # month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+
+    class Meta:
+        model = occupationalHealthSafety
+        fields = ['quarter', 'year']
+
+
+
+class ExcelOccupationalHealthQuarterExcelDownload(generics.ListAPIView):
+    serializer_class = ExcelOccupationalHealthQuarterSeialzier
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'constructionSiteName']
+    filterset_class = ExcelOccupationalHealthQuarterFilter
+
+    def get_queryset(self):
+        queryset = occupationalHealthSafety.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values()
+
+        # Create a Pandas DataFrame
+        df = pd.DataFrame(data)
+
+        # Create a response with the appropriate content type
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=OccupationalHealthQuarter.xlsx'
+
+        # Write the DataFrame to the Excel response
+        df.to_excel(response, index=False, sheet_name='Sheet1')
+
+        return response
 
 
 class ExcelWorkbook(generics.GenericAPIView):
