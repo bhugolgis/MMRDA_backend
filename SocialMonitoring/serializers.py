@@ -83,7 +83,7 @@ class PapSerailzer(serializers.ModelSerializer):
 
     class Meta:
         model = PAP
-        fields = ('quarter', 'packages', 'longitude', 'latitude','dateOfMonitoring', 'user','dateOfIdentification','PAPID','nameOfPAP', 
+        fields = ('quarter', 'packages', 'longitude', 'latitude','dateOfMonitoring', 'user','dateOfIdentification','PAPID','nameOfPAP','firstName', 'middleName', 'lastName',  
                   'addressLine1','streetName','pincode','eligibility', 'categoryOfPap', 
                     'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
                    'actionTaken', 'notAgreedReason','presentPhotograph','remarks' )
