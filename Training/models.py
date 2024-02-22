@@ -121,6 +121,7 @@ class occupationalHealthSafety(Baseclass):
 
     natureOfAccident = models.CharField(max_length=255, blank=True, null=True)
     typeOfIncident = models.CharField(max_length=255,  blank=True, null=True)
+    incidentReportingStatus = models.CharField(max_length=255,  blank=True, null=True)
     incidentLocation = PointField(null=True, blank=True)
     incidentDetails = models.TextField(max_length=255, blank=True, null=True)
     identifiedCauseOfIncident = models.CharField( max_length=255, blank=True, null=True)

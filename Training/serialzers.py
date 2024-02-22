@@ -68,7 +68,7 @@ class occupationalHealthSafetySerialziers(serializers.ModelSerializer):
         'joiningMedicalCheckup' , 'ppeKit' ,'trainingToWorkers','houseKeeping' ,
         'powerSupplySystem' ,'assemblyArea' ,'ambulanceArrangement' ,'toiletFacility',
         'safeMomentPassage' ,'materialKeepingPractice','accidentalCheck','safetyGearStatus',
-        'barricading','natureOfAccident' ,'typeOfIncident' ,'incidentlatitude','incidentlongitude','incidentDetails' ,
+        'barricading','natureOfAccident' ,'typeOfIncident' , 'incidentReportingStatus', 'incidentlatitude','incidentlongitude','incidentDetails' ,
         'identifiedCauseOfIncident' ,'outcome' ,'compensationPaid' ,'photographs' , 'documents' , 'remarks']
 
     
