@@ -98,6 +98,8 @@ class Noise(Baseclass):
     monitoringPeriod_night = models.CharField(
         max_length=255, null=True, blank=True)
     typeOfArea = models.CharField( max_length = 255, null=True, blank=True)
+    isWithinLimit_day = models.CharField( max_length = 255, null=True, blank=True)
+    isWithinLimit_night = models.CharField( max_length = 255, null=True, blank=True)
 
 
 

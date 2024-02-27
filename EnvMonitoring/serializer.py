@@ -105,7 +105,7 @@ class NoiseSerializer(serializers.ModelSerializer):
     latitude=serializers.CharField(max_length=50,required=False)
     class Meta:
         model = Noise
-        fields = ('quarter','month','packages','longitude','latitude' ,'dateOfMonitoringThree','noiseLevel_day', 'noiseLevel_night' , 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea')
+        fields = ('quarter','month','packages','longitude','latitude' ,'dateOfMonitoringThree','noiseLevel_day', 'noiseLevel_night' , 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea','isWithinLimit_day', 'isWithinLimit_night')
 
     def validate(self,data):
         required_fields = ['quarter', 'month', 'packages', 'longitude', 'latitude', 'dateOfMonitoringThree']
