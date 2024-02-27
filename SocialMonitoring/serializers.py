@@ -209,7 +209,7 @@ class RehabilitationViewSerializer(GeoFeatureModelSerializer):
 class RehabilatedPAPIDSerializer(serializers.ModelSerializer):
     class Meta:
         model = PAP
-        fields = ('id', 'PAPID' , 'nameOfPAP' , 'categoryOfPap'  , "actionTaken")
+        fields = ('id', 'PAPID' , 'nameOfPAP' , 'categoryOfPap'  , 'actionTaken', 'firstName', 'middleName', 'lastName', 'addressLine1', 'streetName', 'pincode', 'location')
 
 # -------------------------------- Labour camp details Serialzier --------------------------------      
 # The `LabourCampDetailSerializer` class is a serializer for the `LabourCamp` model in Python, which
