@@ -332,4 +332,10 @@ class GenerateAQISerializer(serializers.ModelSerializer):
     
 
 
+class GenerateWQISerializer(serializers.ModelSerializer):
+    class Meta:
+        model = water
+        fields = ['pH', 'totalHardnessAsCaCO3', 'calcium', 'totalAlkalinityAsCaCO3', 'chlorides', 'magnesium', 'totalDissolvedSolids', 'sulphate', 'nitrate', 'fluoride', 'iron']
+# need to write some validation
+
 

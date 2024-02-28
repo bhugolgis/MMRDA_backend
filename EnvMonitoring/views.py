@@ -782,3 +782,141 @@ class NoiseWhithinLimitAPI(generics.GenericAPIView):
 
 
 
+class GenerateWQI(generics.GenericAPIView):
+    serializer_class = GenerateWQISerializer
+    parser_classes = [MultiPartParser]
+    # permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
+
+    def post(self, request):
+        serializer = self.get_serializer(data = request.data)
+        if serializer.is_valid():
+            measures = serializer.validated_data.values()
+            #     PM10 = sub_indices_calculator.get_PM10_subindex(serializer.validated_data['PM10'])
+            print(serializer.validated_data.keys())
+            print(request.data)
+            print((serializer.validated_data['pH']))
+
+            pH = serializer.validated_data['pH']
+
+            # qi = (float(pH) / 7.5) * 100
+            # print(qi)
+
+            # pH_WiQi = 0.097560 * qi
+
+            # print(pH_WiQi)
+
+            pH_WiQi = get_pH_WiQI((serializer.validated_data['pH']))
+            totalHardnessAsCaCO3_WiQi = get_totalHardnessAsCaCO3_WiQI((serializer.validated_data['totalHardnessAsCaCO3']))
+            calcium_WiQi = get_calcium_WiQI((serializer.validated_data['calcium']))
+            totalAlkalinityAsCaCO3_WiQi = get_totalAlkalinityAsCaCO3_WiQI((serializer.validated_data['totalAlkalinityAsCaCO3']))
+            chlorides_WiQi = get_chlorides_WiQI((serializer.validated_data['chlorides']))
+            magnesium_WiQi = get_magnesium_WiQI((serializer.validated_data['magnesium']))
+            totalDissolvedSolids_WiQi = get_totalDissolvedSolids_WiQI((serializer.validated_data['totalDissolvedSolids']))
+            sulphate_WiQi = get_sulphate_WiQI((serializer.validated_data['sulphate']))
+            nitrate_WiQi = get_nitrate_WiQI((serializer.validated_data['nitrate']))
+            fluoride_WiQi = get_fluoride_WiQI((serializer.validated_data['fluoride']))
+            iron_WiQi = get_iron_WiQI((serializer.validated_data['iron']))
+
+
+            WQI = pH_WiQi + totalHardnessAsCaCO3_WiQi + calcium_WiQi + totalAlkalinityAsCaCO3_WiQi + chlorides_WiQi + magnesium_WiQi + totalDissolvedSolids_WiQi + sulphate_WiQi + nitrate_WiQi + fluoride_WiQi + iron_WiQi
+
+            print(pH_WiQi)
+            print(totalHardnessAsCaCO3_WiQi)
+            print(calcium_WiQi)
+            print(totalAlkalinityAsCaCO3_WiQi)
+            print(chlorides_WiQi)
+            print(magnesium_WiQi)
+            print(totalDissolvedSolids_WiQi)
+            print(sulphate_WiQi)
+            print(nitrate_WiQi)
+            print(fluoride_WiQi)
+            print(iron_WiQi)
+            
+           
+            # sub_indices_calculator = SubIndices()
+            # # PM10 = sub_indices_calculator.get_PM10_subindex(serializer.validated_data['PM10'])
+        
+            # # checking if parameter empty or not if empty return 0 else calculate subindex
+            # PM10 = sub_indices_calculator.get_PM10_subindex(serializer.validated_data['PM10']) if "PM10" in serializer.validated_data.keys() else 0
+            # PM2_5 = sub_indices_calculator.get_PM2_5_subindex(serializer.validated_data['PM2_5']) if "PM2_5" in serializer.validated_data.keys() else 0
+            # SO2 = sub_indices_calculator.get_SO2_subindex(serializer.validated_data['SO2']) if "SO2" in serializer.validated_data.keys() else 0
+            # NOx = sub_indices_calculator.get_NOx_subindex(serializer.validated_data['NOx']) if "NOx" in serializer.validated_data.keys() else 0
+            # CO = sub_indices_calculator.get_CO_subindex(serializer.validated_data['CO']) if "CO" in serializer.validated_data.keys() else 0
+            
+
+            # # print(NOx)
+            # # AQI = max(measures)
+            # sub_indices = [PM10, PM2_5, NOx, SO2, CO]
+            # print(sub_indices)
+            # AQI = max(PM10, PM2_5, NOx, SO2, CO)
+
+            # quality = sub_indices_calculator.check_air_quality(AQI)
+
+            return Response({
+                "message":"WQI generated successfully",
+                "status":"success",
+                "data":WQI,
+                "quality": "good"
+            })
+        else:
+            error = error_simplifier(serializer.errors)
+            return Response({
+                "message":error,
+                "status":"error"
+            },status=status.HTTP_400_BAD_REQUEST)
+        
+
+
+def get_pH_WiQI(x):
+    qi = (float(x) / 7.5) * 100
+    return 0.097560 * qi
+
+
+def get_totalHardnessAsCaCO3_WiQI(x):
+    qi = (float(x) / 200) * 100
+    return 0.04878 * qi
+
+
+def get_calcium_WiQI(x):
+    qi = (float(x) / 75) * 100
+    return 0.04878 * qi
+
+
+def get_totalAlkalinityAsCaCO3_WiQI(x):
+    qi = (float(x) / 200) * 100
+    return 0.0731707317073171 * qi
+
+
+def get_chlorides_WiQI(x):
+    qi = (float(x) / 250) * 100
+    return 0.07317 * qi
+
+
+def get_magnesium_WiQI(x):
+    qi = (float(x) / 30) * 100
+    return 0.0487804878048781 * qi
+
+
+def get_totalDissolvedSolids_WiQI(x):
+    qi = (float(x) / 500) * 100
+    return 0.09756 * qi
+
+
+def get_sulphate_WiQI(x):
+    qi = (float(x) / 200) * 100
+    return 0.09756 * qi
+
+
+def get_nitrate_WiQI(x):
+    qi = (float(x) / 45) * 100
+    return 0.12195 * qi
+
+
+def get_fluoride_WiQI(x):
+    qi = (float(x) / 1) * 100
+    return 0.09756 * qi
+
+
+def get_iron_WiQI(x):
+    qi = (float(x) / 0.3) * 100
+    return 0.09756 * qi
