@@ -82,6 +82,7 @@ class water(Baseclass):
     totalChromium = models.CharField(max_length=255, null=True, blank=True)
     totalColiform = models.CharField(max_length=255, null=True, blank=True)
     eColi = models.CharField(max_length=255, null=True, blank=True)
+    WQI = models.FloatField(blank=True, default=0, null=True)
 
 
 class Noise(Baseclass):

@@ -394,6 +394,10 @@ class IncidenttypeCountchart(APIView):
         dataset = [count['count'] for count in counts]
         
 
+        if not label:
+            return Response({ 'Message': 'No data found', 
+                         }, status=status.HTTP_404_NOT_FOUND)
+
         return Response({'status': 'success',
                         'Message': 'Data was successfully fetched',
                         'dataset': dataset,
@@ -488,6 +492,13 @@ class AirAQIChartDashboardView(APIView):
     def get(self, request,quarter, packages, *args, **kwargs):
 
         air = Air.objects.all().filter(packages=packages, quarter=quarter)
+
+        if not air:
+            return Response({
+                        'Message': 'Use package CA-08 and quarter July-September',
+                        }, status=status.HTTP_400_BAD_REQUEST)
+        
+
         serializer = DashboardAQISerializer(air, many=True)
         serializer_data = serializer.data
      
@@ -512,7 +523,38 @@ class ManDaysLostCountchart(APIView):
     def get(self, request, packages, quarter):
         count = occupationalHealthSafety.objects.filter(packages=packages, quarter=quarter, typeOfIncident="Man Days Lost").count()
         
+
+        if count == 0:
+            return Response({
+                        'Message': 'Data not found',
+                        }, status=status.HTTP_404_NOT_FOUND)
+
         return Response({'status': 'success',
                         'Message': 'Data was successfully fetched',
                         'count': count,
                         })
+    
+
+
+
+# class WaterWQIChartDashboardView(APIView):
+#     serializer_class = DashboardAQISerializer
+    
+#     def get(self, request,quarter, packages, *args, **kwargs):
+
+#         water = water.objects.all().filter(packages=packages, quarter=quarter)
+#         serializer = DashboardAQISerializer(air, many=True)
+#         serializer_data = serializer.data
+     
+#         aqi_list = []
+#         for object in serializer_data:
+#             aqi_list.append(object['AQI'])
+            
+#         avg_aqi = sum(aqi_list) / len(aqi_list)
+        
+#         return Response({
+#             "message":"AQI generated successfully",
+#             "status":"success",
+#             "data":avg_aqi,
+#             # "quality": quality
+#         })
