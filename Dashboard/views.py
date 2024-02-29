@@ -2,6 +2,7 @@ from django.db.models import Count
 from rest_framework.generics import GenericAPIView, ListAPIView
 from .serializers import *
 from EnvMonitoring.models import *
+from EnvMonitoring.models import water as Water
 from Training.models import *
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -537,24 +538,31 @@ class ManDaysLostCountchart(APIView):
 
 
 
-# class WaterWQIChartDashboardView(APIView):
-#     serializer_class = DashboardAQISerializer
+class WaterWQIChartDashboardView(APIView):
+    serializer_class = DashboardWQISerializer
     
-#     def get(self, request,quarter, packages, *args, **kwargs):
+    def get(self, request,quarter, packages, *args, **kwargs):
 
-#         water = water.objects.all().filter(packages=packages, quarter=quarter)
-#         serializer = DashboardAQISerializer(air, many=True)
-#         serializer_data = serializer.data
+        water = Water.objects.all().filter(packages=packages, quarter=quarter)
+
+        if not water:
+            return Response({
+            "message":"No data found for specified package/quarter",
+        }, status=status.HTTP_400_BAD_REQUEST)
+
+
+        serializer = DashboardWQISerializer(water, many=True)
+        serializer_data = serializer.data
      
-#         aqi_list = []
-#         for object in serializer_data:
-#             aqi_list.append(object['AQI'])
+        wqi_list = []
+        for object in serializer_data:
+            wqi_list.append(object['WQI'])
             
-#         avg_aqi = sum(aqi_list) / len(aqi_list)
+        avg_wqi = sum(wqi_list) / len(wqi_list)
         
-#         return Response({
-#             "message":"AQI generated successfully",
-#             "status":"success",
-#             "data":avg_aqi,
-#             # "quality": quality
-#         })
+        return Response({
+            "message":"AQI generated successfully",
+            "status":"success",
+            "data":avg_wqi,
+            # "quality": quality
+        })

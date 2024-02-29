@@ -856,7 +856,6 @@ class GenerateWQI(generics.GenericAPIView):
                 "message":"WQI generated successfully",
                 "status":"success",
                 "data":WQI,
-                "quality": "good"
             })
         else:
             error = error_simplifier(serializer.errors)

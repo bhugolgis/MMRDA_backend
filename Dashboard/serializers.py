@@ -77,7 +77,7 @@ class DashboardAQISerializer(serializers.ModelSerializer):
         fields = ['PM10', 'PM2_5', 'SO2', 'NOx', 'CO','packages', 'quarter', 'AQI']
 
 
-# class DashboardWQISerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = water
-#         fields = ['PM10', 'PM2_5', 'SO2', 'NOx', 'CO','packages', 'quarter', 'AQI']
+class DashboardWQISerializer(serializers.ModelSerializer):
+    class Meta:
+        model = water
+        fields = ['WQI']

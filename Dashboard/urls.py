@@ -28,6 +28,7 @@ urlpatterns = [
      path('WaterCondition',WaterConditionChart.as_view() , name = 'Water condition char'),
      path('AirChartView/<str:month>/<int:year>',AirChartView.as_view() , name = 'AIr chart'),
      path('AirAQIChartDashboardView/<str:quarter>/<str:packages>',AirAQIChartDashboardView.as_view() , name = 'AIr chart'),
+     path('WaterWQIChartDashboardView/<str:quarter>/<str:packages>',WaterWQIChartDashboardView.as_view() , name = 'WQI chart'),
      path('ManDaysLost/<str:quarter>/<str:packages>',ManDaysLostCountchart.as_view() , name = 'Man Days Lost Count'),
 
 
