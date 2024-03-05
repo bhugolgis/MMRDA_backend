@@ -96,8 +96,24 @@ class Rehabilitation(Baseclass):
     categoryOfPap = models.CharField( max_length=255,  null=True, blank=True)
     PAPName = models.CharField(max_length=255, blank=True, null=True)
 
-    cashCompensation = models.PositiveIntegerField(blank=True, null=True)
-    compensationStatus = models.CharField( max_length=255, null=True, blank=True)
+    agreedUpon = models.CharField( max_length=255, null=True, blank=True)
+    compensationStatus = models.CharField( max_length=255, null=True, blank=True) # type of compensation
+
+    cashCompensation = models.PositiveIntegerField(blank=True, null=True) # (old) amount in integer
+    cashCompensationAmount = models.FloatField( null=True, blank=True)
+    cashCompensationStatus = models.CharField( max_length=255, null=True, blank=True ) # complete/pending (disbursement status)
+
+    landProvidedAreaLocationDetails = models.CharField( max_length=255, null=True, blank=True ) 
+    landProvidedStatus = models.CharField( max_length=255, null=True, blank=True) # complete/pending
+    landProvidedArea = models.FloatField(null=True, blank=True)
+    
+    alternateAccomodationLocationDetails = models.CharField(max_length=255, null=True, blank=True)
+    alternateAccomodationStatus = models.CharField( max_length=255, null=True, blank=True) # relocated/pending
+    alternateAccomodationRelocationAllowance = models.FloatField(max_length=255, null=True, blank=True)
+
+    commercialUnitLocationDetails = models.CharField(max_length=255, null=True, blank=True)
+    commercialUnitStatus = models.CharField( max_length=255, null=True, blank=True) # relocated/pending
+    commercialUnitRelocationAllowance = models.FloatField(max_length=255, null=True, blank=True)
 
     typeOfCompensation = models.CharField( max_length=255, null=True, blank=True)
     otherCompensationType = models.CharField(max_length=255, null=True, blank=True)

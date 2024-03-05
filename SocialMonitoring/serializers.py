@@ -164,9 +164,15 @@ class RehabilitationSerializer(serializers.ModelSerializer):
     photographs =serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
     class Meta:
         model = Rehabilitation
-        fields = ('quarter','longitude', 'latitude','ID','packages','dateOfRehabilitation' ,'PAPID', 'PAPName' ,'categoryOfPap','cashCompensation', 'compensationStatus',
+        fields = ('quarter','longitude', 'latitude','ID','packages','dateOfRehabilitation' ,'PAPID',
+                   'PAPName' ,'categoryOfPap','cashCompensation', 'compensationStatus', 'agreedUpon',
+                   'cashCompensationAmount', 'cashCompensationStatus', 'landProvidedAreaLocationDetails',
+                   'landProvidedStatus', 'landProvidedArea', 'alternateAccomodationLocationDetails',
+                   'alternateAccomodationStatus', 'alternateAccomodationRelocationAllowance',
+                   'commercialUnitLocationDetails', 'commercialUnitStatus', 'commercialUnitRelocationAllowance',
                    'typeOfCompensation', 'otherCompensationType' ,'addressLine1','streetName','pincode',
-                   'isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport', 'livelihoodSupportAmount','livelihoodSupportCondition',
+                   'isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport',
+                   'livelihoodSupportAmount','livelihoodSupportCondition',
                    'livelihoodSupportPhotograph','livelihoodSupportRemarks','isTraining','trainingCondition',
                    'trainingPhotograph' ,'trainingRemarks' , 'typeOfStructure'  ,'areaOfTenament' , 'tenamentsPhotograph',
                     'isRelocationAllowance' ,'RelocationAllowanceAmount' ,'isfinancialSupport',
