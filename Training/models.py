@@ -160,6 +160,7 @@ class PreConstructionStage(models.Model):
         max_length=255, blank=True)
     CurrentStatusOfShiftingofUtilities = models.CharField(
         max_length=255, blank=True, null=True)
+    ShiftingofUtilitiesDocuments = models.CharField(max_length=255, blank=True, null=True)
 
     PermissionForFellingOfTrees = models.BooleanField(default=False)
     RulesOfPermissionForFellingOfTrees = models.CharField(
@@ -168,6 +169,7 @@ class PreConstructionStage(models.Model):
         max_length=255, blank=True, null=True)
     CurrentStatusPermissionForFellingOfTrees = models.CharField(
         max_length=255, blank=True, null=True)
+    PermissionForFellingOfTreesDocuments = models.CharField(max_length=255, blank=True, null=True)
 
     CRZClearance = models.BooleanField(default=False)
     RulesOfCRZClearance = models.CharField(
@@ -176,6 +178,7 @@ class PreConstructionStage(models.Model):
         max_length=255, blank=True, null=True)
     CurrentStatusCRZClearance = models.CharField(
         max_length=255, blank=True, null=True)
+    CRZClearanceDocuments = models.CharField(max_length=255, blank=True, null=True)
 
     ForestClearance = models.BooleanField(default=False)
     RulesOfForestClearance = models.CharField(
@@ -184,6 +187,7 @@ class PreConstructionStage(models.Model):
         max_length=255, blank=True, null=True)
     CurrentStatusOfForestClearance = models.CharField(
         max_length=255, blank=True, null=True)
+    ForestClearanceDocuments = models.CharField(max_length=255, blank=True, null=True)
 
 
 # The above class represents a construction stage with various permissions, rules, responsibilities,
