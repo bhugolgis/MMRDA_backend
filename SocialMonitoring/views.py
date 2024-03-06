@@ -120,7 +120,6 @@ class PapView(generics.GenericAPIView):
                         'cadastralMapDocuments': 'PAP/PAP_cadastralMapDocuments',
                         'legalDocuments': 'PAP/PAP_legalDocuments',
                         'presentPhotograph': 'PAP/presentphotograph' , }
-
                     file_mapping = {}
                     for field, file_path in file_fields.items():
                         files = request.FILES.getlist(field)

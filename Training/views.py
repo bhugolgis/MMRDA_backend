@@ -228,12 +228,27 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
         data = request.data
         serializer= PreConstructionStageComplianceSerialzier (data = data)
         if serializer.is_valid():
-            serializer.save(user = self.request.user)
+
+            file_fields = {
+                        'ShiftingofUtilitiesDocuments': 'Training\Training_ShiftingofUtilitiesDocuments',
+                        'PermissionForFellingOfTreesDocuments': 'Training\Training_PermissionForFellingOfTreesDocuments',
+                        'CRZClearanceDocuments': 'Training\Training_CRZClearanceDocuments' ,
+                        'ForestClearanceDocuments': 'Training\Training_ForestClearanceDocuments',
+                        }
+            
+            file_mapping = {}
+            for field, file_path in file_fields.items():
+                files = request.FILES.getlist(field)
+                file_mapping[field] = []
+                save_multiple_files(files, file_mapping, file_path, field)
+            
+            serializer.save(user = self.request.user, **file_mapping)
             return Response({'status': 'success' ,
                             'Message': 'Data saved successfully'} , status= 200)
+        
         else:
             key, value =list(serializer.errors.items())[0]
-            error_message = key+" ,"+ value[0]
+            error_message = str(key)+" ,"+ str(value[0])
             return Response({'status': 'error',
                             'Message' : error_message } , status = status.HTTP_400_BAD_REQUEST)
     
