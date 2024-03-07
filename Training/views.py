@@ -216,7 +216,7 @@ class ContactusListView(generics.ListAPIView):
 # If the data is valid, the method then saves the record to the database and returns a success message. Otherwise, the view returns an error message.
 class PreConstructionStageComplianceView(generics.GenericAPIView):
     serializer_class = PreConstructionStageComplianceSerialzier
-    #parser_classes = [MultiPartParser]
+    parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated]
     
     def post(self , request):
@@ -225,24 +225,10 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
         success message if the data is valid, or an error message if the data is invalid.
         
         """
-        data = request.data
-        serializer= PreConstructionStageComplianceSerialzier (data = data)
-        if serializer.is_valid():
 
-            file_fields = {
-                        'ShiftingofUtilitiesDocuments': 'Training\Training_ShiftingofUtilitiesDocuments',
-                        'PermissionForFellingOfTreesDocuments': 'Training\Training_PermissionForFellingOfTreesDocuments',
-                        'CRZClearanceDocuments': 'Training\Training_CRZClearanceDocuments' ,
-                        'ForestClearanceDocuments': 'Training\Training_ForestClearanceDocuments',
-                        }
-            
-            file_mapping = {}
-            for field, file_path in file_fields.items():
-                files = request.FILES.getlist(field)
-                file_mapping[field] = []
-                save_multiple_files(files, file_mapping, file_path, field)
-            
-            serializer.save(user = self.request.user, **file_mapping)
+        serializer= PreConstructionStageComplianceSerialzier (data = request.data , context={'request': request})
+        if serializer.is_valid():
+            serializer.save(user = request.user)
             return Response({'status': 'success' ,
                             'Message': 'Data saved successfully'} , status= 200)
         

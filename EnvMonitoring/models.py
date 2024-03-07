@@ -142,7 +142,7 @@ class WasteTreatments(Baseclass):
         max_length=255, blank=True, null=True)
     wasteHandlingLocation = models.PointField(null=True, blank=True)
     photographs = models.ImageField(upload_to='waste_photographs/' ,null=True, blank=True)
-    documents = models.FileField(upload_to='waste_documents' , null=True, blank=True)
+    documents = models.FileField(upload_to='waste_documents/' , null=True, blank=True)
     remarks = models.CharField(max_length=255, null=True, blank=True)
 
 

@@ -125,11 +125,6 @@ class ContactusViewSerialzier(GeoFeatureModelSerializer):
 # The class PreConstructionStageComplianceSerialzier is a serializer for the PreConstructionStage
 # model with specific fields.
 class PreConstructionStageComplianceSerialzier(serializers.ModelSerializer):
-    ShiftingofUtilitiesDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    PermissionForFellingOfTreesDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    CRZClearanceDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    ForestClearanceDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-
     class Meta:
         model =  PreConstructionStage
         fields = ('ShiftingofUtilities' , 'ResponsibilityOfShiftingofUtilities','CurrentStatusOfShiftingofUtilities', 'ShiftingofUtilitiesDocuments',
