@@ -127,8 +127,8 @@ class ContactusViewSerialzier(GeoFeatureModelSerializer):
 class PreConstructionStageComplianceSerialzier(serializers.ModelSerializer):
     ShiftingofUtilitiesDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
     PermissionForFellingOfTreesDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    CRZClearanceDocuments = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    ForestClearanceDocuments = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+    CRZClearanceDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+    ForestClearanceDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
 
     class Meta:
         model =  PreConstructionStage
@@ -141,6 +141,16 @@ class PreConstructionStageComplianceSerialzier(serializers.ModelSerializer):
 # The class ConstructionStageComplainceSerializer is a serializer for the ConstructionStage model,
 # excluding certain fields.
 class ConstructionStageComplainceSerializer(serializers.ModelSerializer):
+    ConsenttToEstablishOoperateDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+    PermissionForSandMiningFromRiverbedDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+    PermissionForGroundWaterWithdrawalDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+    AuthorizationForCollectionDisposalManagementDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+    AuthorizationForSolidWasteDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+    DisposalOfBituminousAndOtherWasteDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+    ConsentToDisposalOfsewagefromLabourCampsDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+    PollutionUnderControlCertificateDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+    RoofTopRainWaterHarvestingDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+
     class Meta:
         model = ConstructionStage 
         # fields = '__all__'

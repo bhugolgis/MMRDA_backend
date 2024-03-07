@@ -202,6 +202,7 @@ class ConstructionStage(models.Model):
         max_length=255, blank=True, null=True)
     CurrentStatusOfConsenttToEstablishOoperate = models.CharField(
         max_length=255, blank=True, null=True)
+    ConsenttToEstablishOoperateDocuments = models.CharField(max_length=255, blank=True, null=True)
 
     PermissionForSandMiningFromRiverbed = models.BooleanField(default=False)
     RulesOfSandMiningFromRiverbed = models.CharField(
@@ -210,6 +211,7 @@ class ConstructionStage(models.Model):
         max_length=255, blank=True, null=True)
     CurrentStatusOfSandMiningFromRiverbed = models.CharField(
         max_length=255, blank=True, null=True)
+    PermissionForSandMiningFromRiverbedDocuments = models.CharField(max_length=255, blank=True, null=True)
 
     PermissionForGroundWaterWithdrawal = models.BooleanField(default=False)
     RulesForGroundWaterWithdrawal = models.CharField(
@@ -218,6 +220,7 @@ class ConstructionStage(models.Model):
         max_length=255, blank=True, null=True)
     CurrentStatusOfGroundWaterWithdrawal = models.CharField(
         max_length=255, blank=True, null=True)
+    PermissionForGroundWaterWithdrawalDocuments = models.CharField(max_length=255, blank=True, null=True)
 
     AuthorizationForCollectionDisposalManagement = models.BooleanField(
         default=False)
@@ -227,6 +230,7 @@ class ConstructionStage(models.Model):
         max_length=255, blank=True, null=True)
     CurrentStatusOfCollectionDisposalManagement = models.CharField(
         max_length=255, blank=True, null=True)
+    AuthorizationForCollectionDisposalManagementDocuments = models.CharField(max_length=255, blank=True, null=True)
 
     AuthorizationForSolidWaste = models.BooleanField(default=False)
     RulesForSolidWaste = models.CharField(
@@ -235,6 +239,7 @@ class ConstructionStage(models.Model):
         max_length=255, blank=True, null=True)
     CurrentStatusOfSolidWaste = models.CharField(
         max_length=255, blank=True, null=True)
+    AuthorizationForSolidWasteDocuments = models.CharField(max_length=255, blank=True, null=True)
 
     DisposalOfBituminousAndOtherWaste = models.BooleanField(default=False)
     RulesForDisposalOfBituminousAndOtherWaste = models.CharField(
@@ -243,6 +248,7 @@ class ConstructionStage(models.Model):
         max_length=255, blank=True, null=True)
     CurrentStatusOfDisposalOfBituminousAndOtherWaste = models.CharField(
         max_length=255, blank=True, null=True)
+    DisposalOfBituminousAndOtherWasteDocuments = models.CharField(max_length=255, blank=True, null=True)
 
     ConsentToDisposalOfsewagefromLabourCamps = models.BooleanField(
         default=False)
@@ -252,6 +258,7 @@ class ConstructionStage(models.Model):
         max_length=255, blank=True, null=True)
     CurrentStatusOfDisposalOfsewagefromLabourCamps = models.CharField(
         max_length=255, blank=True, null=True)
+    ConsentToDisposalOfsewagefromLabourCampsDocuments = models.CharField(max_length=255, blank=True, null=True)
 
     PollutionUnderControlCertificate = models.BooleanField(default=False)
     RulesForPollutionUnderControl = models.CharField(
@@ -260,6 +267,7 @@ class ConstructionStage(models.Model):
         max_length=255, blank=True, null=True)
     CurrentStatusPollutionUnderControl = models.CharField(
         max_length=255, blank=True, null=True)
+    PollutionUnderControlCertificateDocuments = models.CharField(max_length=255, blank=True, null=True)
 
     RoofTopRainWaterHarvesting = models.BooleanField(default=False)
     RulesForRoofTopRainWaterHarvesting = models.CharField(
@@ -268,3 +276,4 @@ class ConstructionStage(models.Model):
         max_length=255, blank=True, null=True)
     CurrentStatusRoofTopRainWaterHarvesting = models.CharField(
         max_length=255, blank=True, null=True)
+    RoofTopRainWaterHarvestingDocuments = models.CharField(max_length=255, blank=True, null=True)

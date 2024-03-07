@@ -271,7 +271,26 @@ class ConstructionStageComplainceView(generics.CreateAPIView):
         data = request.data
         serializer= ConstructionStageComplainceSerializer(data = data)
         if serializer.is_valid(raise_exception= True):
-            serializer.save(user = self.request.user)
+
+            file_fields = {
+                        'ConsenttToEstablishOoperateDocuments': 'Training\Training_ConsenttToEstablishOoperateDocuments',
+                        'PermissionForSandMiningFromRiverbedDocuments': 'Training\Training_PermissionForSandMiningFromRiverbedDocuments',
+                        'PermissionForGroundWaterWithdrawalDocuments': 'Training\Training_PermissionForGroundWaterWithdrawalDocuments' ,
+                        'AuthorizationForCollectionDisposalManagementDocuments': 'Training\Training_AuthorizationForCollectionDisposalManagementDocuments',
+                        'AuthorizationForSolidWasteDocuments': 'Training\Training_AuthorizationForSolidWasteDocuments',
+                        'DisposalOfBituminousAndOtherWasteDocuments': 'Training\Training_DisposalOfBituminousAndOtherWasteDocuments',
+                        'ConsentToDisposalOfsewagefromLabourCampsDocuments': 'Training\Training_ConsentToDisposalOfsewagefromLabourCampsDocuments' ,
+                        'PollutionUnderControlCertificateDocuments': 'Training\Training_PollutionUnderControlCertificateDocuments',
+                        'RoofTopRainWaterHarvestingDocuments': 'Training\Training_RoofTopRainWaterHarvestingDocuments',
+                        }
+            
+            file_mapping = {}
+            for field, file_path in file_fields.items():
+                files = request.FILES.getlist(field)
+                file_mapping[field] = []
+                save_multiple_files(files, file_mapping, file_path, field)
+
+            serializer.save(user = self.request.user, **file_mapping)
             return Response({'status': 'success' ,
                             'Message': 'Data saved successfully'} , status= 200)
         else:
