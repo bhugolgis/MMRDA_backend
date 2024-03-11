@@ -199,14 +199,14 @@ class waterExcelReportSerializer(serializers.ModelSerializer):
 class wasteTreatmentsSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = WasteTreatments
-        fields = ('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' ,'quantity',
+        fields = ('id','quarter','month','packages','dateOfMonitoring' , 'wastetype', 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity',
                     'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
         geo_field= ('location')
 
 class wasteTreatmentsExcelSerializer(serializers.ModelSerializer):
     class Meta:
         model = WasteTreatments
-        fields = ('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' ,'quantity',
+        fields = ('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' ,
                     'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
         # geo_field= ('location')
 # The class `materialManagementSerializer` is a serializer class in Python that is used for

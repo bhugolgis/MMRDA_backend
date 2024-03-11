@@ -214,7 +214,7 @@ class WasteTreatmentsSerializer(serializers.ModelSerializer):
     waste_latitude = serializers.CharField(max_length=50,required=True)
     class Meta:
         model  = WasteTreatments
-        fields = ('quarter','month','packages','longitude','latitude'  ,'dateOfMonitoring' , 'wastetype' ,'quantity',
+        fields = ('quarter','month','packages','longitude','latitude'  ,'dateOfMonitoring' , 'wastetype' , 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity',
          'wastehandling' , 'waste_longitude' ,'waste_latitude', 'photographs' , 'documents','remarks')
 
     def validate(self,data):
@@ -303,7 +303,7 @@ class NoisemanagementSerializer(serializers.ModelSerializer):
 class WasteSerializer(serializers.ModelSerializer):
     class Meta:
         model = WasteTreatments
-        fields = ['wastetype','quantity','wastehandling','location','packages','quarter','photographs','remarks']
+        fields = ['wastetype','wastehandling','location','packages','quarter','photographs','remarks']
 
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:

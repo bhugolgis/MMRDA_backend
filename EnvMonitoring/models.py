@@ -137,7 +137,36 @@ class WasteTreatments(Baseclass):
         User, related_name="waste_treatments", on_delete=models.CASCADE, blank=True)
     wastetype = models.CharField(
         max_length=255,  null=True, blank=True)
-    quantity = models.IntegerField(null=True, blank=True)
+    
+    # Hazardous Waste
+    wasteOilQnt = models.FloatField(null=True, blank=True) # liter
+    CCPCPaintSludgeQnt = models.FloatField(null=True, blank=True) # Kg
+    airFiltersQnt = models.FloatField(null=True, blank=True) # liter
+    usedCartridgesQnt = models.FloatField(null=True, blank=True) # litre
+
+    # Recyclable Waste
+
+    plasticQnt = models.FloatField(null=True, blank=True) # Kg
+    paperQnt = models.FloatField(null=True, blank=True) # Kg
+    woodQnt = models.FloatField(null=True, blank=True) # Kg
+    bottlesQnt = models.FloatField(null=True, blank=True) # Kg
+    rubberQnt = models.FloatField(null=True, blank=True) # Kg
+
+    # Bio Degradable Waste
+    bioDegradableQuantity = models.FloatField(null=True, blank=True) # Food and Vegetable waste
+
+    # Bio Medical Waste
+    bioMedicalQuantity = models.FloatField(null=True, blank=True) # Syringe, Needles, Cotton & Bandages
+
+    # Metal Scrape
+    metalScrapeQuantity = models.FloatField(null=True, blank=True) # Kg
+
+    # E Waste 
+    eWasteQuantity = models.FloatField(null=True, blank=True) # Kg
+
+    # Construction Waste
+    constructionWasteQuantity = models.FloatField(null=True, blank=True) # Kg
+
     wastehandling = models.CharField(
         max_length=255, blank=True, null=True)
     wasteHandlingLocation = models.PointField(null=True, blank=True)
