@@ -16,6 +16,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 import pandas as pd
 from django.http import StreamingHttpResponse
 from django.http import HttpResponse
+from django.http import JsonResponse
 # from django_excel_response import ExcelResponse
 
 
@@ -89,6 +90,8 @@ class labourcampreportpackageExcelDownloadView(generics.ListAPIView):
                     'photographs' ,'documents','remarks'
             # Add more fields as needed
         )
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -187,6 +190,8 @@ class labourQuarterExcelDownload(generics.ListAPIView):
                     'photographs' ,'documents','remarks'
             # Add more fields as needed
         )
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -255,6 +260,9 @@ class ConstructionCampReportPackageExcelDownload(generics.ListAPIView):
                         'genralphotographs','documents','remarks'
             # Add more fields as needed
         )
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -334,6 +342,8 @@ class ConstructionCampReportQuaterExcelDownload(generics.ListAPIView):
                         'genralphotographs','documents','remarks'
             # Add more fields as needed
         )
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -396,6 +406,8 @@ class PAPReportPackageExcelDownload(generics.ListAPIView):
                             'actionTaken', 'notAgreedReason','remarks'
             # Add more fields as needed
         )
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -467,6 +479,10 @@ class PAPReportExcelQuaterExcelDownload(generics.ListAPIView):
             # Add more fields as needed
         )
 
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
 
@@ -526,6 +542,10 @@ class RehabilitationReportPackageExcelDownload(generics.ListAPIView):
         data = queryset.values('ID','dateOfRehabilitation','PAPID','categoryOfPap','PAPName','cashCompensation','compensationStatus','typeOfCompensation','otherCompensationType','addressLine1','streetName','pincode','isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport','livelihoodSupportAmount','livelihoodSupportCondition','livelihoodSupportRemarks','isTraining','trainingCondition','trainingRemarks','typeOfStructure','areaOfTenament','isRelocationAllowance','RelocationAllowanceAmount','isfinancialSupport','financialSupportAmount','isCommunityEngagement','isEngagementType','documents', 
                                 'remarks','livelihoodSupportPhotograph','trainingPhotograph',
                                 'tenamentsPhotograph','photographs')
+
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -600,6 +620,10 @@ class RehabilitationReportQuarterExcelDownload(generics.ListAPIView):
                                'isEngagementType','documents','remarks','livelihoodSupportPhotograph','trainingPhotograph',
                                'tenamentsPhotograph','photographs')
 
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+
+
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
 
@@ -658,6 +682,10 @@ class AirReportReportPackageExcelDownload(generics.ListAPIView):
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','quarter','packages','month','dateOfMonitoring','PM10','PM2_5',
                  'SO2','NOx','CO','AQI','Remarks')
+
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -727,6 +755,10 @@ class AirReportQuarterExcelDownload(generics.ListAPIView):
         data = queryset.values('id','quarter','packages','month','dateOfMonitoring','PM10','PM2_5',
                  'SO2','NOx','CO','AQI','Remarks')
 
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
 
@@ -779,6 +811,9 @@ class NoiseReportReportPackageExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','location' ,'quarter','month','packages','dateOfMonitoringThree' ,'noiseLevel' , 'monitoringPeriod', )
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -850,6 +885,8 @@ class NoiseReportQuarterExcelDownload(generics.ListAPIView):
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','location' ,'quarter','month','packages','dateOfMonitoringThree' ,'noiseLevel' , 'monitoringPeriod', )
 
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
 
@@ -901,6 +938,10 @@ class waterReportReportPackageExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' ,'waterDisposal')
+
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -972,6 +1013,9 @@ class WaterReportQuarterExcelDownload(generics.ListAPIView):
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' ,'waterDisposal')
 
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
 
@@ -1027,6 +1071,10 @@ class wasteTreatmentReportPackageExcelDownload(generics.ListAPIView):
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' ,'quantity',
                     'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
+
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -1094,6 +1142,10 @@ class wasteTreatmentQuarterExcelDownload(generics.ListAPIView):
         data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' ,'quantity',
                     'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
 
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
 
@@ -1151,6 +1203,10 @@ class MaterialManegmanetReportPackageExcelDownload(generics.ListAPIView):
          'typeOfMaterial','source','sourceOfQuarry','materialStorageType','storageLocation',
          'materialStorageCondition','materialStoragePhotograph','approvals' ,'photographs',
           'documents','remarks')
+
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -1221,6 +1277,9 @@ class materialManagementQuarterExcelDownload(generics.ListAPIView):
          'materialStorageCondition','materialStoragePhotograph','approvals' ,'photographs',
           'documents','remarks')
 
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
 
@@ -1275,6 +1334,10 @@ class treeManagementReportPackageExcelDownload(generics.ListAPIView):
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
                     'condition', 'noOfTreeCut','actionTaken', 'photographs', 'documents','remarks')
+
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -1341,6 +1404,10 @@ class TreeManagementQuarterExcelDownload(generics.ListAPIView):
         data = queryset.values('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
                     'condition', 'noOfTreeCut','actionTaken', 'photographs', 'documents','remarks')
 
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
 
@@ -1391,6 +1458,10 @@ class MetroLine4AlignmentReportPackageExcelDownload(generics.ListAPIView):
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
                     'condition', 'noOfTreeCut','actionTaken', 'photographs', 'documents','remarks')
+
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -1570,6 +1641,9 @@ class TrainningManagementQuarterExcelDownload(generics.ListAPIView):
                   'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
                   'traningDate' , 'photographs' , 'documents')
 
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
 
@@ -1620,6 +1694,10 @@ class TrainnigReportPackageExcelDownload(generics.ListAPIView):
                   'category' , 'traningTitle' , 'noOfAttends' , 'noOfTimesTrainingConducted',
                   'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
                   'traningDate' , 'photographs' , 'documents')
+
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -1674,6 +1752,10 @@ class OccupationalHealthQuarterExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values()
+
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
@@ -1732,6 +1814,8 @@ class ExcelOccupationalHealthQuarterExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values()
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
         # Create a Pandas DataFrame
         df = pd.DataFrame(data)
