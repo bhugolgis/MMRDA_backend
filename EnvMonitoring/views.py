@@ -750,36 +750,50 @@ class WatermanagmentAPI(generics.GenericAPIView):
 
 class NoiseWhithinLimitAPI(generics.GenericAPIView):
     serializer_class = NoisemanagementSerializer
-    def get(self, request, *args, **kwargs):
-        typeOfArea = self.request.query_params.get("typeOfArea")
-        noiseLevel_day = float(self.request.query_params.get("noiseLevel_day"))
-        noiseLevel_night = float(self.request.query_params.get("noiseLevel_night"))
-        print(typeOfArea, noiseLevel_day, noiseLevel_night)
+    parser_classes = [MultiPartParser]
+    def post(self, request, *args, **kwargs):
+        # typeOfArea = self.request.query_params.get("typeOfArea")
+        # noiseLevel_day = float(self.request.query_params.get("noiseLevel_day"))
+        # noiseLevel_night = float(self.request.query_params.get("noiseLevel_night"))
+        # print(typeOfArea, noiseLevel_day, noiseLevel_night)
+
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+
+            typeOfArea = str(serializer.validated_data['typeOfArea'])
+            noiseLevel_day = float(serializer.validated_data['noiseLevel_day'])
+            noiseLevel_night = float(serializer.validated_data['noiseLevel_night'])
+            print(typeOfArea, noiseLevel_day, noiseLevel_night)
 
 
-        isWhithinLimit = {"day": "initial",
-        "night": "initial"}
-        # type of areas are below
-        # typeOfAreaList = ["Industrial Area", "Commercial Area", "Residential Area", "Residential Area"]
+            isWhithinLimit = {"day": "initial",
+            "night": "initial"}
+            # type of areas are below
+            # typeOfAreaList = ["Industrial Area", "Commercial Area", "Residential Area", "Residential Area"]
 
-        if typeOfArea == "Industrial Area":
-            isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 75 else "Whithin Limit"
-            isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 70 else "Whithin Limit"
-        if typeOfArea == "Commercial Area":
-            isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 65 else "Whithin Limit"
-            isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 55 else "Whithin Limit"
-        if typeOfArea == "Residential Area":
-            isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 55 else "Whithin Limit"
-            isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 45 else "Whithin Limit"
-        if typeOfArea == "Sensitive Area":
-            isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 50 else "Whithin Limit"
-            isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 40 else "Whithin Limit"
+            if typeOfArea == "Industrial Area":
+                isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 75 else "Whithin Limit"
+                isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 70 else "Whithin Limit"
+            if typeOfArea == "Commercial Area":
+                isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 65 else "Whithin Limit"
+                isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 55 else "Whithin Limit"
+            if typeOfArea == "Residential Area":
+                isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 55 else "Whithin Limit"
+                isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 45 else "Whithin Limit"
+            if typeOfArea == "Sensitive Area":
+                isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 50 else "Whithin Limit"
+                isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 40 else "Whithin Limit"
 
-        print(isWhithinLimit)
+            print(isWhithinLimit)
 
-        return Response({'status': 200, 'data': isWhithinLimit,
-                                      'message': 'successfully'})
-
+            return Response({'status': 200, 'data': isWhithinLimit,
+                                        'message': 'successfully'})
+        else:
+            error = error_simplifier(serializer.errors)
+            return Response({
+                "message":error,
+                "status":"error"
+            },status=status.HTTP_400_BAD_REQUEST)
 
 
 class GenerateWQI(generics.GenericAPIView):
@@ -794,9 +808,9 @@ class GenerateWQI(generics.GenericAPIView):
             #     PM10 = sub_indices_calculator.get_PM10_subindex(serializer.validated_data['PM10'])
             print(serializer.validated_data.keys())
             print(request.data)
-            print((serializer.validated_data['pH']))
+            # print((serializer.validated_data['pH']))
 
-            pH = serializer.validated_data['pH']
+            # pH = serializer.validated_data['pH']
 
             # qi = (float(pH) / 7.5) * 100
             # print(qi)

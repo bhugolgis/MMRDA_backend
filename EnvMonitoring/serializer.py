@@ -65,7 +65,7 @@ class WaterSerializer(serializers.ModelSerializer):
     class Meta:
         model = water
         fields = ('quarter','packages','month', 'dateOfMonitoringTwo','longitude','latitude',
-                    'qualityOfWater' , 'sourceOfWater' ,'waterDisposal','pH', 'trueColor', 'turbidity', 'odour', 'totalDissolvedSolids', 'totalAlkalinityAsCaCO3', 'totalHardnessAsCaCO3', 'calcium', 'magnesium', 'chlorides', 'fluoride', 'sulphate', 'nitrate', 'iron', 'zinc', 'copper', 'aluminum', 'nickel', 'manganese', 'phenolicCompounds', 'sulphide', 'cadmium', 'cyanide', 'lead', 'mercury', 'totalArsenic', 'totalChromium', 'totalColiform', 'eColi')
+                    'qualityOfWater' , 'sourceOfWater' ,'waterDisposal','pH', 'trueColor', 'turbidity', 'odour', 'totalDissolvedSolids', 'totalAlkalinityAsCaCO3', 'totalHardnessAsCaCO3', 'calcium', 'magnesium', 'chlorides', 'fluoride', 'sulphate', 'nitrate', 'iron', 'zinc', 'copper', 'aluminum', 'nickel', 'manganese', 'phenolicCompounds', 'sulphide', 'cadmium', 'cyanide', 'lead', 'mercury', 'totalArsenic', 'totalChromium', 'totalColiform', 'eColi', 'WQI')
 
 
     def validate(self,data):
@@ -297,7 +297,7 @@ class AirmanagementSerializer(serializers.ModelSerializer):
 class NoisemanagementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Noise
-        fields = ['noiseLevel','monitoringPeriod','location','packages','quarter']
+        fields = ['noiseLevel','monitoringPeriod','location','packages','quarter', 'noiseLevel_day', 'monitoringPeriod_day', 'monitoringPeriod_night', 'noiseLevel_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night']
 
 
 class WasteSerializer(serializers.ModelSerializer):
