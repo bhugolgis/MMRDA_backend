@@ -548,7 +548,7 @@ class WaterWQIChartDashboardView(APIView):
         if not water:
             return Response({
             "message":"No data found for specified package/quarter",
-        }, status=status.HTTP_400_BAD_REQUEST)
+        }, status=status.HTTP_404_NOT_FOUND)
 
 
         serializer = DashboardWQISerializer(water, many=True)
@@ -566,3 +566,37 @@ class WaterWQIChartDashboardView(APIView):
             "data":avg_wqi,
             # "quality": quality
         })
+    
+# Api for Env Monitoring Dashboard GIS Map
+class DashboardEnvMonitoringGISMap(APIView):
+    def get(self, request, quarter, packages, *args, **kwargs):
+        water = Water.objects.all().filter(packages=packages, quarter=quarter)
+        air = Air.objects.all().filter(packages=packages, quarter=quarter)
+        noise = Noise.objects.all().filter(packages=packages, quarter=quarter)
+
+        if not water:
+            return Response({"message":"No data found for specified package/quarter",}
+                            , status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = DashboardEnvMonitoringGISMapWaterSerializer(water, many=True)
+        serializer_data_water = serializer.data
+
+        if not air:
+            return Response({"message":"No data found for specified package/quarter",}
+                            , status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = DashboardEnvMonitoringGISMapAirSerializer(air, many=True)
+        serializer_data_air = serializer.data
+
+        if not noise:
+            return Response({"message":"No data found for specified package/quarter",}
+                            , status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = DashboardEnvMonitoringGISMapNoiseSerializer(noise, many=True)
+        serializer_data_noise = serializer.data
+
+        return Response({"message": "Data Fetched successfully",
+                         "data_water": serializer_data_water,
+                         "data_air": serializer_data_air,
+                         "data_noise": serializer_data_noise,}
+                        , status=status.HTTP_200_OK)

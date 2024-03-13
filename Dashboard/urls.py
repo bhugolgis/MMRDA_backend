@@ -30,6 +30,7 @@ urlpatterns = [
      path('AirAQIChartDashboardView/<str:quarter>/<str:packages>',AirAQIChartDashboardView.as_view() , name = 'AIr chart'),
      path('WaterWQIChartDashboardView/<str:quarter>/<str:packages>',WaterWQIChartDashboardView.as_view() , name = 'WQI chart'),
      path('ManDaysLost/<str:quarter>/<str:packages>',ManDaysLostCountchart.as_view() , name = 'Man Days Lost Count'),
+     path('DashboardEnvMonitoringGISMap/<str:quarter>/<str:packages>',DashboardEnvMonitoringGISMap.as_view() , name = 'WQI chart'),
 
 
     
