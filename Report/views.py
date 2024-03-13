@@ -92,18 +92,18 @@ class labourcampreportpackageExcelDownloadView(generics.ListAPIView):
         )
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=labour_camp_report.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=labour_camp_report.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
     
     
         
@@ -192,18 +192,18 @@ class labourQuarterExcelDownload(generics.ListAPIView):
         )
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=labour_camp_report.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=labour_camp_report.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
     
 
 # ----------------------------------------------------------------
@@ -263,18 +263,18 @@ class ConstructionCampReportPackageExcelDownload(generics.ListAPIView):
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=ConstructionCampReport.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=ConstructionCampReport.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 
@@ -344,18 +344,18 @@ class ConstructionCampReportQuaterExcelDownload(generics.ListAPIView):
         )
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=ConstructionCampReport.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=ConstructionCampReport.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 
@@ -408,18 +408,18 @@ class PAPReportPackageExcelDownload(generics.ListAPIView):
         )
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=PAPReportPackage.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=PAPReportPackage.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 
@@ -482,18 +482,19 @@ class PAPReportExcelQuaterExcelDownload(generics.ListAPIView):
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=PAPReportExcelQuater.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=PAPReportExcelQuater.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 # ------------------------------------------------------------
@@ -547,17 +548,19 @@ class RehabilitationReportPackageExcelDownload(generics.ListAPIView):
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=RehabilitationReport.xlsx'
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=RehabilitationReport.xlsx'
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        return response
+            return response
 
 
 
@@ -623,18 +626,19 @@ class RehabilitationReportQuarterExcelDownload(generics.ListAPIView):
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
+        else:
+                
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=RehabilitationReportQuater.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=RehabilitationReportQuater.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 
@@ -687,17 +691,20 @@ class AirReportReportPackageExcelDownload(generics.ListAPIView):
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+        else:
+            
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=AirReport.xlsx'
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=AirReport.xlsx'
 
-        return response
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
+
+            return response
 
 
 
@@ -758,18 +765,19 @@ class AirReportQuarterExcelDownload(generics.ListAPIView):
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=AirReportQuater.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=AirReportQuater.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 class NoiseReportpackageView(ListAPIView):
@@ -814,18 +822,19 @@ class NoiseReportReportPackageExcelDownload(generics.ListAPIView):
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+                
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=NoiseReport.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=NoiseReport.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 
@@ -888,16 +897,18 @@ class NoiseReportQuarterExcelDownload(generics.ListAPIView):
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
         # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+        else:
+            
+            df = pd.DataFrame(data)
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=NoiseReportQuater.xlsx'
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=NoiseReportQuater.xlsx'
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        return response
+            return response
 
 
 
@@ -943,17 +954,19 @@ class waterReportReportPackageExcelDownload(generics.ListAPIView):
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=WaterReport.xlsx'
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=WaterReport.xlsx'
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        return response
+            return response
 
 
 
@@ -1015,18 +1028,19 @@ class WaterReportQuarterExcelDownload(generics.ListAPIView):
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+                
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=WaterReportQuater.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=WaterReportQuater.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 
@@ -1075,18 +1089,19 @@ class wasteTreatmentReportPackageExcelDownload(generics.ListAPIView):
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=wasteTreatmentReport.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=wasteTreatmentReport.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 
@@ -1146,17 +1161,19 @@ class wasteTreatmentQuarterExcelDownload(generics.ListAPIView):
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=WasteTreatmentQuater.xlsx'
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=WasteTreatmentQuater.xlsx'
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        return response
+            return response
 
 
 
@@ -1207,18 +1224,19 @@ class MaterialManegmanetReportPackageExcelDownload(generics.ListAPIView):
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+                
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=MaterialManagementReport.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=MaterialManagementReport.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 
@@ -1279,18 +1297,19 @@ class materialManagementQuarterExcelDownload(generics.ListAPIView):
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=MaterialManegmanetQuater.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=MaterialManegmanetQuater.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 
@@ -1339,17 +1358,19 @@ class treeManagementReportPackageExcelDownload(generics.ListAPIView):
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=ExistingTreeManagmentReport.xlsx'
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=ExistingTreeManagmentReport.xlsx'
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        return response
+            return response
 
 
 class TreeManagementReportQuarterView(ListAPIView):
@@ -1407,18 +1428,19 @@ class TreeManagementQuarterExcelDownload(generics.ListAPIView):
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=TreeManegmanetQuater.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=TreeManegmanetQuater.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 
@@ -1463,17 +1485,19 @@ class MetroLine4AlignmentReportPackageExcelDownload(generics.ListAPIView):
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=ExistingTreeManagmentReport.xlsx'
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=ExistingTreeManagmentReport.xlsx'
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        return response
+            return response
 
 
 class Package54AlignmentView(generics.GenericAPIView):
@@ -1644,17 +1668,19 @@ class TrainningManagementQuarterExcelDownload(generics.ListAPIView):
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+        else:
+                
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=TrainningQuater.xlsx'
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=TrainningQuater.xlsx'
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        return response
+            return response
 
 
 
@@ -1698,18 +1724,19 @@ class TrainnigReportPackageExcelDownload(generics.ListAPIView):
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=training.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=training.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 
@@ -1756,18 +1783,18 @@ class OccupationalHealthQuarterExcelDownload(generics.ListAPIView):
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=OccupationalHealthQuarter.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=OccupationalHealthQuarter.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 class OccupationalHealthPackageView(generics.GenericAPIView):
@@ -1816,18 +1843,19 @@ class ExcelOccupationalHealthQuarterExcelDownload(generics.ListAPIView):
         data = queryset.values()
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
 
-        # Create a Pandas DataFrame
-        df = pd.DataFrame(data)
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=OccupationalHealthQuarter.xlsx'
 
-        # Create a response with the appropriate content type
-        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        response['Content-Disposition'] = 'attachment; filename=OccupationalHealthQuarter.xlsx'
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
 
-        # Write the DataFrame to the Excel response
-        df.to_excel(response, index=False, sheet_name='Sheet1')
-
-        return response
+            return response
 
 
 class ExcelWorkbook(generics.GenericAPIView):
