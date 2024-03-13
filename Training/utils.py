@@ -16,14 +16,14 @@ def save_multiple_files(files, file_mapping, file_path , field):
     for file in files:
         if file == False:
             print("file empty")
-        else:
-            print("file is not empty")
-            print(type(file))
+       
+            # print("file is not empty")
+            # print(type(file))
         tmp = os.path.join(settings.MEDIA_ROOT, file_path, file.name)
-        print("tmp:" + tmp)
-        print("file_path:" + file_path)
-        print("file.name:" + file.name)
+        # print(tmp , "temp")
         path = default_storage.save(tmp, ContentFile(file.read()))
+        print(path)
         tmp_file = os.path.join(settings.MEDIA_ROOT, path)
         file_list.append('/media/' + file_path + '/' + file.name)
+        # print(file_list)
     file_mapping[field] = file_list
