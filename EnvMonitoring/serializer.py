@@ -31,7 +31,7 @@ class AirSerializer(serializers.ModelSerializer):
     latitude=serializers.CharField(max_length=50,required=True)
     class Meta:
         model = Air
-        fields = ('quarter','packages','month','longitude','latitude','dateOfMonitoring','PM10',
+        fields = ('quarter','packages','month','longitude','latitude','place_location', 'dateOfMonitoring','PM10',
                   'PM2_5','SO2','NOx','CO','AQI','Remarks')
         # geo_field='location'
     def validate(self,data):
