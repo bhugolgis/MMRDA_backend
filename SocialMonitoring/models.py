@@ -90,7 +90,7 @@ class PAP(Baseclass):
 class Rehabilitation(Baseclass):
     user = models.ForeignKey(User, related_name='rehabilitationUser', on_delete=models.CASCADE, blank=True)
     location = models.PointField(null=True, blank=True)
-    ID = models.ForeignKey( PAP, related_name='rehabilitation', on_delete=models.CASCADE)
+    ID = models.ForeignKey( PAP, related_name='rehabilitation', on_delete=models.CASCADE, blank=True, null=True)
     dateOfRehabilitation = models.DateField(blank=True, null=True)
     PAPID = models.CharField(max_length=255, blank=True, null=True)
     categoryOfPap = models.CharField( max_length=255,  null=True, blank=True)

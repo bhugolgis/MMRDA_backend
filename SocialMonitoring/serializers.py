@@ -164,7 +164,7 @@ class RehabilitationSerializer(serializers.ModelSerializer):
     photographs =serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
     class Meta:
         model = Rehabilitation
-        fields = ('quarter','longitude', 'latitude','ID','packages','dateOfRehabilitation' ,'PAPID',
+        fields = ('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',
                    'PAPName' ,'categoryOfPap','cashCompensation', 'compensationStatus', 'agreedUpon',
                    'cashCompensationAmount', 'cashCompensationStatus', 'landProvidedAreaLocationDetails',
                    'landProvidedStatus', 'landProvidedArea', 'alternateAccomodationLocationDetails',

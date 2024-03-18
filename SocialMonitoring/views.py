@@ -329,7 +329,7 @@ class RehabilitationView(generics.GenericAPIView):
                                     'status' : 'success'})
             else:
                 key, value =list(serializer.errors.items())[0]
-                error_message = key+" ,"+value[0]
+                error_message = str(key)+" ,"+str(value[0])
                 return Response({'status': 'error',
                                 'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
         else:
