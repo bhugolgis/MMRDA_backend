@@ -236,5 +236,5 @@ SIMPLE_JWT = {
 
 TIME_ZONE =  'Asia/Kolkata'
 
-GDAL_LIBRARY_PATH = r"C:\OSGeo4W\bin\gdal308.dll"
-# GDAL_LIBRARY_PATH = r"C:\OSGeo4W64\bin\gdal301.dll"
+# GDAL_LIBRARY_PATH = r"C:\OSGeo4W\bin\gdal308.dll"
+GDAL_LIBRARY_PATH = r"C:\OSGeo4W64\bin\gdal301.dll"

@@ -17,6 +17,7 @@ import pandas as pd
 from django.http import StreamingHttpResponse
 from django.http import HttpResponse
 from django.http import JsonResponse
+import calendar
 # from django_excel_response import ExcelResponse
 
 
@@ -736,11 +737,24 @@ class AirReportQuarterView(ListAPIView):
 
 class AirReportQuarterFilter(django_filters.FilterSet):
     year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
-    # month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+    month = django_filters.CharFilter(method='filter_by_month', label='Month')
 
+    def filter_by_month(self, queryset, name, value):
+        if value.isdigit():
+            # If the value is a digit, return the queryset as is
+            return queryset
+
+        try:
+            month_number = list(calendar.month_name).index(value.capitalize())
+            return queryset.filter(dateOfMonitoring__month=month_number)
+        except ValueError:
+            # If the value is not a valid month name, return an empty queryset
+            return queryset.none()
     class Meta:
         model = Air
         fields = [ 'month','year']
+
+
 
 
 
@@ -869,8 +883,19 @@ class NoiseReportQuarterView(ListAPIView):
 
 class NoiseReportQuarterFilter(django_filters.FilterSet):
     year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
-    month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+    month = django_filters.CharFilter(method='filter_by_month', label='Month')
 
+    def filter_by_month(self, queryset, name, value):
+        if value.isdigit():
+            # If the value is a digit, return the queryset as is
+            return queryset
+
+        try:
+            month_number = list(calendar.month_name).index(value.capitalize())
+            return queryset.filter(dateOfMonitoring__month=month_number)
+        except ValueError:
+            # If the value is not a valid month name, return an empty queryset
+            return queryset.none()
     class Meta:
         model = Noise
         fields = ['month', 'year']
@@ -1001,8 +1026,19 @@ class waterReportQuarterView(ListAPIView):
 
 class WaterReportQuarterFilter(django_filters.FilterSet):
     year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
-    month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+    month = django_filters.CharFilter(method='filter_by_month', label='Month')
 
+    def filter_by_month(self, queryset, name, value):
+        if value.isdigit():
+            # If the value is a digit, return the queryset as is
+            return queryset
+
+        try:
+            month_number = list(calendar.month_name).index(value.capitalize())
+            return queryset.filter(dateOfMonitoring__month=month_number)
+        except ValueError:
+            # If the value is not a valid month name, return an empty queryset
+            return queryset.none()
     class Meta:
         model = water
         fields = ['month', 'year']
@@ -1131,8 +1167,19 @@ class WasteTreatmentsQuarterView(ListAPIView):
 
 class WasteTreatmentsQuarterFilter(django_filters.FilterSet):
     year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
-    month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+    month = django_filters.CharFilter(method='filter_by_month', label='Month')
 
+    def filter_by_month(self, queryset, name, value):
+        if value.isdigit():
+            # If the value is a digit, return the queryset as is
+            return queryset
+
+        try:
+            month_number = list(calendar.month_name).index(value.capitalize())
+            return queryset.filter(dateOfMonitoring__month=month_number)
+        except ValueError:
+            # If the value is not a valid month name, return an empty queryset
+            return queryset.none()
     class Meta:
         model = WasteTreatments
         fields = ['month', 'year']
@@ -1267,8 +1314,19 @@ class MaterialManagementReporetQuarterView(ListAPIView):
 
 class materialManagementQuarterFilter(django_filters.FilterSet):
     year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
-    month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+    month = django_filters.CharFilter(method='filter_by_month', label='Month')
 
+    def filter_by_month(self, queryset, name, value):
+        if value.isdigit():
+            # If the value is a digit, return the queryset as is
+            return queryset
+
+        try:
+            month_number = list(calendar.month_name).index(value.capitalize())
+            return queryset.filter(dateOfMonitoring__month=month_number)
+        except ValueError:
+            # If the value is not a valid month name, return an empty queryset
+            return queryset.none()
     class Meta:
         model = MaterialManegmanet
         fields = ['month', 'year']
@@ -1399,8 +1457,19 @@ class TreeManagementReportQuarterView(ListAPIView):
 
 class ExistingTreeManagmentQuarterFilter(django_filters.FilterSet):
     year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
-    month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+    month = django_filters.CharFilter(method='filter_by_month', label='Month')
 
+    def filter_by_month(self, queryset, name, value):
+        if value.isdigit():
+            # If the value is a digit, return the queryset as is
+            return queryset
+
+        try:
+            month_number = list(calendar.month_name).index(value.capitalize())
+            return queryset.filter(dateOfMonitoring__month=month_number)
+        except ValueError:
+            # If the value is not a valid month name, return an empty queryset
+            return queryset.none()
     class Meta:
         model = ExistingTreeManagment
         fields = ['month', 'year']
@@ -1637,8 +1706,19 @@ class TrainnigReportQuarterView(APIView):
 
 class TrainingQuarterFilter(django_filters.FilterSet):
     year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
-    month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
+    month = django_filters.CharFilter(method='filter_by_month', label='Month')
 
+    def filter_by_month(self, queryset, name, value):
+        if value.isdigit():
+            # If the value is a digit, return the queryset as is
+            return queryset
+
+        try:
+            month_number = list(calendar.month_name).index(value.capitalize())
+            return queryset.filter(dateOfMonitoring__month=month_number)
+        except ValueError:
+            # If the value is not a valid month name, return an empty queryset
+            return queryset.none()
     class Meta:
         model = traning
         fields = ['month', 'year']
