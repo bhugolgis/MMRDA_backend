@@ -139,32 +139,48 @@ class WasteTreatments(Baseclass):
         max_length=255,  null=True, blank=True)
     
     # Hazardous Waste
+    iswasteOilQnt = models.BooleanField(blank=True, null=True)
     wasteOilQnt = models.FloatField(null=True, blank=True) # liter
+    isCCPCPaintSludgeQnt = models.BooleanField(blank=True, null=True)
     CCPCPaintSludgeQnt = models.FloatField(null=True, blank=True) # Kg
+    isfilterQnt = models.BooleanField(blank=True, null=True)
+    filterQnt = models.FloatField(null=True, blank=True) # litre
+    isairFiltersQnt = models.BooleanField(blank=True, null=True)
     airFiltersQnt = models.FloatField(null=True, blank=True) # liter
+    isusedCartridgesQnt = models.BooleanField(blank=True, null=True)
     usedCartridgesQnt = models.FloatField(null=True, blank=True) # litre
 
     # Recyclable Waste
 
+    isplasticQnt = models.BooleanField(blank=True, null=True)
     plasticQnt = models.FloatField(null=True, blank=True) # Kg
+    ispaperQnt = models.BooleanField(blank=True, null=True)
     paperQnt = models.FloatField(null=True, blank=True) # Kg
+    iswoodQnt = models.BooleanField(blank=True, null=True)
     woodQnt = models.FloatField(null=True, blank=True) # Kg
+    isbottlesQnt = models.BooleanField(blank=True, null=True)
     bottlesQnt = models.FloatField(null=True, blank=True) # Kg
+    isrubberQnt = models.BooleanField(blank=True, null=True)
     rubberQnt = models.FloatField(null=True, blank=True) # Kg
 
     # Bio Degradable Waste
+    isbioDegradableQuantity = models.BooleanField(blank=True, null=True)
     bioDegradableQuantity = models.FloatField(null=True, blank=True) # Food and Vegetable waste
 
     # Bio Medical Waste
+    isbioMedicalQuantity = models.BooleanField(blank=True, null=True)
     bioMedicalQuantity = models.FloatField(null=True, blank=True) # Syringe, Needles, Cotton & Bandages
 
     # Metal Scrape
+    ismetalScrapeQuantity = models.BooleanField(blank=True, null=True)
     metalScrapeQuantity = models.FloatField(null=True, blank=True) # Kg
 
-    # E Waste 
+    # E Waste
+    iseWasteQuantity = models.BooleanField(blank=True, null=True)
     eWasteQuantity = models.FloatField(null=True, blank=True) # Kg
 
     # Construction Waste
+    isconstructionWasteQuantity = models.BooleanField(blank=True, null=True)
     constructionWasteQuantity = models.FloatField(null=True, blank=True) # Kg
 
     wastehandling = models.CharField(

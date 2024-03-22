@@ -263,10 +263,13 @@ class ConstructionCampReportPackageExcelDownload(generics.ListAPIView):
         )
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return Response({'status':'error','message':'Data Not Found'}, status=status.HTTP_400_BAD_REQUEST)
+
+
         else:
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
+
 
             # Create a response with the appropriate content type
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')

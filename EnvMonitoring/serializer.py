@@ -31,7 +31,7 @@ class AirSerializer(serializers.ModelSerializer):
     latitude=serializers.CharField(max_length=50,required=True)
     class Meta:
         model = Air
-        fields = ('quarter','packages','month','longitude','latitude','dateOfMonitoring','PM10',
+        fields = ('quarter','packages','month','longitude','latitude','place_location', 'dateOfMonitoring','PM10',
                   'PM2_5','SO2','NOx','CO','AQI','Remarks')
         # geo_field='location'
     def validate(self,data):
@@ -214,7 +214,7 @@ class WasteTreatmentsSerializer(serializers.ModelSerializer):
     waste_latitude = serializers.CharField(max_length=50,required=True)
     class Meta:
         model  = WasteTreatments
-        fields = ('quarter','month','packages','longitude','latitude'  ,'dateOfMonitoring' , 'wastetype' , 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity',
+        fields = ('quarter','month','packages','longitude','latitude'  ,'dateOfMonitoring' , 'wastetype' , 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'iswasteOilQnt', 'isCCPCPaintSludgeQnt', 'isfilterQnt', 'isairFiltersQnt', 'isusedCartridgesQnt', 'isplasticQnt', 'ispaperQnt', 'iswoodQnt', 'isbottlesQnt', 'isrubberQnt', 'isbioDegradableQuantity', 'isbioMedicalQuantity', 'ismetalScrapeQuantity', 'iseWasteQuantity', 'isconstructionWasteQuantity', 
          'wastehandling' , 'waste_longitude' ,'waste_latitude', 'photographs' , 'documents','remarks')
 
     def validate(self,data):

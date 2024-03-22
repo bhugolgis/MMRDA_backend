@@ -30,9 +30,13 @@ class PAPCategoryDashboardView(ListAPIView):
         ]
         packages = self.request.query_params.get("packages")
         quarter = self.request.query_params.get("quarter")
+        #if package and quarter are given
         if packages and quarter:
             categoryOfPap = PAP.objects.filter(packages = packages , quarter = quarter).values('categoryOfPap').annotate(count=Count('categoryOfPap'))
             print(categoryOfPap)
+
+            if not categoryOfPap:
+                return Response({'message': 'no data found'}, status=status.HTTP_400_BAD_REQUEST)
 
             lable = [count['categoryOfPap'] for count in categoryOfPap]
             dataset_PAP = [count['count'] for count in categoryOfPap]
@@ -44,6 +48,9 @@ class PAPCategoryDashboardView(ListAPIView):
         else:
             categoryOfPap = PAP.objects.values('categoryOfPap').annotate(count=Count('categoryOfPap'))
             print(categoryOfPap)
+
+            if not categoryOfPap:
+                return Response({'message': 'no data found'}, status=status.HTTP_400_BAD_REQUEST)
             lable = [count['categoryOfPap'] for count in categoryOfPap]
             lable.sort(reverse=True)
             dataset_PAP = [count['count'] for count in categoryOfPap]
@@ -89,6 +96,8 @@ class CategoryWiseCompensationChart(APIView):
         if packages and quarter:
             Compensation_Status = Rehabilitation.objects.filter(packages=packages, quarter=quarter).values('compensationStatus').annotate(count=Count('compensationStatus'))
             
+            if not Compensation_Status:
+                return Response({'message': 'no data found'}, status=status.HTTP_400_BAD_REQUEST)
 
             label_Compensation_Status = [count['compensationStatus'] for count in Compensation_Status]
             # print(label_Compensation_Status)
@@ -104,6 +113,9 @@ class CategoryWiseCompensationChart(APIView):
                             })
         else:
             Compensation_Status = Rehabilitation.objects.values('compensationStatus').annotate(count=Count('compensationStatus'))
+
+            if not Compensation_Status:
+                return Response({'message': 'no data found'}, status=status.HTTP_400_BAD_REQUEST)
 
             label_Compensation_Status = [count['compensationStatus'] for count in Compensation_Status]
             # print(label_Compensation_Status)
@@ -496,7 +508,7 @@ class AirAQIChartDashboardView(APIView):
 
         if not air:
             return Response({
-                        'Message': 'Use package CA-08 and quarter July-September',
+                        'Message': 'No data found for specified package and quarter',
                         }, status=status.HTTP_400_BAD_REQUEST)
         
 
@@ -528,7 +540,7 @@ class ManDaysLostCountchart(APIView):
         if count == 0:
             return Response({
                         'Message': 'Data not found',
-                        }, status=status.HTTP_404_NOT_FOUND)
+                        }, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'status': 'success',
                         'Message': 'Data was successfully fetched',
@@ -548,7 +560,7 @@ class WaterWQIChartDashboardView(APIView):
         if not water:
             return Response({
             "message":"No data found for specified package/quarter",
-        }, status=status.HTTP_400_BAD_REQUEST)
+        }, status=status.HTTP_404_NOT_FOUND)
 
 
         serializer = DashboardWQISerializer(water, many=True)
@@ -566,3 +578,37 @@ class WaterWQIChartDashboardView(APIView):
             "data":avg_wqi,
             # "quality": quality
         })
+    
+# Api for Env Monitoring Dashboard GIS Map
+class DashboardEnvMonitoringGISMap(APIView):
+    def get(self, request, quarter, packages, *args, **kwargs):
+        water = Water.objects.all().filter(packages=packages, quarter=quarter)
+        air = Air.objects.all().filter(packages=packages, quarter=quarter)
+        noise = Noise.objects.all().filter(packages=packages, quarter=quarter)
+
+        if not water:
+            return Response({"message":"No data found for specified package/quarter",}
+                            , status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = DashboardEnvMonitoringGISMapWaterSerializer(water, many=True)
+        serializer_data_water = serializer.data
+
+        if not air:
+            return Response({"message":"No data found for specified package/quarter",}
+                            , status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = DashboardEnvMonitoringGISMapAirSerializer(air, many=True)
+        serializer_data_air = serializer.data
+
+        if not noise:
+            return Response({"message":"No data found for specified package/quarter",}
+                            , status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = DashboardEnvMonitoringGISMapNoiseSerializer(noise, many=True)
+        serializer_data_noise = serializer.data
+
+        return Response({"message": "Data Fetched successfully",
+                         "data_water": serializer_data_water,
+                         "data_air": serializer_data_air,
+                         "data_noise": serializer_data_noise,}
+                        , status=status.HTTP_200_OK)

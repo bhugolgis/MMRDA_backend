@@ -81,3 +81,21 @@ class DashboardWQISerializer(serializers.ModelSerializer):
     class Meta:
         model = water
         fields = ['WQI']
+
+
+class DashboardEnvMonitoringGISMapWaterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = water
+        fields = ['WQI', 'location']
+
+
+class DashboardEnvMonitoringGISMapAirSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Air
+        fields = ['AQI', 'location']
+
+
+class DashboardEnvMonitoringGISMapNoiseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Noise
+        fields = ['isWithinLimit_day', 'isWithinLimit_night', 'location']
