@@ -1170,22 +1170,23 @@ class WasteTreatmentsQuarterView(ListAPIView):
 
 class WasteTreatmentsQuarterFilter(django_filters.FilterSet):
     year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
-    month = django_filters.CharFilter(method='filter_by_month', label='Month')
+    quarter = django_filters.CharFilter(field_name='quarter', label='quarter')
+    # month = django_filters.CharFilter(method='filter_by_month', label='Month')
 
-    def filter_by_month(self, queryset, name, value):
-        if value.isdigit():
-            # If the value is a digit, return the queryset as is
-            return queryset
+    # def filter_by_month(self, queryset, name, value):
+    #     # if value.isdigit():
+    #     #     # If the value is a digit, return the queryset as is
+    #     #     return queryset
 
-        try:
-            month_number = list(calendar.month_name).index(value.capitalize())
-            return queryset.filter(dateOfMonitoring__month=month_number)
-        except ValueError:
-            # If the value is not a valid month name, return an empty queryset
-            return queryset.none()
+    #     try:
+    #         month_number = list(calendar.month_name).index(value.capitalize())
+    #         return queryset.filter(dateOfMonitoring__month=month_number)
+    #     except ValueError:
+    #         # If the value is not a valid month name, return an empty queryset
+    #         return queryset.none()
     class Meta:
         model = WasteTreatments
-        fields = ['month', 'year']
+        fields = ['quarter', 'year']
 
 
 
@@ -1204,7 +1205,7 @@ class wasteTreatmentQuarterExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' ,'quantity',
+        data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' , 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments', 'iswasteOilQnt', 'wasteOilQnt', 'isCCPCPaintSludgeQnt', 'CCPCPaintSludgeQnt', 'isfilterQnt', 'filterQnt', 'isairFiltersQnt', 'airFiltersQnt', 'isusedCartridgesQnt', 'usedCartridgesQnt', 'isplasticQnt', 'plasticQnt', 'ispaperQnt', 'paperQnt', 'iswoodQnt', 'woodQnt', 'isbottlesQnt', 'bottlesQnt', 'isrubberQnt', 'rubberQnt', 'isbioDegradableQuantity', 'bioDegradableQuantity', 'isbioMedicalQuantity', 'bioMedicalQuantity', 'ismetalScrapeQuantity', 'metalScrapeQuantity', 'iseWasteQuantity', 'eWasteQuantity', 'isconstructionWasteQuantity', 'constructionWasteQuantity',
                     'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
 
 
