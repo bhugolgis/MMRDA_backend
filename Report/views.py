@@ -1028,17 +1028,17 @@ class waterReportQuarterView(ListAPIView):
 
 
 class WaterReportQuarterFilter(django_filters.FilterSet):
-    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+    year = django_filters.NumberFilter(field_name='dateOfMonitoringTwo__year', label='Year')
     month = django_filters.CharFilter(method='filter_by_month', label='Month')
 
     def filter_by_month(self, queryset, name, value):
-        if value.isdigit():
-            # If the value is a digit, return the queryset as is
-            return queryset
+        # if value.isdigit():
+        #     # If the value is a digit, return the queryset as is
+        #     return queryset
 
         try:
             month_number = list(calendar.month_name).index(value.capitalize())
-            return queryset.filter(dateOfMonitoring__month=month_number)
+            return queryset.filter(dateOfMonitoringTwo__month=month_number)
         except ValueError:
             # If the value is not a valid month name, return an empty queryset
             return queryset.none()
