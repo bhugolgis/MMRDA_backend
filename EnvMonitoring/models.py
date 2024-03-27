@@ -138,6 +138,13 @@ class WasteTreatments(Baseclass):
     wastetype = models.CharField(
         max_length=255,  null=True, blank=True)
     
+
+    isGISPermitsTransportation = models.BooleanField(blank=True, null=True)
+    GISPermitsTransportationDocuments = models.FileField(upload_to='waste_documents/GISPermitsTransportation' , null=True, blank=True)
+
+    isTransportationVechicalHasPermission = models.BooleanField(blank=True, null=True)
+    TransportationVechicalHasPermissionDocuments = models.FileField(upload_to='waste_documents/' , null=True, blank=True)
+
     # Hazardous Waste
     iswasteOilQnt = models.BooleanField(blank=True, null=True)
     wasteOilQnt = models.FloatField(null=True, blank=True) # liter
