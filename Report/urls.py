@@ -120,6 +120,7 @@ urlpatterns = [
      path('TreeMangementReportPackage/<str:packages>',
          TreeMangementReportPackage.as_view(), name='Tree Management Package'),
      path('TreeManagementReportQuarterView/', TreeManagementReportQuarterView.as_view(), name='TreeManagementReportQuarterView'),
+     path('TreeManagementReportPackageExcelDownload/', treeManagementReportPackageExcelDownload.as_view(), name='TreeManagementReportPackageExcelDownload'),
 
 
 
