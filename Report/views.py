@@ -1122,7 +1122,7 @@ class wasteTreatmentReportPackageExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' ,'quantity',
+        data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' , 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments', 'iswasteOilQnt', 'wasteOilQnt', 'isCCPCPaintSludgeQnt', 'CCPCPaintSludgeQnt', 'isfilterQnt', 'filterQnt', 'isairFiltersQnt', 'airFiltersQnt', 'isusedCartridgesQnt', 'usedCartridgesQnt', 'isplasticQnt', 'plasticQnt', 'ispaperQnt', 'paperQnt', 'iswoodQnt', 'woodQnt', 'isbottlesQnt', 'bottlesQnt', 'isrubberQnt', 'rubberQnt', 'isbioDegradableQuantity', 'bioDegradableQuantity', 'isbioMedicalQuantity', 'bioMedicalQuantity', 'ismetalScrapeQuantity', 'metalScrapeQuantity', 'iseWasteQuantity', 'eWasteQuantity', 'isconstructionWasteQuantity', 'constructionWasteQuantity',
                     'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
 
 
@@ -1320,9 +1320,9 @@ class materialManagementQuarterFilter(django_filters.FilterSet):
     month = django_filters.CharFilter(method='filter_by_month', label='Month')
 
     def filter_by_month(self, queryset, name, value):
-        if value.isdigit():
-            # If the value is a digit, return the queryset as is
-            return queryset
+        # if value.isdigit():
+        #     # If the value is a digit, return the queryset as is
+        #     return queryset
 
         try:
             month_number = list(calendar.month_name).index(value.capitalize())
@@ -1463,9 +1463,9 @@ class ExistingTreeManagmentQuarterFilter(django_filters.FilterSet):
     month = django_filters.CharFilter(method='filter_by_month', label='Month')
 
     def filter_by_month(self, queryset, name, value):
-        if value.isdigit():
-            # If the value is a digit, return the queryset as is
-            return queryset
+        # if value.isdigit():
+        #     # If the value is a digit, return the queryset as is
+        #     return queryset
 
         try:
             month_number = list(calendar.month_name).index(value.capitalize())
