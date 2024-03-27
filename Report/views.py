@@ -743,9 +743,9 @@ class AirReportQuarterFilter(django_filters.FilterSet):
     month = django_filters.CharFilter(method='filter_by_month', label='Month')
 
     def filter_by_month(self, queryset, name, value):
-        if value.isdigit():
-            # If the value is a digit, return the queryset as is
-            return queryset
+        # if value.isdigit():
+        #     # If the value is a digit, return the queryset as is
+        #     return queryset
 
         try:
             month_number = list(calendar.month_name).index(value.capitalize())
