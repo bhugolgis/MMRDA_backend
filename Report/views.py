@@ -379,7 +379,7 @@ class PAPReportPackageView(ListAPIView):
             data = PAP.objects.filter(packages=packages).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'Failed'},  status=status.HTTP_200_OK)
+                                 },  status=status.HTTP_400_BAD_REQUEST)
             papdata = PAPReportSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
@@ -518,7 +518,7 @@ class RehabilitationReportPackageView(ListAPIView):
                 packages=packages).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 },  status=status.HTTP_400_BAD_REQUEST)
             Rehabilitationdata = RehabilitationReportSerializer(
                 data, many=True).data
 
@@ -667,7 +667,7 @@ class AirReportPackageView(ListAPIView):
             data = Air.objects.filter(packages=packages).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 },  status=status.HTTP_400_BAD_REQUEST)
             airdata = AirReportSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
@@ -816,7 +816,7 @@ class NoiseReportpackageView(ListAPIView):
             data = Noise.objects.filter(packages=packages).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 },  status=status.HTTP_400_BAD_REQUEST)
 
             Noise_data = NoiseReportSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
@@ -961,7 +961,7 @@ class waterReportPackageView(ListAPIView):
             data = water.objects.filter(packages=packages).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 },  status=status.HTTP_400_BAD_REQUEST)
 
             water_data = waterReportSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
@@ -1109,7 +1109,7 @@ class WasteTreatmentsPackageView(ListAPIView):
                 packages=packages).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 },  status=status.HTTP_400_BAD_REQUEST)
             Waste_data = wasteTreatmentsSerializer(data, many=True).data
 
             return Response({'Message': 'data Fetched Successfully',
@@ -1404,7 +1404,7 @@ class TreeMangementReportPackage(ListAPIView):
             data = ExistingTreeManagment.objects.filter(packages=packages).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 },  status=status.HTTP_400_BAD_REQUEST)
 
             Material_data = treeManagementSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
@@ -1797,8 +1797,8 @@ class TrainnigReportPackageView(APIView):
         data = traning.objects.filter(
             packages=packages ).order_by('-id')
         if not data.exists():
-            return Response({'Message': 'No data found',
-                                'status' : 'success'},  status=status.HTTP_200_OK)
+                return Response({'Message': 'No data found',
+                                 },  status=status.HTTP_400_BAD_REQUEST)
         
         training_data = TrainnigReportSerializer(data, many=True).data
         return Response({'Message': 'data Fetched Successfully',
@@ -1910,8 +1910,8 @@ class OccupationalHealthPackageView(generics.GenericAPIView):
         data = occupationalHealthSafety.objects.filter(
             packages=packages ).order_by('-id')
         if not data.exists():
-            return Response({'Message': 'No data found',
-                                'status' : 'success'},  status=status.HTTP_200_OK)
+                return Response({'Message': 'No data found',
+                                 },  status=status.HTTP_400_BAD_REQUEST)
         
         training_data = OccupationalHealthQuarterSeialzier(data, many=True).data
         return Response({'Message': 'data Fetched Successfully',
