@@ -71,6 +71,8 @@ class labourcampreportpackageExcelDownloadView(generics.ListAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
+        if 'packages' not in request.GET:
+            return JsonResponse({'status': 'error', 'message': 'Please provide filters'}, status=400)
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
@@ -246,6 +248,8 @@ class ConstructionCampReportPackageExcelDownload(generics.ListAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
+        if 'packages' not in request.GET:
+            return JsonResponse({'status': 'error', 'message': 'Please provide filters'}, status=400)
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
@@ -400,6 +404,8 @@ class PAPReportPackageExcelDownload(generics.ListAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
+        if 'packages' not in request.GET:
+            return JsonResponse({'status': 'error', 'message': 'Please provide filters'}, status=400)
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
@@ -541,6 +547,8 @@ class RehabilitationReportPackageExcelDownload(generics.ListAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
+        if 'packages' not in request.GET:
+            return JsonResponse({'status': 'error', 'message': 'Please provide filters'}, status=400)
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
@@ -685,6 +693,8 @@ class AirReportReportPackageExcelDownload(generics.ListAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
+        if 'packages' not in request.GET:
+            return JsonResponse({'status': 'error', 'message': 'Please provide filters'}, status=400)
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
@@ -832,6 +842,8 @@ class NoiseReportReportPackageExcelDownload(generics.ListAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
+        if 'packages' not in request.GET:
+            return JsonResponse({'status': 'error', 'message': 'Please provide filters'}, status=400)
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
@@ -973,6 +985,9 @@ class waterReportReportPackageExcelDownload(generics.ListAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
+        if 'packages' not in request.GET:
+            return JsonResponse({'status': 'error', 'message': 'Please provide filters'}, status=400)
+        
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
@@ -1119,6 +1134,8 @@ class wasteTreatmentReportPackageExcelDownload(generics.ListAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
+        if 'packages' not in request.GET:
+            return JsonResponse({'status': 'error', 'message': 'Please provide filters'}, status=400)
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
@@ -1264,6 +1281,8 @@ class MaterialManegmanetReportPackageExcelDownload(generics.ListAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
+        if 'packages' not in request.GET:
+            return JsonResponse({'status': 'error', 'message': 'Please provide filters'}, status=400)
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
@@ -1411,6 +1430,8 @@ class treeManagementReportPackageExcelDownload(generics.ListAPIView):
         return queryset
 
     def get(self, request, *args, **kwargs):
+        if 'packages' not in request.GET:
+            return JsonResponse({'status': 'error', 'message': 'Please provide filters'}, status=400)
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
