@@ -1255,7 +1255,7 @@ class MaterialManagementReporetpackageView(ListAPIView):
                 packages=packages).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 'status' : 'success'},  status=status.HTTP_400_BAD_REQUEST)
 
             Material_data = materialManagementSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
