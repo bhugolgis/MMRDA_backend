@@ -443,7 +443,7 @@ class PAPReportQuarterView(ListAPIView):
                 quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 },  status=status.HTTP_400_BAD_REQUEST)
             papdata = PAPReportSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
@@ -587,7 +587,7 @@ class RehabilitationReportQuarterView(ListAPIView):
                 quarter=quarter, dateOfRehabilitation__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 },  status=status.HTTP_400_BAD_REQUEST)
             Rehabilitation_data = RehabilitationReportSerializer(
                 data, many=True).data
 
@@ -734,7 +734,7 @@ class AirReportQuarterView(ListAPIView):
                 month=month, dateOfMonitoring__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 },  status=status.HTTP_400_BAD_REQUEST)
 
             airdata = AirReportSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
@@ -880,7 +880,7 @@ class NoiseReportQuarterView(ListAPIView):
                 month=month, dateOfMonitoringThree__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 },  status=status.HTTP_400_BAD_REQUEST)
 
             Noise_data = NoiseReportSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
@@ -1171,7 +1171,7 @@ class WasteTreatmentsQuarterView(ListAPIView):
             data = WasteTreatments.objects.filter(quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 },  status=status.HTTP_400_BAD_REQUEST)
 
             Waste_data = wasteTreatmentsSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
@@ -1320,7 +1320,7 @@ class MaterialManagementReporetQuarterView(ListAPIView):
                 quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 'status' : 'success'},  status=status.HTTP_400_BAD_REQUEST)
 
             Material_data = materialManagementSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
@@ -1467,7 +1467,7 @@ class TreeManagementReportQuarterView(ListAPIView):
                 quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 },  status=status.HTTP_400_BAD_REQUEST)
 
             Material_data = treeManagementSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
@@ -1722,7 +1722,7 @@ class TrainnigReportQuarterView(APIView):
             quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
         if not data.exists():
             return Response({'Message': 'No data found',
-                                'status' : 'success'},  status=status.HTTP_200_OK)
+                                },  status=status.HTTP_400_BAD_REQUEST)
         
         training_data = TrainnigReportSerializer(data, many=True).data
         return Response({'Message': 'data Fetched Successfully',
@@ -1857,7 +1857,7 @@ class OccupationalHealthQuarterView(generics.GenericAPIView):
             quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
         if not data.exists():
             return Response({'Message': 'No data found',
-                                'status' : 'success'},  status=status.HTTP_200_OK)
+                                },  status=status.HTTP_400_BAD_REQUEST)
         
         training_data = OccupationalHealthQuarterSeialzier(data, many=True).data
         return Response({'Message': 'data Fetched Successfully',
