@@ -52,7 +52,7 @@ class LabourcampReportPackageView(ListAPIView):
 
         except Exception as e:
             return Response({'Message': 'There is no data available for this Package or Quarter',
-                            'status' : 'Failed'}, status=status.HTTP_400_BAD_REQUEST)
+                            'status' : 'Failed'}, status=400)
 
 
 
@@ -92,7 +92,7 @@ class labourcampreportpackageExcelDownloadView(generics.ListAPIView):
             # Add more fields as needed
         )
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
@@ -192,7 +192,7 @@ class labourQuarterExcelDownload(generics.ListAPIView):
             # Add more fields as needed
         )
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
@@ -230,7 +230,7 @@ class ConstructionCampReportPackageView(ListAPIView):
 
         except Exception:
             return Response({'Message': 'There is no data available for the Package or Quarter',
-                            'status' : 'Failed'}, status=status.HTTP_400_BAD_REQUEST)
+                            'status' : 'Failed'}, status=400)
 
 
 
@@ -263,7 +263,7 @@ class ConstructionCampReportPackageExcelDownload(generics.ListAPIView):
         )
 
         if not data:
-            return Response({'status':'error','message':'Data Not Found'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'status':'error','message':'Data Not Found'}, status=400)
 
 
         else:
@@ -347,7 +347,7 @@ class ConstructionCampReportQuaterExcelDownload(generics.ListAPIView):
             # Add more fields as needed
         )
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
@@ -411,7 +411,7 @@ class PAPReportPackageExcelDownload(generics.ListAPIView):
             # Add more fields as needed
         )
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
@@ -485,7 +485,7 @@ class PAPReportExcelQuaterExcelDownload(generics.ListAPIView):
 
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
             
             # Create a Pandas DataFrame
@@ -550,7 +550,7 @@ class RehabilitationReportPackageExcelDownload(generics.ListAPIView):
 
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
 
         else:
             
@@ -628,7 +628,7 @@ class RehabilitationReportQuarterExcelDownload(generics.ListAPIView):
                                'tenamentsPhotograph','photographs')
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
 
         else:
                 
@@ -693,7 +693,7 @@ class AirReportReportPackageExcelDownload(generics.ListAPIView):
 
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
 
         else:
             
@@ -781,7 +781,7 @@ class AirReportQuarterExcelDownload(generics.ListAPIView):
 
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
             
             # Create a Pandas DataFrame
@@ -838,7 +838,7 @@ class NoiseReportReportPackageExcelDownload(generics.ListAPIView):
         data = queryset.values('id','location' ,'quarter','month','packages','dateOfMonitoringThree' ,'noiseLevel' , 'monitoringPeriod', )
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
                 
             # Create a Pandas DataFrame
@@ -923,7 +923,7 @@ class NoiseReportQuarterExcelDownload(generics.ListAPIView):
         data = queryset.values('id','location' ,'quarter','month','packages','dateOfMonitoringThree' ,'noiseLevel' , 'monitoringPeriod', )
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         # Create a Pandas DataFrame
         else:
             
@@ -980,7 +980,7 @@ class waterReportReportPackageExcelDownload(generics.ListAPIView):
 
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
 
         else:
             
@@ -1013,7 +1013,7 @@ class waterReportQuarterView(ListAPIView):
             data = water.objects.filter(month=month, dateOfMonitoringTwo__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_200_OK)
+                                 'status' : 'success'},  status=status.HTTP_400_BAD_REQUEST)
 
             water_data = waterReportSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
@@ -1066,7 +1066,7 @@ class WaterReportQuarterExcelDownload(generics.ListAPIView):
         data = queryset.values('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' ,'waterDisposal')
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
                 
             # Create a Pandas DataFrame
@@ -1127,7 +1127,7 @@ class wasteTreatmentReportPackageExcelDownload(generics.ListAPIView):
 
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
             
             # Create a Pandas DataFrame
@@ -1210,7 +1210,7 @@ class wasteTreatmentQuarterExcelDownload(generics.ListAPIView):
 
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
 
         else:
             
@@ -1274,7 +1274,7 @@ class MaterialManegmanetReportPackageExcelDownload(generics.ListAPIView):
 
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
                 
             # Create a Pandas DataFrame
@@ -1359,7 +1359,7 @@ class materialManagementQuarterExcelDownload(generics.ListAPIView):
           'documents','remarks')
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
             
             # Create a Pandas DataFrame
@@ -1419,7 +1419,7 @@ class treeManagementReportPackageExcelDownload(generics.ListAPIView):
 
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
 
         else:
             
@@ -1502,7 +1502,7 @@ class TreeManagementQuarterExcelDownload(generics.ListAPIView):
 
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
             
             # Create a Pandas DataFrame
@@ -1558,7 +1558,7 @@ class MetroLine4AlignmentReportPackageExcelDownload(generics.ListAPIView):
 
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
 
         else:
             
@@ -1752,7 +1752,7 @@ class TrainningManagementQuarterExcelDownload(generics.ListAPIView):
                   'traningDate' , 'photographs' , 'documents')
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
 
         else:
                 
@@ -1809,7 +1809,7 @@ class TrainnigReportPackageExcelDownload(generics.ListAPIView):
 
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
             
             # Create a Pandas DataFrame
@@ -1868,7 +1868,7 @@ class OccupationalHealthQuarterExcelDownload(generics.ListAPIView):
 
 
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
@@ -1928,7 +1928,7 @@ class ExcelOccupationalHealthQuarterExcelDownload(generics.ListAPIView):
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values()
         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=404)
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
         else:
             
             # Create a Pandas DataFrame
