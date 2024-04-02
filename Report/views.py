@@ -38,8 +38,14 @@ class LabourcampReportPackageView(ListAPIView):
         """
         try:
             previous = LabourCamp.objects.filter(packages=packages, labourCampName=labourCampName ).order_by('-id')[1:]
+
+            if not previous:
+                return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
            
             latest = LabourCamp.objects.filter(packages=packages, labourCampName=labourCampName).latest('id')
+
+            if not latest:
+                return JsonResponse({'status':'error','message':'Data Not Found'}, status=400 )           
             # latest_serializer = LabourcampReportSerializer(latest).data
            
             previousData = self.serializer_class(previous, many=True)
@@ -552,7 +558,7 @@ class RehabilitationReportPackageExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('ID','dateOfRehabilitation','PAPID','categoryOfPap','PAPName','cashCompensation','compensationStatus','typeOfCompensation','otherCompensationType','addressLine1','streetName','pincode','isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport','livelihoodSupportAmount','livelihoodSupportCondition','livelihoodSupportRemarks','isTraining','trainingCondition','trainingRemarks','typeOfStructure','areaOfTenament','isRelocationAllowance','RelocationAllowanceAmount','isfinancialSupport','financialSupportAmount','isCommunityEngagement','isEngagementType','documents', 
+        data = queryset.values('quarter','packages','dateOfMonitoring','ID','dateOfRehabilitation','PAPID','categoryOfPap','PAPName','cashCompensation','compensationStatus','typeOfCompensation','otherCompensationType','addressLine1','streetName','pincode','isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport','livelihoodSupportAmount','livelihoodSupportCondition','livelihoodSupportRemarks','isTraining','trainingCondition','trainingRemarks','typeOfStructure','areaOfTenament','isRelocationAllowance','RelocationAllowanceAmount','isfinancialSupport','financialSupportAmount','isCommunityEngagement','isEngagementType','documents', 
                                 'remarks','livelihoodSupportPhotograph','trainingPhotograph',
                                 'tenamentsPhotograph','photographs')
 
