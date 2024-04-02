@@ -612,3 +612,22 @@ class DashboardEnvMonitoringGISMap(APIView):
                          "data_air": serializer_data_air,
                          "data_noise": serializer_data_noise,}
                         , status=status.HTTP_200_OK)
+    
+
+class DashboardEnvMonReportsSubmitted(APIView):
+    def get(self, request,month, year, *args, **kwargs):
+        air = Air.objects.all().filter(month=month, dateOfMonitoring__year=year).count()
+        print(air)
+        if not air:
+            return Response({"message":"No data found for specified package/quarter",}
+                            , status=status.HTTP_400_BAD_REQUEST)
+        
+
+        if air >= 2:
+            return Response({"message": "Data Fetched successfully",
+                            "reports_submitted": "yes",}
+                            , status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Data Fetched successfully",
+                            "reports_submitted": "no",}
+                            , status=status.HTTP_200_OK)
