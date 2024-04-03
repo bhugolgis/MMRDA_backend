@@ -632,7 +632,7 @@ class RehabilitationReportQuarterExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('ID','dateOfRehabilitation','PAPID','categoryOfPap','PAPName','cashCompensation',
+        data = queryset.values('quarter','packages','dateOfMonitoring', 'ID','dateOfRehabilitation','PAPID','categoryOfPap','PAPName','cashCompensation',
                                'compensationStatus','typeOfCompensation','otherCompensationType','addressLine1',
                                'streetName','pincode','isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport',
                                'livelihoodSupportAmount','livelihoodSupportCondition','livelihoodSupportRemarks','isTraining',
@@ -997,7 +997,7 @@ class waterReportReportPackageExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' ,'waterDisposal')
+        data = queryset.values('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' ,'waterDisposal','WQI', 'pH', 'totalHardnessAsCaCO3', 'calcium', 'totalAlkalinityAsCaCO3', 'chlorides', 'magnesium', 'totalDissolvedSolids', 'sulphate', 'nitrate', 'fluoride', 'iron')
 
 
         if not data:
@@ -1084,7 +1084,7 @@ class WaterReportQuarterExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' ,'waterDisposal')
+        data = queryset.values('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' ,'waterDisposal', 'WQI', 'pH', 'totalHardnessAsCaCO3', 'calcium', 'totalAlkalinityAsCaCO3', 'chlorides', 'magnesium', 'totalDissolvedSolids', 'sulphate', 'nitrate', 'fluoride', 'iron')
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
