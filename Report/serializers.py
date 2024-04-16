@@ -167,7 +167,7 @@ class AirReportExcelSerializer(serializers.ModelSerializer):
 class NoiseReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Noise
-        fields = ('id','location' ,'quarter','month','packages','dateOfMonitoringThree' ,'noiseLevel' , 'monitoringPeriod', )
+        fields = ('id','location' ,'quarter','month','packages','dateOfMonitoringThree', 'noiseLevel_day', 'noiseLevel_night', 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night')
         geo_field= ('location')
 
 
@@ -175,7 +175,7 @@ class NoiseReportSerializer(GeoFeatureModelSerializer):
 class NoiseReportExcelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Noise
-        fields = ('id','location' ,'quarter','month','packages','dateOfMonitoringThree' ,'noiseLevel' , 'monitoringPeriod', )
+        fields = ('id','location' ,'quarter','month','packages','dateOfMonitoringThree' , 'noiseLevel_day', 'noiseLevel_night', 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night' )
         # geo_field= ('location')
 # The waterReportSerializer class is a serializer for the water model that includes specific fields
 # and a geo_field for location.
@@ -199,14 +199,14 @@ class waterExcelReportSerializer(serializers.ModelSerializer):
 class wasteTreatmentsSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = WasteTreatments
-        fields = ('id','quarter','month','packages','dateOfMonitoring' , 'wastetype', 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity',
+        fields = ('id','quarter','month','packages','dateOfMonitoring' , 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments', 'iswasteOilQnt', 'wasteOilQnt', 'isCCPCPaintSludgeQnt', 'CCPCPaintSludgeQnt', 'isfilterQnt', 'filterQnt', 'isairFiltersQnt', 'airFiltersQnt', 'isusedCartridgesQnt', 'usedCartridgesQnt', 'isplasticQnt', 'plasticQnt', 'ispaperQnt', 'paperQnt', 'iswoodQnt', 'woodQnt', 'isbottlesQnt', 'bottlesQnt', 'isrubberQnt', 'rubberQnt', 'isbioDegradableQuantity', 'bioDegradableQuantity', 'isbioMedicalQuantity', 'bioMedicalQuantity', 'ismetalScrapeQuantity', 'metalScrapeQuantity', 'iseWasteQuantity', 'eWasteQuantity', 'isconstructionWasteQuantity', 'constructionWasteQuantity',
                     'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
         geo_field= ('location')
 
 class wasteTreatmentsExcelSerializer(serializers.ModelSerializer):
     class Meta:
         model = WasteTreatments
-        fields = ('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' ,
+        fields = ('id','quarter','month','packages','dateOfMonitoring' ,  'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments', 'iswasteOilQnt', 'wasteOilQnt', 'isCCPCPaintSludgeQnt', 'CCPCPaintSludgeQnt', 'isfilterQnt', 'filterQnt', 'isairFiltersQnt', 'airFiltersQnt', 'isusedCartridgesQnt', 'usedCartridgesQnt', 'isplasticQnt', 'plasticQnt', 'ispaperQnt', 'paperQnt', 'iswoodQnt', 'woodQnt', 'isbottlesQnt', 'bottlesQnt', 'isrubberQnt', 'rubberQnt', 'isbioDegradableQuantity', 'bioDegradableQuantity', 'isbioMedicalQuantity', 'bioMedicalQuantity', 'ismetalScrapeQuantity', 'metalScrapeQuantity', 'iseWasteQuantity', 'eWasteQuantity', 'isconstructionWasteQuantity', 'constructionWasteQuantity',
                     'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
         # geo_field= ('location')
 # The class `materialManagementSerializer` is a serializer class in Python that is used for
