@@ -69,7 +69,7 @@ class occupationalHealthSafetySerialziers(serializers.ModelSerializer):
         'powerSupplySystem' ,'assemblyArea' ,'ambulanceArrangement' ,'toiletFacility',
         'safeMomentPassage' ,'materialKeepingPractice','accidentalCheck','safetyGearStatus',
         'barricading','natureOfAccident' ,'typeOfIncident' , 'incidentReportingStatus', 'incidentlatitude','incidentlongitude','incidentDetails' ,
-        'identifiedCauseOfIncident' ,'outcome' ,'compensationPaid' ,'photographs' , 'documents' , 'remarks']
+        'identifiedCauseOfIncident' ,'outcome' ,'compensationPaid' ,'manDaysLostCount', 'manDaysLostReason', 'photographs' , 'documents' , 'remarks']
 
     
     def create(self,data):

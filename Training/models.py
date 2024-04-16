@@ -127,6 +127,9 @@ class occupationalHealthSafety(Baseclass):
     identifiedCauseOfIncident = models.CharField( max_length=255, blank=True, null=True)
     outcome = models.CharField(max_length=255, blank=True, null=True)
     compensationPaid = models.PositiveIntegerField(blank=True, null=True)
+
+    manDaysLostCount = models.PositiveBigIntegerField(blank=True, null=True)
+    manDaysLostReason = models.TextField(max_length=255, blank=True, null=True)
     photographs = models.CharField( max_length=255, null=True, blank=True)
     documents = models.CharField( max_length=255 , blank=True, null=True)
     remarks = models.TextField(max_length=255, blank=True, null=True)
