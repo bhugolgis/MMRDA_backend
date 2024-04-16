@@ -37,10 +37,11 @@ class LabourcampReportPackageView(ListAPIView):
 
         """
         try:
-            previous = LabourCamp.objects.filter(packages=packages, labourCampName=labourCampName ).order_by('-id')[1:]
+            # previous = LabourCamp.objects.filter(packages=packages, labourCampName=labourCampName ).order_by('-id')[1:]
+            previous = LabourCamp.objects.filter(packages=packages, labourCampName=labourCampName )
 
             if not previous:
-                return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
+                return JsonResponse({'status':'error','message':'Data Not Found previous'}, status=400)
            
             latest = LabourCamp.objects.filter(packages=packages, labourCampName=labourCampName).latest('id')
 
@@ -150,7 +151,7 @@ class LabourCampReportQuarterView(generics.ListAPIView):
                             'latest': latestData},
                             status=status.HTTP_200_OK)
         except:
-            return Response({'Message': 'There is no data available for this Package or Quarter',
+            return Response({'Message': 'There is no data available',
                             'status' : 'Failed'}, status=400)
 
 
@@ -1145,7 +1146,7 @@ class wasteTreatmentReportPackageExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' , 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments', 'iswasteOilQnt', 'wasteOilQnt', 'isCCPCPaintSludgeQnt', 'CCPCPaintSludgeQnt', 'isfilterQnt', 'filterQnt', 'isairFiltersQnt', 'airFiltersQnt', 'isusedCartridgesQnt', 'usedCartridgesQnt', 'isplasticQnt', 'plasticQnt', 'ispaperQnt', 'paperQnt', 'iswoodQnt', 'woodQnt', 'isbottlesQnt', 'bottlesQnt', 'isrubberQnt', 'rubberQnt', 'isbioDegradableQuantity', 'bioDegradableQuantity', 'isbioMedicalQuantity', 'bioMedicalQuantity', 'ismetalScrapeQuantity', 'metalScrapeQuantity', 'iseWasteQuantity', 'eWasteQuantity', 'isconstructionWasteQuantity', 'constructionWasteQuantity',
+        data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments', 'iswasteOilQnt', 'wasteOilQnt', 'isCCPCPaintSludgeQnt', 'CCPCPaintSludgeQnt', 'isfilterQnt', 'filterQnt', 'isairFiltersQnt', 'airFiltersQnt', 'isusedCartridgesQnt', 'usedCartridgesQnt', 'isplasticQnt', 'plasticQnt', 'ispaperQnt', 'paperQnt', 'iswoodQnt', 'woodQnt', 'isbottlesQnt', 'bottlesQnt', 'isrubberQnt', 'rubberQnt', 'isbioDegradableQuantity', 'bioDegradableQuantity', 'isbioMedicalQuantity', 'bioMedicalQuantity', 'ismetalScrapeQuantity', 'metalScrapeQuantity', 'iseWasteQuantity', 'eWasteQuantity', 'isconstructionWasteQuantity', 'constructionWasteQuantity',
                     'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
 
 
@@ -1331,7 +1332,7 @@ class MaterialManagementReporetQuarterView(ListAPIView):
             Material_data = materialManagementSerializer(data, many=True).data
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                             "material Management data": Material_data},
+                             "materialManagementData": Material_data},
                             status=200)
         except:
             return Response({'Message': 'There is no data available for the Quarter',
