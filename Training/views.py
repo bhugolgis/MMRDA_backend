@@ -114,7 +114,7 @@ class photographsListView(generics.GenericAPIView):
 
 class occupationalHealthSafety (generics.GenericAPIView):
     serializer_class = occupationalHealthSafetySerialziers
-    #parser_classes = [MultiPartParser]
+    # parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
@@ -131,13 +131,13 @@ class occupationalHealthSafety (generics.GenericAPIView):
 
             location = Point(long, lat, srid=4326)
 
-            try: 
-                incidentlatitude = float(serializer.validated_data['incidentlatitude'])
-                incidentlongitude = float(serializer.validated_data['incidentlongitude'])
-                incidentLocation = Point(incidentlongitude, incidentlatitude, srid=4326)
+            # try: 
+            #     incidentlatitude = float(serializer.validated_data['incidentlatitude'])
+            #     incidentlongitude = float(serializer.validated_data['incidentlongitude'])
+            #     incidentLocation = Point(incidentlongitude, incidentlatitude, srid=4326)
                 
-            except:
-                incidentLocation = None
+            # except:
+            #     incidentLocation = None
 
 
             file_fields = {
@@ -150,7 +150,7 @@ class occupationalHealthSafety (generics.GenericAPIView):
                 file_mapping[field] = []
                 save_multiple_files(files, file_mapping, file_path , field)
                 
-            data = serializer.save(location=location , incidentLocation = incidentLocation, user = request.user , **file_mapping)
+            data = serializer.save(location=location, user = request.user , **file_mapping) # , incidentLocation = incidentLocation
             data = occupationalHealthSafetyViewSerializer(data).data
             return Response({'status' : 'success',
                              'Message' : 'Data Saved Successfully'}, status=200)

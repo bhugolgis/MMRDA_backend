@@ -56,9 +56,9 @@ class photographsViewSerializer(serializers.ModelSerializer):
 # incidents.
 class occupationalHealthSafetySerialziers(serializers.ModelSerializer):
     longitude = serializers.CharField(max_length= 255 , required = False) # longitude
-    incidentlongitude = serializers.CharField(max_length= 255 , required = False) # longitude
+    # incidentlongitude = serializers.CharField(max_length= 255 , required = False) # longitude
     latitude = serializers.CharField(max_length= 255, required = False) # latitude
-    incidentlatitude = serializers.CharField(max_length= 255, required = False) # latitude
+    # incidentlatitude = serializers.CharField(max_length= 255, required = False) # latitude
     documents = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
     photographs = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
 
@@ -68,15 +68,15 @@ class occupationalHealthSafetySerialziers(serializers.ModelSerializer):
         'joiningMedicalCheckup' , 'ppeKit' ,'trainingToWorkers','houseKeeping' ,
         'powerSupplySystem' ,'assemblyArea' ,'ambulanceArrangement' ,'toiletFacility',
         'safeMomentPassage' ,'materialKeepingPractice','accidentalCheck','safetyGearStatus',
-        'barricading','natureOfAccident' ,'typeOfIncident' , 'incidentReportingStatus', 'incidentlatitude','incidentlongitude','incidentDetails' ,
+        'barricading','natureOfAccident' ,'typeOfIncident' , 'incidentReportingStatus', 'incidentDetails' ,
         'identifiedCauseOfIncident' ,'outcome' ,'compensationPaid' ,'manDaysLostCount', 'manDaysLostReason', 'photographs' , 'documents' , 'remarks']
-
+        # 'incidentlatitude','incidentlongitude',
     
     def create(self,data):
         data.pop('longitude')
         data.pop('latitude')
-        data.pop('incidentlongitude')
-        data.pop('incidentlatitude')
+        # data.pop('incidentlongitude')
+        # data.pop('incidentlatitude')
         return occupationalHealthSafety.objects.create(**data)
     
 
