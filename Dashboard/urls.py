@@ -29,6 +29,7 @@ urlpatterns = [
      path('AirChartView/<str:month>/<int:year>',AirChartView.as_view() , name = 'AIr chart'),
      path('AirAQIChartDashboardView/<str:quarter>/<str:packages>',AirAQIChartDashboardView.as_view() , name = 'AIr chart'),
      path('WaterWQIChartDashboardView/<str:quarter>/<str:packages>',WaterWQIChartDashboardView.as_view() , name = 'WQI chart'),
+     path('NoiseChartDashboardView/<str:quarter>/<str:packages>',NoiseChartDashboardView.as_view() , name = 'Noise chart'),
      path('ManDaysLost/<str:quarter>/<str:packages>',ManDaysLostCountchart.as_view() , name = 'Man Days Lost Count'),
      path('DashboardEnvMonitoringGISMap/<str:quarter>/<str:packages>',DashboardEnvMonitoringGISMap.as_view() , name = 'WQI chart'),
      path('DashboardEnvMonReportsSubmitted/<str:month>/<str:year>',DashboardEnvMonReportsSubmitted.as_view() , name = 'Env Mon Reports Submitted'),
