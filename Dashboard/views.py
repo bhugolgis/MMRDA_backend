@@ -534,17 +534,24 @@ class AirAQIChartDashboardView(APIView):
 class ManDaysLostCountchart(APIView):
 # how to improve it more    
     def get(self, request, packages, quarter):
-        count = occupationalHealthSafety.objects.filter(packages=packages, quarter=quarter, typeOfIncident="Man Days Lost").count()
-        
+        # count = occupationalHealthSafety.objects.filter(packages=packages, quarter=quarter, typeOfIncident="Man Days Lost").count()
+        data = occupationalHealthSafety.objects.filter(packages=packages, quarter=quarter)
+        man_days_lost_counts = data.values_list('manDaysLostCount', flat=True).exclude(manDaysLostCount__isnull=True)
 
-        if count == 0:
+        total_count = 0
+        for count in man_days_lost_counts:
+            total_count = total_count + count
+            
+
+        print(total_count)
+        if total_count == 0:
             return Response({
                         'Message': 'Data not found',
                         }, status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'status': 'success',
                         'Message': 'Data was successfully fetched',
-                        'count': count,
+                        'count': total_count,
                         })
     
 
@@ -631,3 +638,75 @@ class DashboardEnvMonReportsSubmitted(APIView):
             return Response({"message": "Data Fetched successfully",
                             "reports_submitted": "no",}
                             , status=status.HTTP_200_OK)
+        
+
+
+class NoiseChartDashboardView(APIView):
+    serializer_class = DashboardNoiseSerializer
+    
+    def get(self, request,quarter, packages, *args, **kwargs):
+
+        noise = Noise.objects.all().filter(packages=packages, quarter=quarter)
+
+        if not noise:
+            return Response({
+                        'Message': 'No data found for specified package and quarter',
+                        }, status=status.HTTP_400_BAD_REQUEST)
+        
+
+        serializer = DashboardNoiseSerializer(noise, many=True)
+        serializer_data = serializer.data
+
+        # Initialize count variables
+        day_within_limit_count = 0
+        day_out_of_limit_count = 0
+        night_within_limit_count = 0
+        night_out_of_limit_count = 0
+
+        # Iterate through serializer data
+        for item in serializer_data:
+            # Count occurrences for isWithinLimit_day
+            if item['isWithinLimit_day'] == 'Within Limit':
+                day_within_limit_count += 1
+            elif item['isWithinLimit_day'] == 'Out of Limit':
+                day_out_of_limit_count += 1
+
+            # Count occurrences for isWithinLimit_night
+            if item['isWithinLimit_night'] == 'Within Limit':
+                night_within_limit_count += 1
+            elif item['isWithinLimit_night'] == 'Out of Limit':
+                night_out_of_limit_count += 1
+
+
+        if day_within_limit_count > day_out_of_limit_count:
+            day_within_limit_value = day_within_limit_count
+            isWithinLimit_day = "Within Limit"
+        else:
+            day_within_limit_value = day_out_of_limit_count
+            isWithinLimit_day = "Out of Limit"
+
+        if night_within_limit_count > night_out_of_limit_count:
+            night_out_of_limit_value = night_within_limit_count
+            isWithinLimit_night = "Within Limit"
+        else:
+            night_out_of_limit_value = night_out_of_limit_count
+            isWithinLimit_night = "Out of Limit"
+
+        # Display the counts
+        print("isWithinLimit_day:")
+        print("Within Limit:", day_within_limit_count)
+        print("Out of Limit:", day_out_of_limit_count)
+
+        print("\nisWithinLimit_night:")
+        print("Within Limit:", night_within_limit_count)
+        print("Out of Limit:", night_out_of_limit_count)
+
+        
+        return Response({
+            "message":"Noise chart generated successfully",
+            "status":"success",
+            "data":{"isWithinLimit_day": isWithinLimit_day,
+                "isWithinLimit_night": isWithinLimit_night,
+            },
+            # "quality": quality
+        })
