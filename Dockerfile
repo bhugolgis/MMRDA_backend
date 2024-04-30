@@ -3,7 +3,7 @@ FROM python:3.10.6
 
 
 # Use an official Gdal as a base image
-FROM osgeo/gdal:ubuntu-small-latest
+FROM osgeo/gdal:ubuntu-small-3.6.3
 
 RUN apt-get update && apt-get install -y build-essential libcairo2-dev pkg-config
 RUN apt-get update && apt-get -y install python3-pip --fix-missing
@@ -34,7 +34,7 @@ CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
 # docker run -it osgeo/gdal:ubuntu-small-latest
 # docker build --tag webgram:latest .
 # docker image ls
-# docker run --name webgram -d -p 9006:9006 webgram:latest 
+# docker run --name mmrda -d -p 9006:9006 mmrda:latest 
 # docker container ps
 
 

@@ -1,0 +1,42 @@
+import rsa
+
+public_key_data = '''-----BEGIN RSA PUBLIC KEY-----
+MIGJAoGBAKW5Ex7qmEZxr9itp0y7RBTliuonxnQ+fAkF/UfGlU2U0+n4V9jKQ/5j
+f63Pd2LN+sWG7UZSKzHt32mB0arex/ltBhOZriPqYYIb4diRW63vOBHkemI+dD6l
+la1ED/gh4G3o4MkqfoWwJ1ZvhI72K2bTI6Il+OPmtkkLQu0bGfnNAgMBAAE=
+-----END RSA PUBLIC KEY-----
+'''
+
+public_key = rsa.PublicKey.load_pkcs1(public_key_data)
+
+
+private_key_data = '''-----BEGIN RSA PRIVATE KEY-----
+MIICXwIBAAKBgQCluRMe6phGca/YradMu0QU5YrqJ8Z0PnwJBf1HxpVNlNPp+FfY
+ykP+Y3+tz3dizfrFhu1GUisx7d9pgdGq3sf5bQYTma4j6mGCG+HYkVut7zgR5Hpi
+PnQ+pZWtRA/4IeBt6ODJKn6FsCdWb4SO9itm0yOiJfjj5rZJC0LtGxn5zQIDAQAB
+AoGAKpDD0YAOBqHyuaO4weOjk/51VLlMptTZxPON356pAJlGaOUJozwohLGHvNv5
+3R3s2ElUrmgygguIA7B9P36kwhi1jMZk63Lu+yhALHRslcAlm9l7Fq9KwshyepM0
+Q3lsSYK3Srg+e3x4mxHKtTO4/2ZhEL+tNu8tA3z/wnDl1B0CRQCpPp6YwVvUDrDq
+IX6+m0wcHLypFWLz41mY+dWEFUuutJbdZjCItq5tQ0fvW0jM6CR9vkTvr/fs0v4n
+QTXDTLKUQzaxEwI9APqsUe+Naxc1TmMYjLTE9XrBajFZn43aZm20AaIiA4KupJkg
+Gn+s4cLYQcw6tZqHVqFF2WDJuZZFhNTlnwJEVp6sATaFTyUtusbl3ZwR+hljHY7K
+lFR52OeVNgLIN2RKCopwsKf+4gEbYg/wVJ9Dfe/RzHLdiyH53hFr+MbaZzN3XG0C
+PEVE5QdrbtJk+ppLqGYznxoi5HNqrrqGRZO/EEx7VbkBBZ8Czg/F+ETdeaE0AAcJ
+qxi5so4acFxkLYafRQJEUA3lcuq5ZvieGg/za/HIX3dEGKOAQ/t133JU1dNvZRct
+cBfk4idafQbTcnKUM+Ma5wTc/Uu7ldRRDiSB2ffVdMkX6Bg=
+-----END RSA PRIVATE KEY-----
+'''
+
+private_key = rsa.PrivateKey.load_pkcs1(private_key_data)
+
+message = "Hello World"
+
+print(message)
+
+encrypted_message = rsa.encrypt(message.encode(), public_key)
+
+print(type(encrypted_message))
+
+clear_message = rsa.decrypt(encrypted_message, private_key)
+# print(encrypted_message)
+print(clear_message.decode())
