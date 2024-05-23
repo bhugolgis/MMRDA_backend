@@ -60,7 +60,7 @@ class PAP(Baseclass):
     user = models.ForeignKey(User, related_name='papUser', on_delete=models.CASCADE, null=True)
     PAPID = models.CharField( max_length=255,unique=True)
     cadastralMapID = models.CharField( max_length=255,unique=True, blank=True, null=True)
-    cadastralMapDocuments = models.CharField(max_length=255, blank=True, null=True)
+    cadastralMapDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True))
     nameOfPAP = models.CharField(max_length=255, blank=True, null=True)
     firstName = models.CharField(max_length=255, blank=True, null=True)
     middleName = models.CharField(max_length=255, blank=True, null=True)

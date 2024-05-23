@@ -38,6 +38,7 @@ class PostlabourCampdetails(generics.GenericAPIView):
 
                 file_mapping = {}
                 for field, file_path in file_fields.items():
+                    print(request.FILES)
                     files = request.FILES.getlist(field)
                     file_mapping[field] = []
                     save_multiple_files(files, file_mapping, file_path , field)
@@ -87,6 +88,7 @@ class labourCampdetailsViewSearch(generics.ListAPIView):
 # user's group.
 class PapView(generics.GenericAPIView):
     renderer_classes = [ErrorRenderer]
+    # parser_classes = [MultiPartParser]
     serializer_class = PapSerailzer
     permission_classes = [IsAuthenticated]
    
@@ -344,7 +346,7 @@ class RehabilitationView(generics.GenericAPIView):
 
 class LabourCampDetailsView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
-    # parser_classes = [MultiPartParser]
+    parser_classes = [MultiPartParser]
     serializer_class = LabourCampDetailSerializer
 
     def post(self, request):

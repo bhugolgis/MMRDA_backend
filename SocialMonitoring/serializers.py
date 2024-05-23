@@ -78,9 +78,9 @@ class PapSerailzer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     longitude = serializers.CharField(max_length=50, required=True)
     latitude = serializers.CharField(max_length=50, required=True)
-    cadastralMapDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
     legalDocuments = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
     presentPhotograph = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+    cadastralMapDocuments = serializers.FileField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
 
     class Meta:
         model = PAP
