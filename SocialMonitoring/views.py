@@ -121,7 +121,8 @@ class PapView(generics.GenericAPIView):
                     file_fields = {
                         'cadastralMapDocuments': 'PAP/PAP_cadastralMapDocuments',
                         'legalDocuments': 'PAP/PAP_legalDocuments',
-                        'presentPhotograph': 'PAP/presentphotograph' , }
+                        'presentPhotograph': 'PAP/presentphotograph' , 
+                        'documents': 'PAP/documents' , }
                     file_mapping = {}
                     for field, file_path in file_fields.items():
                         files = request.FILES.getlist(field)
@@ -150,7 +151,8 @@ class PapView(generics.GenericAPIView):
                 file_fields = {
                     'cadastralMapDocuments': 'PAP/PAP_cadastralMapDocuments',
                     'legalDocuments': 'PAP/PAP_legalDocuments',
-                    'presentPhotograph': 'PAP/presentphotograph' , }
+                    'presentPhotograph': 'PAP/presentphotograph' , 
+                    'documents': 'PAP/documents' , }
 
                 file_mapping = {}
                 for field, file_path in file_fields.items():

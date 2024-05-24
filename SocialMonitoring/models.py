@@ -75,10 +75,11 @@ class PAP(Baseclass):
     typeOfStructure = models.CharField( max_length=255,  null=True, blank=True)
     areaOfAsset = models.BigIntegerField(blank=True, null=True)
     legalStatus = models.CharField( max_length=255,  null=True, blank=True)
-    legalDocuments = models.CharField(max_length=255, blank=True, null=True)
+    legalDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True))
     actionTaken = models.CharField(max_length=100, null=True, blank=True)
     notAgreedReason = models.TextField(max_length=255, blank=True, null=True)
-    presentPhotograph = models.CharField( max_length=255, blank=True, null=True)
+    documents = ArrayField(models.CharField( max_length=255, blank=True, null=True))
+    presentPhotograph = ArrayField(models.CharField( max_length=255, blank=True, null=True))
     remarks = models.TextField(max_length=255, blank=True, null=True)
 
 
