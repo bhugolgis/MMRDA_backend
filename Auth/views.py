@@ -152,7 +152,7 @@ class LoginView(generics.GenericAPIView):
                                 'Message':'Login sucessfull', 
                                 'user': serializer2.data[0].get('email'),
                                 'username': serializer2.data[0].get('username'),
-                                # 'user_group' : user.groups.values_list("name",flat=True)[0]
+                                'user_group' : user.groups.values_list("name",flat=True)[0]
                                 } , 
                                 status=status.HTTP_200_OK)
         else:
