@@ -88,7 +88,7 @@ class labourCampdetailsViewSearch(generics.ListAPIView):
 # user's group.
 class PapView(generics.GenericAPIView):
     renderer_classes = [ErrorRenderer]
-    # parser_classes = [MultiPartParser]
+    parser_classes = [MultiPartParser]
     serializer_class = PapSerailzer
     permission_classes = [IsAuthenticated]
    
