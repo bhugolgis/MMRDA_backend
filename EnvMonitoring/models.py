@@ -90,8 +90,8 @@ class Noise(Baseclass):
     dateOfMonitoringThree = models.DateField(null=True, blank=True)
     user = models.ForeignKey(User, related_name="noises", on_delete=models.CASCADE , blank=True )
     noiseLevel = models.IntegerField( null=True, blank=True)
-    noiseLevel_day = models.IntegerField( null=True, blank=True)
-    noiseLevel_night = models.IntegerField( null=True, blank=True)
+    noiseLevel_day = models.FloatField( null=True, blank=True)
+    noiseLevel_night = models.FloatField( null=True, blank=True)
     monitoringPeriod = models.CharField(
         max_length=255, null=True, blank=True)
     monitoringPeriod_day = models.CharField(
