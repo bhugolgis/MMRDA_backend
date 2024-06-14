@@ -333,6 +333,33 @@ class GenerateAQISerializer(serializers.ModelSerializer):
 
 
 class GenerateWQISerializer(serializers.ModelSerializer):
+    pH = serializers.FloatField(required=True)
+    totalHardnessAsCaCO3 = serializers.FloatField(required=True)
+    calcium = serializers.FloatField(required=True)
+    totalAlkalinityAsCaCO3 = serializers.FloatField(required=True)
+    chlorides = serializers.FloatField(required=True)
+    magnesium = serializers.FloatField(required=True)
+    totalDissolvedSolids = serializers.FloatField(required=True)
+    sulphate = serializers.FloatField(required=True)
+    nitrate = serializers.FloatField(required=True)
+    fluoride = serializers.FloatField(required=True)
+    iron = serializers.FloatField(required=True)
+
+    def to_internal_value(self, data):
+        required_fields = [
+            'pH', 'totalHardnessAsCaCO3', 'calcium', 'totalAlkalinityAsCaCO3', 'chlorides',
+            'magnesium', 'totalDissolvedSolids', 'sulphate', 'nitrate', 'fluoride', 'iron'
+        ]
+        errors = {}
+        for field in required_fields:
+            if field not in data or data[field] in [None, '']:
+                errors[field] = f"This field is required."
+
+        if errors:
+            raise serializers.ValidationError(errors)
+
+        return super().to_internal_value(data)
+    
     class Meta:
         model = water
         fields = ['pH', 'totalHardnessAsCaCO3', 'calcium', 'totalAlkalinityAsCaCO3', 'chlorides', 'magnesium', 'totalDissolvedSolids', 'sulphate', 'nitrate', 'fluoride', 'iron']
