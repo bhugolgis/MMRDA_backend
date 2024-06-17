@@ -299,7 +299,14 @@ class NoisemanagementSerializer(serializers.ModelSerializer):
         model = Noise
         fields = ['noiseLevel','monitoringPeriod','location','packages','quarter', 'noiseLevel_day', 'monitoringPeriod_day', 'monitoringPeriod_night', 'noiseLevel_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night']
 
+    def validate(self, data):
+        missing_fields = [field for field in self.Meta.fields if field not in data or data[field] is None]
 
+        if missing_fields:
+            raise ValidationError(f"Missing required fields: {', '.join(missing_fields)}")
+        
+        return data
+    
 class WasteSerializer(serializers.ModelSerializer):
     class Meta:
         model = WasteTreatments

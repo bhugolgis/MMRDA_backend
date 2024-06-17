@@ -417,10 +417,10 @@ class PAPReportPackageExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values(
-            'id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','nameOfPAP',
-                            'addressLine1','streetName','pincode','eligibility', 'categoryOfPap',
-                            'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
-                            'actionTaken', 'notAgreedReason','remarks'
+            'id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','firstName','middleName','lastName', 'cadastralMapID', 'cadastralMapDocuments', 
+                  'addressLine1','streetName','pincode','eligibility', 'categoryOfPap','dateOfIdentification',
+                  'areaOfAsset','typeOfStructure','legalStatus','legalDocuments', 
+                   'actionTaken', 'notAgreedReason','remarks', 'presentPhotograph', 'documents'
             # Add more fields as needed
         )
         if not data:
@@ -489,10 +489,10 @@ class PAPReportExcelQuaterExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values(
-            'id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','nameOfPAP',
-                            'addressLine1','streetName','pincode','eligibility', 'categoryOfPap',
-                            'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
-                            'actionTaken', 'notAgreedReason','remarks'
+            'id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','firstName','middleName','lastName', 'cadastralMapID', 'cadastralMapDocuments', 
+                  'addressLine1','streetName','pincode','eligibility', 'categoryOfPap','dateOfIdentification',
+                  'areaOfAsset','typeOfStructure','legalStatus','legalDocuments', 
+                   'actionTaken', 'notAgreedReason','remarks', 'presentPhotograph', 'documents'
             # Add more fields as needed
         )
 
