@@ -706,7 +706,7 @@ class AirReportReportPackageExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','quarter','packages','month','dateOfMonitoring','PM10','PM2_5',
-                 'SO2','NOx','CO','AQI','Remarks')
+                 'SO2','NOx','CO','AQI')
 
 
         if not data:
@@ -794,7 +794,7 @@ class AirReportQuarterExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','quarter','packages','month','dateOfMonitoring','PM10','PM2_5',
-                 'SO2','NOx','CO','AQI','Remarks')
+                 'SO2','NOx','CO','AQI')
 
 
         if not data:

@@ -483,7 +483,7 @@ class labourCampUpdateView(generics.UpdateAPIView):
 
 class constructionSiteView(generics.GenericAPIView):
     renderer_classes = [ErrorRenderer]
-    #parser_classes = [MultiPartParser]
+    parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated]
     serializer_class = constructionSiteSerializer
 
