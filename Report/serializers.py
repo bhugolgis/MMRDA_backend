@@ -156,7 +156,7 @@ class AirReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Air
         fields =('id','quarter','packages','month','dateOfMonitoring','PM10','PM2_5',
-                 'SO2','NOx','CO','AQI')
+                 'SO2','NOx','CO','AQI', 'place_location')
         geo_field= ('location')
 
 
@@ -164,7 +164,7 @@ class AirReportExcelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Air
         fields =('id','quarter','packages','month','dateOfMonitoring','PM10','PM2_5',
-                 'SO2','NOx','CO','AQI')
+                 'SO2','NOx','CO','AQI', 'place_location')
         # geo_field= ('location')
 # The NoiseReportSerializer class is a serializer for the Noise model that includes specific fields
 # and a geo_field for location.
