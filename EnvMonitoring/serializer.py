@@ -143,7 +143,7 @@ class TreeManagementSerailizer(serializers.ModelSerializer):
     class Meta:
         model = ExistingTreeManagment
         fields = ('quarter','month','dateOfMonitoring','packages','longitude','latitude' ,'treeID','commanName' ,'botanicalName',
-                    'condition', 'noOfTreeCut','actionTaken', 'photographs', 'documents','remarks',)
+                    'condition', 'actionTaken', 'photographs', 'documents','remarks',)
 
     def validate(self,data):
         long = data['longitude'].split('.')[-1]

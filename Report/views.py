@@ -1443,7 +1443,7 @@ class treeManagementReportPackageExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
-                    'condition', 'noOfTreeCut','actionTaken', 'photographs', 'documents','remarks')
+                    'condition', 'actionTaken', 'photographs', 'documents','remarks')
 
 
         if not data:
@@ -1526,7 +1526,7 @@ class TreeManagementQuarterExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
-                    'condition', 'noOfTreeCut','actionTaken', 'photographs', 'documents','remarks')
+                    'condition', 'actionTaken', 'photographs', 'documents','remarks')
 
 
         if not data:

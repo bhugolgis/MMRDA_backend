@@ -238,7 +238,7 @@ class treeManagementSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = ExistingTreeManagment
         fields = ('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
-                    'condition', 'noOfTreeCut','actionTaken', 'photographs', 'documents','remarks')
+                    'condition', 'actionTaken', 'photographs', 'documents','remarks')
 
         geo_field= ('location')
 
@@ -247,7 +247,7 @@ class treeManagementExcelSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExistingTreeManagment
         fields = ('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
-                    'condition', 'noOfTreeCut','actionTaken', 'photographs', 'documents','remarks')
+                    'condition', 'actionTaken', 'photographs', 'documents','remarks')
 
         # geo_field= ('location')
 
