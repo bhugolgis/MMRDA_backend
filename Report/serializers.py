@@ -171,7 +171,7 @@ class AirReportExcelSerializer(serializers.ModelSerializer):
 class NoiseReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Noise
-        fields = ('id','location' ,'quarter','month','packages','dateOfMonitoringThree', 'noiseLevel_day', 'noiseLevel_night', 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night')
+        fields = ('id', 'quarter','month','packages','dateOfMonitoringThree', 'noiseLevel_day', 'noiseLevel_night', 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night')
         geo_field= ('location')
 
 
@@ -179,7 +179,7 @@ class NoiseReportSerializer(GeoFeatureModelSerializer):
 class NoiseReportExcelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Noise
-        fields = ('id','location' ,'quarter','month','packages','dateOfMonitoringThree' , 'noiseLevel_day', 'noiseLevel_night', 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night' )
+        fields = ('id', 'quarter','month','packages','dateOfMonitoringThree' , 'noiseLevel_day', 'noiseLevel_night', 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night' )
         # geo_field= ('location')
 # The waterReportSerializer class is a serializer for the water model that includes specific fields
 # and a geo_field for location.
