@@ -1146,8 +1146,7 @@ class wasteTreatmentReportPackageExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments', 'iswasteOilQnt', 'wasteOilQnt', 'isCCPCPaintSludgeQnt', 'CCPCPaintSludgeQnt', 'isfilterQnt', 'filterQnt', 'isairFiltersQnt', 'airFiltersQnt', 'isusedCartridgesQnt', 'usedCartridgesQnt', 'isplasticQnt', 'plasticQnt', 'ispaperQnt', 'paperQnt', 'iswoodQnt', 'woodQnt', 'isbottlesQnt', 'bottlesQnt', 'isrubberQnt', 'rubberQnt', 'isbioDegradableQuantity', 'bioDegradableQuantity', 'isbioMedicalQuantity', 'bioMedicalQuantity', 'ismetalScrapeQuantity', 'metalScrapeQuantity', 'iseWasteQuantity', 'eWasteQuantity', 'isconstructionWasteQuantity', 'constructionWasteQuantity',
-        'wasteHandlingLocation', 'photographs' , 'documents','remarks')
+        data = queryset.values('id','quarter','month','packages','dateOfMonitoring', 'GISPermitsTransportationDocuments', 'TransportationVechicalHasPermissionDocuments', 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
 
 
         if not data:
@@ -1229,8 +1228,7 @@ class wasteTreatmentQuarterExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' , 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments', 'iswasteOilQnt', 'wasteOilQnt', 'isCCPCPaintSludgeQnt', 'CCPCPaintSludgeQnt', 'isfilterQnt', 'filterQnt', 'isairFiltersQnt', 'airFiltersQnt', 'isusedCartridgesQnt', 'usedCartridgesQnt', 'isplasticQnt', 'plasticQnt', 'ispaperQnt', 'paperQnt', 'iswoodQnt', 'woodQnt', 'isbottlesQnt', 'bottlesQnt', 'isrubberQnt', 'rubberQnt', 'isbioDegradableQuantity', 'bioDegradableQuantity', 'isbioMedicalQuantity', 'bioMedicalQuantity', 'ismetalScrapeQuantity', 'metalScrapeQuantity', 'iseWasteQuantity', 'eWasteQuantity', 'isconstructionWasteQuantity', 'constructionWasteQuantity',
-        'wasteHandlingLocation', 'photographs' , 'documents','remarks')
+        data = queryset.values('id','quarter','month','packages','dateOfMonitoring', 'GISPermitsTransportationDocuments', 'TransportationVechicalHasPermissionDocuments', 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
 
 
         if not data:
