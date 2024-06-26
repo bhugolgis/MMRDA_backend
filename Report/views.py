@@ -96,7 +96,7 @@ class labourcampreportpackageExcelDownloadView(generics.ListAPIView):
                     'isRegularHealthCheckup','regularHealthCheckupCondition','regularHealthCheckupPhotographs','regularHealthCheckupRemarks',
                      'isAvailabilityOfDoctor', 'availabilityOfDoctorCondition','availabilityOfDoctorPhotographs','availabilityOfDoctorRemarks',
                       'isFirstAidKit','firstAidKitCondition' ,'firstAidKitPhotographs','firstAidKitRemarks',
-                    'transportationFacility' ,'transportationFacilityCondition', 'modeOfTransportation','distanceFromSite',
+                    'transportationFacility', 'modeOfTransportation',
                     'photographs' ,'documents','remarks'
             # Add more fields as needed
         )
@@ -196,7 +196,7 @@ class labourQuarterExcelDownload(generics.ListAPIView):
                     'isRegularHealthCheckup','regularHealthCheckupCondition','regularHealthCheckupPhotographs','regularHealthCheckupRemarks',
                      'isAvailabilityOfDoctor', 'availabilityOfDoctorCondition','availabilityOfDoctorPhotographs','availabilityOfDoctorRemarks',
                       'isFirstAidKit','firstAidKitCondition' ,'firstAidKitPhotographs','firstAidKitRemarks',
-                    'transportationFacility' ,'transportationFacilityCondition', 'modeOfTransportation','distanceFromSite',
+                    'transportationFacility', 'modeOfTransportation',
                     'photographs' ,'documents','remarks'
             # Add more fields as needed
         )
