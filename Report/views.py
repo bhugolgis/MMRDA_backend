@@ -1147,7 +1147,7 @@ class wasteTreatmentReportPackageExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments', 'iswasteOilQnt', 'wasteOilQnt', 'isCCPCPaintSludgeQnt', 'CCPCPaintSludgeQnt', 'isfilterQnt', 'filterQnt', 'isairFiltersQnt', 'airFiltersQnt', 'isusedCartridgesQnt', 'usedCartridgesQnt', 'isplasticQnt', 'plasticQnt', 'ispaperQnt', 'paperQnt', 'iswoodQnt', 'woodQnt', 'isbottlesQnt', 'bottlesQnt', 'isrubberQnt', 'rubberQnt', 'isbioDegradableQuantity', 'bioDegradableQuantity', 'isbioMedicalQuantity', 'bioMedicalQuantity', 'ismetalScrapeQuantity', 'metalScrapeQuantity', 'iseWasteQuantity', 'eWasteQuantity', 'isconstructionWasteQuantity', 'constructionWasteQuantity',
-                    'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
+        'wasteHandlingLocation', 'photographs' , 'documents','remarks')
 
 
         if not data:
@@ -1230,7 +1230,7 @@ class wasteTreatmentQuarterExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('id','quarter','month','packages','dateOfMonitoring' , 'wastetype' , 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments', 'iswasteOilQnt', 'wasteOilQnt', 'isCCPCPaintSludgeQnt', 'CCPCPaintSludgeQnt', 'isfilterQnt', 'filterQnt', 'isairFiltersQnt', 'airFiltersQnt', 'isusedCartridgesQnt', 'usedCartridgesQnt', 'isplasticQnt', 'plasticQnt', 'ispaperQnt', 'paperQnt', 'iswoodQnt', 'woodQnt', 'isbottlesQnt', 'bottlesQnt', 'isrubberQnt', 'rubberQnt', 'isbioDegradableQuantity', 'bioDegradableQuantity', 'isbioMedicalQuantity', 'bioMedicalQuantity', 'ismetalScrapeQuantity', 'metalScrapeQuantity', 'iseWasteQuantity', 'eWasteQuantity', 'isconstructionWasteQuantity', 'constructionWasteQuantity',
-                    'wastehandling' , 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
+        'wasteHandlingLocation', 'photographs' , 'documents','remarks')
 
 
         if not data:
