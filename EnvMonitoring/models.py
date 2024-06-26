@@ -45,7 +45,7 @@ class  Air(Baseclass):
     Remarks = models.TextField(blank=True, max_length=255, null=True)
     place_location = models.CharField(max_length=255, null=True, blank=True)
 
-
+# there are two types of water parameters, ground water and surface water, we have used ground water and calculated wqi for ground water
 class water(Baseclass):
     dateOfMonitoring = None
     dateOfMonitoringTwo =  models.DateField(null=True, blank=True)
@@ -80,8 +80,8 @@ class water(Baseclass):
     mercury = models.CharField(max_length=255, null=True, blank=True)
     totalArsenic = models.CharField(max_length=255, null=True, blank=True)
     totalChromium = models.CharField(max_length=255, null=True, blank=True)
-    totalColiform = models.CharField(max_length=255, null=True, blank=True)
-    eColi = models.CharField(max_length=255, null=True, blank=True)
+    totalColiform = models.CharField(max_length=255, null=True, blank=True) # not added in the forms
+    eColi = models.CharField(max_length=255, null=True, blank=True) # not added in the forms
     WQI = models.FloatField(blank=True, default=0, null=True)
 
 
