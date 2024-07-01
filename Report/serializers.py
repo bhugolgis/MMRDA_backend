@@ -122,14 +122,20 @@ class PAPReportExcelSerializer(serializers.ModelSerializer):
 class RehabilitationReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Rehabilitation
-        fields = "__all__"
-        # fields =  ('id','ID','dateOfRehabilitation' ,'PAPID', 'PAPName' ,'cashCompensation', 'compensationStatus',
-        #            'typeOfCompensation', 'otherCompensationType' ,'addressLine1','streetName','pincode',
-        #            'isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport', 'livelihoodSupportAmount','livelihoodSupportCondition',
-        #            'livelihoodSupportPhotograph','livelihoodSupportRemarks','isTraining','trainingCondition',
-        #            'trainingPhotograph' ,'trainingRemarks' , 'typeOfTenaments'  ,'areaOfTenament' , 'tenamentsPhotograph',
-        #             'isRelocationAllowance' ,'RelocationAllowanceAmount' ,'isfinancialSupport',
-        #            'financialSupportAmount','isCommunityEngagement','isEngagementType', 'photographs' , 'documents','remarks')
+        # fields = "__all__"
+        fields =  ('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',
+                   'categoryOfPap','firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
+                   'cashCompensationAmount',
+                   'typeOfCompensation', 'otherCompensationType' ,
+                   'addressLine1','streetName','pincode',
+                   'rehabLocation', 'allowance',
+                   'landProvidedArea', 'alternateAccomodationArea', 'commercialUnitArea',
+                   'isShiftingAllowance','shiftingAllowanceAmount',
+                   'isLivelihoodSupport', 'livelihoodSupportAmount',
+                   'isTraining','trainingRemarks', 'typeOfStructure',
+                   'isRelocationAllowance' ,'RelocationAllowanceAmount' ,'isfinancialSupport',
+                   'financialSupportAmount','isCommunityEngagement','isEngagementType',
+                   'photographs' , 'documents','remarks')
         geo_field= ('location')
 
 
@@ -137,14 +143,20 @@ class RehabilitationReportSerializer(GeoFeatureModelSerializer):
 class RehabilitationReportExcelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rehabilitation
-        fields = "__all__"
-        # fields =  ('id','ID','dateOfRehabilitation' ,'PAPID', 'PAPName' ,'cashCompensation', 'compensationStatus',
-        #            'typeOfCompensation', 'otherCompensationType' ,'addressLine1','streetName','pincode',
-        #            'isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport', 'livelihoodSupportAmount','livelihoodSupportCondition',
-        #            'livelihoodSupportPhotograph','livelihoodSupportRemarks','isTraining','trainingCondition',
-        #            'trainingPhotograph' ,'trainingRemarks' , 'typeOfTenaments'  ,'areaOfTenament' , 'tenamentsPhotograph',
-        #             'isRelocationAllowance' ,'RelocationAllowanceAmount' ,'isfinancialSupport',
-        #            'financialSupportAmount','isCommunityEngagement','isEngagementType', 'photographs' , 'documents','remarks')
+        # fields = "__all__"
+        fields =  ('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',
+                   'categoryOfPap','firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
+                   'cashCompensationAmount',
+                   'typeOfCompensation', 'otherCompensationType' ,
+                   'addressLine1','streetName','pincode',
+                   'rehabLocation', 'allowance',
+                   'landProvidedArea', 'alternateAccomodationArea', 'commercialUnitArea',
+                   'isShiftingAllowance','shiftingAllowanceAmount',
+                   'isLivelihoodSupport', 'livelihoodSupportAmount',
+                   'isTraining','trainingRemarks', 'typeOfStructure',
+                   'isRelocationAllowance' ,'RelocationAllowanceAmount' ,'isfinancialSupport',
+                   'financialSupportAmount','isCommunityEngagement','isEngagementType',
+                   'photographs' , 'documents','remarks')
         # geo_field= ('location')
 
 

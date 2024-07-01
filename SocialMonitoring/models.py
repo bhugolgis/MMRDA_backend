@@ -61,7 +61,6 @@ class PAP(Baseclass):
     PAPID = models.CharField( max_length=255,unique=True)
     cadastralMapID = models.CharField( max_length=255,unique=True, blank=True, null=True)
     cadastralMapDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True))
-    nameOfPAP = models.CharField(max_length=255, blank=True, null=True)
     firstName = models.CharField(max_length=255, blank=True, null=True)
     middleName = models.CharField(max_length=255, blank=True, null=True)
     lastName = models.CharField(max_length=255, blank=True, null=True)
@@ -92,72 +91,66 @@ class Rehabilitation(Baseclass):
     user = models.ForeignKey(User, related_name='rehabilitationUser', on_delete=models.CASCADE, blank=True)
     location = models.PointField(null=True, blank=True)
     ID = models.ForeignKey( PAP, related_name='rehabilitation', on_delete=models.CASCADE, blank=True, null=True)
-    dateOfRehabilitation = models.DateField(blank=True, null=True)
+    dateOfRehabilitation = models.DateField(blank=True, null=True) # what is date of rehab
     PAPID = models.CharField(max_length=255, blank=True, null=True)
     categoryOfPap = models.CharField( max_length=255,  null=True, blank=True)
-    PAPName = models.CharField(max_length=255, blank=True, null=True)
 
-    agreedUpon = models.CharField( max_length=255, null=True, blank=True)
-    compensationStatus = models.CharField( max_length=255, null=True, blank=True) # type of compensation
-
-    cashCompensation = models.PositiveIntegerField(blank=True, null=True) # (old) amount in integer
-    cashCompensationAmount = models.FloatField( null=True, blank=True)
-    cashCompensationStatus = models.CharField( max_length=255, null=True, blank=True ) # complete/pending (disbursement status)
-
-    landProvidedAreaLocationDetails = models.CharField( max_length=255, null=True, blank=True ) 
-    landProvidedStatus = models.CharField( max_length=255, null=True, blank=True) # complete/pending
-    landProvidedArea = models.FloatField(null=True, blank=True)
-    
-    alternateAccomodationLocationDetails = models.CharField(max_length=255, null=True, blank=True)
-    alternateAccomodationStatus = models.CharField( max_length=255, null=True, blank=True) # relocated/pending
-    alternateAccomodationRelocationAllowance = models.FloatField(max_length=255, null=True, blank=True)
-
-    commercialUnitLocationDetails = models.CharField(max_length=255, null=True, blank=True)
-    commercialUnitStatus = models.CharField( max_length=255, null=True, blank=True) # relocated/pending
-    commercialUnitRelocationAllowance = models.FloatField(max_length=255, null=True, blank=True)
-
-    typeOfCompensation = models.CharField( max_length=255, null=True, blank=True)
-    otherCompensationType = models.CharField(max_length=255, null=True, blank=True)
+    # Location Details
 
     addressLine1 = models.TextField(max_length=255, blank=True, null=True)
     streetName = models.CharField(max_length=255, blank=True, null=True)
     pincode = models.BigIntegerField(blank=True, null=True)
 
+    # Rehabilitation Details
+
+    firstName = models.CharField(max_length=255, blank=True, null=True)
+    middleName = models.CharField(max_length=255, blank=True, null=True)
+    lastName = models.CharField(max_length=255, blank=True, null=True)
+
+    compensationStatus = models.CharField( max_length=255, null=True, blank=True) # type of compensation (values: Cash compensation, Land Provided Area, Alternate Accommodation, Commercial Unit)
+    otherCompensationType = models.CharField(max_length=255, null=True, blank=True)
+    typeOfCompensation = models.CharField( max_length=255, null=True, blank=True)
+    agreedUpon = models.CharField( max_length=255, null=True, blank=True) # (values: yes, no)
+    processStatus = models.CharField( max_length=255, null=True, blank=True) # complete/pending (common for cash, land, alternate location and commercial unit)
+
+    cashCompensationAmount = models.FloatField( null=True, blank=True)
+    
+    # Rehab Location is common location
+    rehabLocation = models.CharField( max_length=255, null=True, blank=True ) # common for land provided area, alternate location accomodation, commercial unit)
+    allowance = models.FloatField( null=True, blank=True)
+    
+    landProvidedArea = models.FloatField(null=True, blank=True)
+    alternateAccomodationArea = models.FloatField(null=True, blank=True)
+    commercialUnitArea = models.FloatField(null=True, blank=True)
+
+    typeOfStructure = models.CharField(max_length=255, blank=True) # (values: Tenaments, House, Flat)
+    
+    # Rehabilitation Status Checklist
+
     isShiftingAllowance = models.BooleanField(blank=True , null = True)
     shiftingAllowanceAmount = models.PositiveIntegerField(blank=True, null=True)
-
-    isLivelihoodSupport = models.BooleanField(blank=True , null = True)
-    livelihoodSupportAmount = models.BigIntegerField(blank=True, null=True)
-    livelihoodSupportCondition = models.CharField( max_length=255, blank=True, null=True)
     
-    livelihoodSupportRemarks = models.TextField(max_length=255, blank=True, null=True)
-
-    isTraining = models.BooleanField(blank=True , null = True)
-    trainingCondition = models.CharField( max_length=255,  blank=True, null=True)
-    
-    trainingRemarks = models.TextField(max_length=255, blank=True, null=True)
-
-    typeOfStructure = models.CharField(max_length=255, blank=True)
-    areaOfTenament = models.BigIntegerField(blank=True, null=True)
-    
-
     isRelocationAllowance = models.CharField( max_length=255, blank=True, null=True)
     RelocationAllowanceAmount = models.PositiveIntegerField(blank=True, null=True)
-
-    isfinancialSupport = models.BooleanField(blank=True, null=True)
-    financialSupportAmount = models.PositiveIntegerField(blank=True, null=True)
 
     isCommunityEngagement = models.BooleanField(blank=True, null=True)
     isEngagementType = models.CharField(max_length=255, blank=True, null=True)
 
-    
+    isLivelihoodSupport = models.BooleanField(blank=True , null = True)
+    livelihoodSupportAmount = models.BigIntegerField(blank=True, null=True)
+
+    isTraining = models.BooleanField(blank=True , null = True)
+    trainingRemarks = models.TextField(max_length=255, blank=True, null=True)
+
+    isfinancialSupport = models.BooleanField(blank=True, null=True)
+    financialSupportAmount = models.PositiveIntegerField(blank=True, null=True)
+
+    # Documents and Remarks
+
     documents = models.CharField(max_length=255, blank=True, null=True)
+    photographs = models.CharField(max_length=255, blank=True, null=True)
     remarks = models.TextField(max_length=255, blank=True, null=True)
     
-    livelihoodSupportPhotograph = models.CharField(max_length=255, blank=True, null=True)
-    trainingPhotograph = models.CharField(max_length=255, blank=True, null=True)
-    tenamentsPhotograph = models.CharField(max_length=255, blank=True, null=True)
-    photographs = models.CharField(max_length=255, blank=True, null=True)
 
 
     
@@ -250,6 +243,18 @@ class ConstructionSiteDetails(Baseclass):
     constructionSiteName = models.CharField( max_length=255,   blank=True, null=True)
     constructionSiteId = models.CharField(max_length=255,  blank=True, null=True)
 
+    # Constructioncamp Facilities
+
+    isToilet = models.BooleanField(max_length=255, blank=True, null=True)
+    toiletCondition = models.CharField(max_length=255, blank=True, null=True)
+    toiletPhotograph =  ArrayField(models.CharField( max_length=255, blank=True, null=True))
+    toiletRemarks = models.TextField(max_length=255, null=True, blank=True)
+
+    isDrinkingWaterCheck = models.BooleanField(blank=True)
+    drinkingWaterCondition = models.CharField(  max_length=255, blank=True,  null=True)
+    drinkingWaterPhotographs =ArrayField(models.CharField( max_length=255, blank=True, null=True))
+    drinkingWaterRemarks = models.TextField( max_length=255, null=True, blank=True)
+
     isDemarkationOfPathways = models.BooleanField(blank=True)
     demarkationOfPathwaysCondition = models.CharField(max_length=255, blank=True, null=True)
     demarkationOfPathwaysPhotographs = ArrayField(models.CharField( max_length=255, blank=True, null=True))
@@ -259,6 +264,8 @@ class ConstructionSiteDetails(Baseclass):
     signagesLabelingCondition = models.CharField( max_length=255, blank=True, null=True)
     signagesLabelingPhotographs = ArrayField(models.CharField( max_length=255, blank=True, null=True))
     signagesLabelingRemarks = models.TextField( max_length=255,  blank=True, null=True)
+
+    # Medical Facilities
 
     isRegularHealthCheckup = models.BooleanField(blank=True)
     regularHealthCheckupCondition = models.CharField( max_length=255, blank=True, null=True)
@@ -275,17 +282,7 @@ class ConstructionSiteDetails(Baseclass):
     firstAidKitPhotographs = ArrayField(models.CharField( max_length=255, blank=True, null=True))
     firstAidKitRemarks = models.TextField(max_length=255,  blank=True, null=True)
 
-    isDrinkingWaterCheck = models.BooleanField(blank=True)
-    drinkingWaterCondition = models.CharField(  max_length=255, blank=True,  null=True)
-    drinkingWaterPhotographs =ArrayField(models.CharField( max_length=255, blank=True, null=True))
-    drinkingWaterRemarks = models.TextField( max_length=255, null=True, blank=True)
-
-    isToilet = models.BooleanField(max_length=255, blank=True, null=True)
-    toiletCondition = models.CharField(max_length=255, blank=True, null=True)
-    toiletPhotograph =  ArrayField(models.CharField( max_length=255, blank=True, null=True))
-    toiletRemarks = models.TextField(max_length=255, null=True, blank=True)
-
-
+    # Documents and Remarks
     genralphotographs = ArrayField(models.CharField( max_length=255, blank=True, null=True))
     documents = ArrayField(models.CharField( max_length=255, blank=True, null=True))
     remarks = models.TextField(max_length=255, blank=True, null=True)

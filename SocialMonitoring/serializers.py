@@ -85,7 +85,7 @@ class PapSerailzer(serializers.ModelSerializer):
 
     class Meta:
         model = PAP
-        fields = ('quarter', 'packages', 'longitude', 'latitude','dateOfMonitoring', 'user','dateOfIdentification','PAPID', 'cadastralMapID', 'cadastralMapDocuments', 'nameOfPAP','firstName', 'middleName', 'lastName',  
+        fields = ('quarter', 'packages', 'longitude', 'latitude','dateOfMonitoring', 'user','dateOfIdentification','PAPID', 'cadastralMapID', 'cadastralMapDocuments', 'firstName', 'middleName', 'lastName',  
                   'addressLine1','streetName','pincode','eligibility', 'categoryOfPap', 
                     'areaOfAsset','typeOfStructure','legalStatus', 'legalDocuments', 'presentPhotograph',
                    'actionTaken', 'notAgreedReason','documents','remarks' )
@@ -159,25 +159,22 @@ class RehabilitationSerializer(serializers.ModelSerializer):
     latitude = serializers.CharField(max_length=50, required=True)
 
     documents = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    livelihoodSupportPhotograph = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    trainingPhotograph = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    tenamentsPhotograph =serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
     photographs =serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
     class Meta:
         model = Rehabilitation
         fields = ('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',
-                   'PAPName' ,'categoryOfPap','cashCompensation', 'compensationStatus', 'agreedUpon',
-                   'cashCompensationAmount', 'cashCompensationStatus', 'landProvidedAreaLocationDetails',
-                   'landProvidedStatus', 'landProvidedArea', 'alternateAccomodationLocationDetails',
-                   'alternateAccomodationStatus', 'alternateAccomodationRelocationAllowance',
-                   'commercialUnitLocationDetails', 'commercialUnitStatus', 'commercialUnitRelocationAllowance',
-                   'typeOfCompensation', 'otherCompensationType' ,'addressLine1','streetName','pincode',
-                   'isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport',
-                   'livelihoodSupportAmount','livelihoodSupportCondition',
-                   'livelihoodSupportPhotograph','livelihoodSupportRemarks','isTraining','trainingCondition',
-                   'trainingPhotograph' ,'trainingRemarks' , 'typeOfStructure'  ,'areaOfTenament' , 'tenamentsPhotograph',
-                    'isRelocationAllowance' ,'RelocationAllowanceAmount' ,'isfinancialSupport',
-                   'financialSupportAmount','isCommunityEngagement','isEngagementType', 'photographs' , 'documents','remarks')
+                   'categoryOfPap','firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
+                   'cashCompensationAmount',
+                   'typeOfCompensation', 'otherCompensationType' ,
+                   'addressLine1','streetName','pincode',
+                   'rehabLocation', 'allowance',
+                   'landProvidedArea', 'alternateAccomodationArea', 'commercialUnitArea',
+                   'isShiftingAllowance','shiftingAllowanceAmount',
+                   'isLivelihoodSupport', 'livelihoodSupportAmount',
+                   'isTraining','trainingRemarks', 'typeOfStructure',
+                   'isRelocationAllowance' ,'RelocationAllowanceAmount' ,'isfinancialSupport',
+                   'financialSupportAmount','isCommunityEngagement','isEngagementType',
+                   'photographs' , 'documents','remarks')
 
     def validate(self,data):
         """
@@ -216,7 +213,7 @@ class RehabilitationViewSerializer(GeoFeatureModelSerializer):
 class RehabilatedPAPIDSerializer(serializers.ModelSerializer):
     class Meta:
         model = PAP
-        fields = ('id', 'PAPID' , 'nameOfPAP' , 'categoryOfPap'  , 'actionTaken', 'firstName', 'middleName', 'lastName', 'addressLine1', 'streetName', 'pincode', 'location')
+        fields = ('id', 'PAPID', 'categoryOfPap'  , 'actionTaken', 'firstName', 'middleName', 'lastName', 'addressLine1', 'streetName', 'pincode', 'location')
 
 # -------------------------------- Labour camp details Serialzier --------------------------------      
 # The `LabourCampDetailSerializer` class is a serializer for the `LabourCamp` model in Python, which

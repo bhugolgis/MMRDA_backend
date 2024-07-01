@@ -559,9 +559,19 @@ class RehabilitationReportPackageExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('quarter','packages','dateOfMonitoring','ID','dateOfRehabilitation','PAPID','categoryOfPap','PAPName','cashCompensation','compensationStatus','typeOfCompensation','otherCompensationType','addressLine1','streetName','pincode','isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport','livelihoodSupportAmount','livelihoodSupportCondition','livelihoodSupportRemarks','isTraining','trainingCondition','trainingRemarks','typeOfStructure','areaOfTenament','isRelocationAllowance','RelocationAllowanceAmount','isfinancialSupport','financialSupportAmount','isCommunityEngagement','isEngagementType','documents', 
-                                'remarks','livelihoodSupportPhotograph','trainingPhotograph',
-                                'tenamentsPhotograph','photographs')
+        data = queryset.values('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',
+                   'categoryOfPap','firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
+                   'cashCompensationAmount',
+                   'typeOfCompensation', 'otherCompensationType' ,
+                   'addressLine1','streetName','pincode',
+                   'rehabLocation', 'allowance',
+                   'landProvidedArea', 'alternateAccomodationArea', 'commercialUnitArea',
+                   'isShiftingAllowance','shiftingAllowanceAmount',
+                   'isLivelihoodSupport', 'livelihoodSupportAmount',
+                   'isTraining','trainingRemarks', 'typeOfStructure',
+                   'isRelocationAllowance' ,'RelocationAllowanceAmount' ,'isfinancialSupport',
+                   'financialSupportAmount','isCommunityEngagement','isEngagementType',
+                   'photographs' , 'documents','remarks')
 
 
         if not data:
@@ -633,14 +643,19 @@ class RehabilitationReportQuarterExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('quarter','packages','dateOfMonitoring', 'ID','dateOfRehabilitation','PAPID','categoryOfPap','PAPName','cashCompensation',
-                               'compensationStatus','typeOfCompensation','otherCompensationType','addressLine1',
-                               'streetName','pincode','isShiftingAllowance','shiftingAllowanceAmount','isLivelihoodSupport',
-                               'livelihoodSupportAmount','livelihoodSupportCondition','livelihoodSupportRemarks','isTraining',
-                               'trainingCondition','trainingRemarks','typeOfStructure','areaOfTenament','isRelocationAllowance',
-                               'RelocationAllowanceAmount','isfinancialSupport','financialSupportAmount','isCommunityEngagement',
-                               'isEngagementType','documents','remarks','livelihoodSupportPhotograph','trainingPhotograph',
-                               'tenamentsPhotograph','photographs')
+        data = queryset.values('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',
+                   'categoryOfPap','firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
+                   'cashCompensationAmount',
+                   'typeOfCompensation', 'otherCompensationType' ,
+                   'addressLine1','streetName','pincode',
+                   'rehabLocation', 'allowance',
+                   'landProvidedArea', 'alternateAccomodationArea', 'commercialUnitArea',
+                   'isShiftingAllowance','shiftingAllowanceAmount',
+                   'isLivelihoodSupport', 'livelihoodSupportAmount',
+                   'isTraining','trainingRemarks', 'typeOfStructure',
+                   'isRelocationAllowance' ,'RelocationAllowanceAmount' ,'isfinancialSupport',
+                   'financialSupportAmount','isCommunityEngagement','isEngagementType',
+                   'photographs' , 'documents','remarks')
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
