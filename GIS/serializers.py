@@ -91,7 +91,7 @@ class RehabilitatedPapSerializer(GeoFeatureModelSerializer):
 class PAPGISSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = PAP
-        fields = ('id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','nameOfPAP', 
+        fields = ('id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID', 
                   'addressLine1','streetName','pincode','eligibility', 'categoryOfPap', 
                   'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
                    'actionTaken', 'notAgreedReason','remarks' )
