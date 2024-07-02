@@ -123,7 +123,7 @@ class RehabilitationReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Rehabilitation
         # fields = "__all__"
-        fields =  ('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',
+        fields =  ('quarter', 'packages','dateOfRehabilitation' ,'PAPID',
                    'categoryOfPap','firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
                    'cashCompensationAmount',
                    'typeOfCompensation', 'otherCompensationType' ,
@@ -144,7 +144,7 @@ class RehabilitationReportExcelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rehabilitation
         # fields = "__all__"
-        fields =  ('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',
+        fields =  ('quarter', 'packages','dateOfRehabilitation' ,'PAPID',
                    'categoryOfPap','firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
                    'cashCompensationAmount',
                    'typeOfCompensation', 'otherCompensationType' ,
