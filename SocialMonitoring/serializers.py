@@ -158,8 +158,8 @@ class RehabilitationSerializer(serializers.ModelSerializer):
     longitude = serializers.CharField(max_length=50, required=True  )
     latitude = serializers.CharField(max_length=50, required=True)
 
-    documents = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    photographs =serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+    documents  = serializers.FileField(allow_empty_file=True, use_url=False,write_only=True , required=False)
+    photographs = serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True ,  required=False)
     class Meta:
         model = Rehabilitation
         fields = ('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',

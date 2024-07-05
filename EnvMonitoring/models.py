@@ -3,6 +3,7 @@ from Auth.models import User
 from django.db.models.signals import post_save
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
+from django.contrib.postgres.fields import ArrayField
 # Create your models here.
 
 def validate_location_precision(value):
@@ -114,8 +115,10 @@ class ExistingTreeManagment(Baseclass):
     condition = models.CharField(max_length=255, null=True, blank=True)
     actionTaken = models.CharField(max_length=255 ,blank=True, null=True)
     noOfTreeCut = models.IntegerField(null=True, blank=True)
-    photographs = models.ImageField(upload_to="Existingtree_photos/", null=True, blank=True)
-    documents = models.FileField(upload_to='existingTree_documents/', null = True , blank=True)
+    documents =ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
+    photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
+    # photographs = models.ImageField(upload_to="Existingtree_photos/", null=True, blank=True)
+    # documents = models.FileField(upload_to='existingTree_documents/', null = True , blank=True)
     remarks = models.TextField(blank=True, null=True )
 
 
@@ -126,8 +129,10 @@ class NewTreeManagement(Baseclass):
     commanName = models.CharField(max_length=255, blank=True, null=True)
     botanicalName = models.CharField(max_length=255, null=True, blank=True)
     condition = models.CharField(max_length=255, null=True, blank=True)
-    photographs = models.ImageField(upload_to="newTree_photographs/", null=True, blank=True)
-    documents = models.FileField(upload_to="newTree_documents/", null  = True, blank=True  )
+    documents =ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
+    photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
+    # photographs = models.ImageField(upload_to="newTree_photographs/", null=True, blank=True)
+    # documents = models.FileField(upload_to="newTree_documents/", null  = True, blank=True  )
     remarks = models.TextField(max_length= 255 , null = True , blank = True)
 
 
@@ -140,10 +145,12 @@ class WasteTreatments(Baseclass):
     
 
     isGISPermitsTransportation = models.BooleanField(blank=True, null=True)
-    GISPermitsTransportationDocuments = models.FileField(upload_to='waste_documents/GISPermitsTransportation' , null=True, blank=True)
+    # GISPermitsTransportationDocuments = models.FileField(upload_to='waste_documents/GISPermitsTransportation' , null=True, blank=True)
+    GISPermitsTransportationDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
 
     isTransportationVechicalHasPermission = models.BooleanField(blank=True, null=True)
-    TransportationVechicalHasPermissionDocuments = models.FileField(upload_to='waste_documents/' , null=True, blank=True)
+    # TransportationVechicalHasPermissionDocuments = models.FileField(upload_to='waste_documents/' , null=True, blank=True)
+    TransportationVechicalHasPermissionDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
 
     # Hazardous Waste
     iswasteOilQnt = models.BooleanField(blank=True, null=True)
@@ -193,8 +200,12 @@ class WasteTreatments(Baseclass):
     wastehandling = models.CharField(
         max_length=255, blank=True, null=True)
     wasteHandlingLocation = models.PointField(null=True, blank=True)
-    photographs = models.ImageField(upload_to='waste_photographs/' ,null=True, blank=True)
-    documents = models.FileField(upload_to='waste_documents/' , null=True, blank=True)
+
+    documents =ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
+    photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
+
+    # photographs = models.ImageField(upload_to='waste_photographs/' ,null=True, blank=True)
+    # documents = models.FileField(upload_to='waste_documents/' , null=True, blank=True)
     remarks = models.CharField(max_length=255, null=True, blank=True)
 
 
@@ -207,12 +218,17 @@ class MaterialManegmanet(Baseclass):
 
     materialStorageType = models.CharField(max_length=255 , blank = True , null = True)
     materialStorageCondition = models.CharField(max_length = 255 , blank = True , null = True)
-    materialStoragePhotograph = models.ImageField(upload_to = 'MaterialManegment/materailStorage_Photograph' , blank = True , null = True)
+    # materialStoragePhotograph = models.ImageField(upload_to = 'MaterialManegment/materailStorage_Photograph' , blank = True , null = True)
+    materialStoragePhotograph = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
 
-    approvals = models.FileField(null=True, blank=True)
+    # approvals = models.FileField(null=True, blank=True)
+    approvals = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
 
-    photographs = models.ImageField(upload_to='MaterialManegment/materialsourcing_photographs/',null=True, blank=True)
-    documents = models.FileField(upload_to='MaterialManegment/materialsourcing_documents', null=True, blank=True)
+    # photographs = models.ImageField(upload_to='MaterialManegment/materialsourcing_photographs/',null=True, blank=True)
+    # documents = models.FileField(upload_to='MaterialManegment/materialsourcing_documents', null=True, blank=True)
+
+    documents =ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
+    photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     remarks = models.CharField(max_length=255, null=True, blank=True)
 
 

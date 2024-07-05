@@ -58,15 +58,21 @@ class labourcampDetails(models.Model):
 # notAgreedReason, presentPhotograph, and remarks.
 class PAP(Baseclass):
     user = models.ForeignKey(User, related_name='papUser', on_delete=models.CASCADE, null=True)
-    PAPID = models.CharField( max_length=255,unique=True)
-    cadastralMapID = models.CharField( max_length=255,unique=True, blank=True, null=True)
-    cadastralMapDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True))
-    firstName = models.CharField(max_length=255, blank=True, null=True)
-    middleName = models.CharField(max_length=255, blank=True, null=True)
-    lastName = models.CharField(max_length=255, blank=True, null=True)
+
+    # Affected Location Details
+    
     addressLine1 = models.TextField(max_length=255, blank=True, null=True)
     streetName = models.CharField(max_length=255, blank=True, null=True)
     pincode = models.PositiveIntegerField(blank=True, null=True)
+
+    # Project Affected Person Details
+
+    PAPID = models.CharField( max_length=255,unique=True)
+    cadastralMapID = models.CharField( max_length=255,unique=True, blank=True, null=True)
+    cadastralMapDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
+    firstName = models.CharField(max_length=255, blank=True, null=True)
+    middleName = models.CharField(max_length=255, blank=True, null=True)
+    lastName = models.CharField(max_length=255, blank=True, null=True)
     dateOfIdentification = models.DateField(blank=True, null=True)
     eligibility = models.CharField(max_length=255, null=True, blank=True)
     categoryOfPap = models.CharField( max_length=255,  null=True, blank=True)
@@ -74,11 +80,14 @@ class PAP(Baseclass):
     typeOfStructure = models.CharField( max_length=255,  null=True, blank=True)
     areaOfAsset = models.BigIntegerField(blank=True, null=True)
     legalStatus = models.CharField( max_length=255,  null=True, blank=True)
-    legalDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True))
+    legalDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     actionTaken = models.CharField(max_length=100, null=True, blank=True)
     notAgreedReason = models.TextField(max_length=255, blank=True, null=True)
-    documents = ArrayField(models.CharField( max_length=255, blank=True, null=True))
-    presentPhotograph = ArrayField(models.CharField( max_length=255, blank=True, null=True))
+
+    # Documents and Remarks
+
+    documents = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
+    presentPhotograph = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     remarks = models.TextField(max_length=255, blank=True, null=True)
 
 
@@ -147,8 +156,8 @@ class Rehabilitation(Baseclass):
 
     # Documents and Remarks
 
-    documents = models.CharField(max_length=255, blank=True, null=True)
-    photographs = models.CharField(max_length=255, blank=True, null=True)
+    documents =ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
+    photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     remarks = models.TextField(max_length=255, blank=True, null=True)
     
 
@@ -220,7 +229,7 @@ class LabourCamp(Baseclass):
 
     isFirstAidKit = models.BooleanField(blank=True)
     firstAidKitCondition = models.CharField( max_length=255,  blank=True, null=True)
-    firstAidKitPhotographs =    (models.CharField( max_length=255, blank=True, null=True))
+    firstAidKitPhotographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), blank=True, null=True)
     firstAidKitRemarks = models.TextField(max_length=255,  blank=True, null=True)
 
     #Transportation Facilities
