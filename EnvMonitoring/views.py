@@ -35,7 +35,7 @@ class PostSensorLocationDetails(generics.GenericAPIView):
                                 'data': data}, status=status.HTTP_200_OK)
         else:
             key, value =list(serializer.errors.items())[0]
-            error_message = key+" ,"+value[0]
+            error_message = str(key)+" ," + str(value[0])
             return Response({'status': 'error',
                             'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
 
@@ -121,7 +121,7 @@ class AirView(generics.GenericAPIView):
                                         'data': data}, status= status.HTTP_200_OK)
                 else:
                     key, value =list(Serializer.errors.items())[0]
-                    error_message = key+" ,"+value[0]
+                    error_message = str(key)+" ," + str(value[0])
                     print(value[0])
                     return Response({'status' : 'error',
                                     'message' : value[0]} , status = status.HTTP_400_BAD_REQUEST)
@@ -139,7 +139,7 @@ class AirView(generics.GenericAPIView):
                                         'data': data}, status= status.HTTP_200_OK)
                 else:
                     key, value =list(Serializer.errors.items())[0]
-                    error_message = key+" ,"+value[0]
+                    error_message = str(key)+" ," + str(value[0])
                     print(value[0])
                     return Response({'status' : 'failed',
                                     'message' : value[0]}, status = status.HTTP_400_BAD_REQUEST)
@@ -207,7 +207,7 @@ class WaterView(generics.GenericAPIView):
                                     'data' : data }, status = 200)
             else:
                 key, value =list(serializer.errors.items())[0]
-                error_message = key+" ,"+value[0]
+                error_message = str(key)+" ," + str(value[0])
                 return Response({'status': 'error',
                                 'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
         elif "consultant" in request.user.groups.values_list("name",flat=True):
@@ -226,7 +226,7 @@ class WaterView(generics.GenericAPIView):
                                     'datat' : data }, status = 200)
             else:
                 key, value =list(serializer.errors.items())[0]
-                error_message = key+" ,"+value[0]
+                error_message = str(key)+" ," + str(value[0])
                 return Response({'status': 'failed',
                                 'Message' : value[0]} , status = status.HTTP_400_BAD_REQUEST)
         else:
@@ -294,7 +294,7 @@ class NoiseView(generics.GenericAPIView):
                                     'data' : data }, status = 200)
             else:
                 key, value =list(serializer.errors.items())[0]
-                error_message = key+" ,"+value[0]
+                error_message = str(key)+" ," + str(value[0])
                 return Response({'status': 'failed',
                                 'Message' : value[0]} , status = status.HTTP_400_BAD_REQUEST)
         elif "consultant" in request.user.groups.values_list("name",flat=True):
@@ -313,7 +313,7 @@ class NoiseView(generics.GenericAPIView):
                                     'data' : data }, status = 200)
                 else:
                     key, value =list(serializer.errors.items())[0]
-                    error_message = key+" ,"+value[0]
+                    error_message = str(key)+" ," + str(value[0])
                     return Response({'status': 'failed',
                                     'Message' : value[0]} , status = status.HTTP_400_BAD_REQUEST)
         else:
@@ -375,7 +375,7 @@ class ExistingTreeManagementView(generics.GenericAPIView):
                                     'data' : data }, status = 200)
             else:
                 key, value =list(serializer.errors.items())[0]
-                error_message = key+" ," + value[0]
+                error_message = str(key)+" ," + str(value[0])
                 return Response({'status': 'error',
                                 'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
         elif "consultant" in request.user.groups.values_list("name",flat=True):
@@ -391,7 +391,7 @@ class ExistingTreeManagementView(generics.GenericAPIView):
                                         'data' : data }, status = 200)
                 else:
                     key, value =list(serializer.errors.items())[0]
-                    error_message = key+" ," + value[0]
+                    error_message = str(key)+" ," + str(value[0])
                     return Response({'status': 'error',
                                     'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
         else:
@@ -469,7 +469,7 @@ class NewTereeManagementView(generics.GenericAPIView):
                                     'data' : data }, status = 200)
             else:
                 key, value =list(serializer.errors.items())[0]
-                error_message = key+" ," + value[0]
+                error_message = str(key)+" ," + str(value[0])
                 return Response({'status': 'error',
                                 'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
 
@@ -488,7 +488,7 @@ class NewTereeManagementView(generics.GenericAPIView):
                                         'data' : data }, status = 200)
                 else:
                     key, value =list(serializer.errors.items())[0]
-                    error_message = key+" ," + value[0]
+                    error_message = str(key)+" ," + str(value[0])
                     return Response({'status': 'error',
                                    'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
         else:
@@ -532,7 +532,7 @@ class WasteTreatmentsView(generics.GenericAPIView):
                                         'data' : data }, status = 200)
                 else:
                     key, value =list(serializer.errors.items())[0]
-                    error_message = key+" ," + value[0]
+                    error_message = str(key)+" ," + str(value[0])
                     return Response({'status': 'error',
                                     'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
             elif "consultant" in request.user.groups.values_list("name",flat=True):
@@ -554,7 +554,7 @@ class WasteTreatmentsView(generics.GenericAPIView):
                                         'data' : data }, status = 200)
                 else:
                     key, value =list(serializer.errors.items())[0]
-                    error_message = key+" ," + value[0]
+                    error_message = str(key)+" ," + str(value[0])
                     return Response({'status': 'error',
                                     'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
             else:
@@ -611,7 +611,7 @@ class MaterialSourcingView(generics.GenericAPIView):
                                         'data' : data }, status = 200)
                 else:
                     key, value =list(serializer.errors.items())[0]
-                    error_message = key+" ," + value[0]
+                    error_message = str(key)+" ," + str(value[0])
                     return Response({'status': 'error',
                                     'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
             elif "consultant" in request.user.groups.values_list("name",flat=True):
@@ -632,7 +632,7 @@ class MaterialSourcingView(generics.GenericAPIView):
                                         'data' : data }, status = 200)
                 else:
                     key, value =list(serializer.errors.items())[0]
-                    error_message = key+" ," + value[0]
+                    error_message = str(key)+" ," + str(value[0])
                     return Response({'status': 'error',
                                     'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
             else:
