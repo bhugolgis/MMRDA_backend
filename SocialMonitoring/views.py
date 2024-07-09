@@ -132,6 +132,7 @@ class PapView(generics.GenericAPIView):
                     pap = serializer.save(location=location, user=request.user , **file_mapping)
 
                     data = papviewserialzer(pap).data
+                    print(request.data)
                     return Response ({'Message': 'data saved successfully',
                                     'status' : 'success' , 
                                     'data': data
@@ -164,6 +165,7 @@ class PapView(generics.GenericAPIView):
 
                 pap = serializer.save(location=location , user = request.user , **file_mapping)
                 data = papviewserialzer(pap).data 
+                print(request.data)
                 return Response ({'Message': 'data saved successfully',
                                     'status' : 'success',
                                     'data': data}, status=200)
