@@ -111,7 +111,8 @@ class PapView(generics.GenericAPIView):
                 data = PAP.objects.filter(PAPID=papid).exists()
                 if data == True:
                     return Response({'Message': 'already data filled for this PAP-ID',
-                                    'status' : 'success'}, status=400)
+                                    'status' : 'success',
+                                    }, status=400)
                 else:
                     lat = float(serializer.validated_data['latitude'])
                     long = float(serializer.validated_data['longitude'])
@@ -133,6 +134,7 @@ class PapView(generics.GenericAPIView):
                     data = papviewserialzer(pap).data
                     return Response ({'Message': 'data saved successfully',
                                     'status' : 'success' , 
+                                    'data': data
                                     }, status=200)
             else:    
                 key, value =list(serializer.errors.items())[0]
@@ -163,7 +165,8 @@ class PapView(generics.GenericAPIView):
                 pap = serializer.save(location=location , user = request.user , **file_mapping)
                 data = papviewserialzer(pap).data 
                 return Response ({'Message': 'data saved successfully',
-                                    'status' : 'success'}, status=200)
+                                    'status' : 'success',
+                                    'data': data}, status=200)
             else:
                 key, value =list(serializer.errors.items())[0]
                 error_message = str(key)+" ,"+str(value[0])
