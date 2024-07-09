@@ -254,7 +254,7 @@ class RehabilatedPAPIDView(generics.GenericAPIView):
 
 class RehabilitationView(generics.GenericAPIView):
     serializer_class = RehabilitationSerializer
-    #parser_classes = [MultiPartParser]
+    parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
@@ -284,9 +284,6 @@ class RehabilitationView(generics.GenericAPIView):
                     location = Point(long, lat, srid=4326)
 
                     file_fields = {
-                        'livelihoodSupportPhotograph': 'rehabitation/livelihoodSupportPhotograph',
-                        'trainingPhotograph': 'rehabitation/trainingPhotograph' ,
-                        'tenamentsPhotograph' : 'rehabitation/tenamentsPhotograph',
                         'photographs' : 'rehabitation/Rehabitationphotographs',
                         'documents' : 'rehabitation/documents'
                         }
@@ -314,9 +311,6 @@ class RehabilitationView(generics.GenericAPIView):
                 long = float(serializer.validated_data['longitude'])
                 location = Point(long, lat, srid=4326)
                 file_fields = {
-                        'livelihoodSupportPhotograph': 'rehabitation/livelihoodSupportPhotograph',
-                        'trainingPhotograph': 'rehabitation/trainingPhotograph' ,
-                        'tenamentsPhotograph' : 'rehabitation/tenamentsPhotograph',
                         'photographs' : 'rehabitation/Rehabitationphotographs',
                         'documents' : 'rehabitation/documents',
                         }
