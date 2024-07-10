@@ -218,6 +218,8 @@ class WasteTreatmentsSerializer(serializers.ModelSerializer):
     waste_latitude = serializers.CharField(max_length=50,required=True)
     documents  = serializers.FileField(allow_empty_file=True, use_url=False,write_only=True , required=False)
     photographs = serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True ,  required=False)
+    GISPermitsTransportationDocuments = serializers.FileField(allow_empty_file=True, use_url=False,write_only=True ,  required=False)
+    TransportationVechicalHasPermissionDocuments = serializers.FileField(allow_empty_file=True, use_url=False,write_only=True ,  required=False)
     class Meta:
         model  = WasteTreatments
         fields = ('quarter','month','packages','longitude','latitude'  ,'dateOfMonitoring' , 'wastetype' , 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'iswasteOilQnt', 'isCCPCPaintSludgeQnt', 'isfilterQnt', 'isairFiltersQnt', 'isusedCartridgesQnt', 'isplasticQnt', 'ispaperQnt', 'iswoodQnt', 'isbottlesQnt', 'isrubberQnt', 'isbioDegradableQuantity', 'isbioMedicalQuantity', 'ismetalScrapeQuantity', 'iseWasteQuantity', 'isconstructionWasteQuantity', 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments',

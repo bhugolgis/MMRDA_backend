@@ -572,8 +572,10 @@ class WasteTreatmentsView(generics.GenericAPIView):
                         location=Point(long,lat,srid=4326)
 
                         file_fields = {
-                        'photographs' : 'wastetreatment/Photographs',
-                        'documents' : 'wastetreatment/documents'
+                        'photographs' : 'Wastetreatment/Photographs',
+                        'documents' : 'Wastetreatment/documents',
+                        'GISPermitsTransportationDocuments' : 'Wastetreatment/GISPermitsTransportationDocuments',
+                        'TransportationVechicalHasPermissionDocuments' : 'Wastetreatment/TransportationVechicalHasPermissionDocuments'
                         }
 
                         file_mapping = {}
@@ -605,9 +607,11 @@ class WasteTreatmentsView(generics.GenericAPIView):
                     location=Point(long,lat,srid=4326)
 
                     file_fields = {
-                        'photographs' : 'wastetreatment/Photographs',
-                        'documents' : 'wastetreatment/documents'
-                        }
+                        'photographs' : 'Wastetreatment/Photographs',
+                        'documents' : 'Wastetreatment/documents',
+                        'GISPermitsTransportationDocuments' : 'Wastetreatment/GISPermitsTransportationDocuments',
+                        'TransportationVechicalHasPermissionDocuments' : 'Wastetreatment/TransportationVechicalHasPermissionDocuments'
+                    }
 
                     file_mapping = {}
                     for field, file_path in file_fields.items():
