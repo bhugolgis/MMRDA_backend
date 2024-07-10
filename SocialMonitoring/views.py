@@ -302,7 +302,8 @@ class RehabilitationView(generics.GenericAPIView):
                     rehabilitation = serializer.save(location=location, user=request.user , **file_mapping)
                     data = RehabilitationViewSerializer(rehabilitation).data
                     return Response({'Message': 'data saved successfully',
-                                    'status' : 'success'})
+                                    'status' : 'success',
+                                    'data':data})
             else:
                 key, value =list(serializer.errors.items())[0]
                 error_message = key+" ,"+value[0]
@@ -329,7 +330,8 @@ class RehabilitationView(generics.GenericAPIView):
                 rehabilitation = serializer.save(location=location , user = request.user , **file_mapping)
                 data = RehabilitationViewSerializer(rehabilitation).data
                 return Response({'Message': 'data saved successfully',
-                                    'status' : 'success'})
+                                    'status' : 'success',
+                                    'data':data})
             else:
                 key, value =list(serializer.errors.items())[0]
                 error_message = str(key)+" ,"+str(value[0])
