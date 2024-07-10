@@ -82,6 +82,7 @@ class PapSerailzer(serializers.ModelSerializer):
     presentPhotograph = serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
     cadastralMapDocuments = serializers.FileField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
     documents = serializers.FileField(allow_empty_file=True, use_url=False,write_only=True,  required=False)
+    cadastralMapID = serializers.CharField(required=True)  # Ensure it's required
 
     class Meta:
         model = PAP
@@ -103,6 +104,13 @@ class PapSerailzer(serializers.ModelSerializer):
         if len(lat) > 6:
             raise serializers.ValidationError("latitude must have at most 6 digits after the decimal point.")
         return data
+    
+    def validate_cadastralMapID(self, value):
+        if not value:
+            raise serializers.ValidationError("Cadastral Map ID is required.")
+        if PAP.objects.filter(cadastralMapID=value).exists():
+            raise serializers.ValidationError("This Cadastral Map ID already exists.")
+        return value
 
     def create(self, data):
         """
