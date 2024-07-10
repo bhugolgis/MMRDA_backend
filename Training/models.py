@@ -67,6 +67,8 @@ class occupationalHealthSafety(Baseclass):
     user = models.ForeignKey(User, related_name='occupational_health_safety_User', on_delete=models.CASCADE, blank=True)
     location = PointField(blank=True)
 
+    # Occupational Facilities
+    
     joiningMedicalCheckup = models.BooleanField(null=True, blank=True)
     joiningMedicalCheckupCondition = models.CharField(max_length=50 , choices=choices)
     joiningMedicalCheckupConditionRemarks = models.CharField(max_length=255 ,blank = True , null = True ) 

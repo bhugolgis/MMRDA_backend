@@ -13,6 +13,7 @@ from Auth.permissions import IsConsultant , IsMMRDA
 from .serializer import *
 from .permissions import IsConsultant , IsContractor
 from MMRDA.utils import error_simplifier
+from Training.utils import save_multiple_files
 
 from .utils import SubIndices
 
@@ -368,8 +369,20 @@ class ExistingTreeManagementView(generics.GenericAPIView):
                     lat=float(serializer.validated_data['latitude'])
                     long=float(serializer.validated_data['longitude'])
                     Plocation=Point(long,lat,srid=4326)
-                    water_data =serializer.save(location=Plocation , user = request.user)
-                    data = TreeManagmentviewserializer(water_data).data
+                    
+                    file_fields = {
+                        'photographs' : 'ExistingTreeManagement/Photographs',
+                        'documents' : 'ExistingTreeManagement/documents'
+                        }
+
+                    file_mapping = {}
+                    for field, file_path in file_fields.items():
+                        files = request.FILES.getlist(field)
+                        file_mapping[field] = []
+                        save_multiple_files(files, file_mapping, file_path , field)
+
+                    tree_data =serializer.save(location=Plocation , user = request.user, **file_mapping)
+                    data = TreeManagmentviewserializer(tree_data).data
                     return Response({'status': 'success' ,
                                     'Message' : 'data saved successfully',
                                     'data' : data }, status = 200)
@@ -377,15 +390,26 @@ class ExistingTreeManagementView(generics.GenericAPIView):
                 key, value =list(serializer.errors.items())[0]
                 error_message = str(key)+" ," + str(value[0])
                 return Response({'status': 'error',
-                                'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
+                                'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
         elif "consultant" in request.user.groups.values_list("name",flat=True):
                 serializer = TreeManagementSerailizer(data = request.data )
                 if serializer.is_valid():
                     lat=float(serializer.validated_data['latitude'])
                     long=float(serializer.validated_data['longitude'])
                     Plocation=Point(long,lat,srid=4326)
-                    water_data =serializer.save(location=Plocation , user = request.user)
-                    data = TreeManagmentviewserializer(water_data).data
+                    file_fields = {
+                        'photographs' : 'ExistingTreeManagement/Photographs',
+                        'documents' : 'ExistingTreeManagement/documents'
+                        }
+
+                    file_mapping = {}
+                    for field, file_path in file_fields.items():
+                        files = request.FILES.getlist(field)
+                        file_mapping[field] = []
+                        save_multiple_files(files, file_mapping, file_path , field)
+
+                    tree_data =serializer.save(location=Plocation , user = request.user, **file_mapping)
+                    data = TreeManagmentviewserializer(tree_data).data
                     return Response({'status': 'success' ,
                                         'Message' : 'data saved successfully',
                                         'data' : data }, status = 200)
@@ -393,7 +417,7 @@ class ExistingTreeManagementView(generics.GenericAPIView):
                     key, value =list(serializer.errors.items())[0]
                     error_message = str(key)+" ," + str(value[0])
                     return Response({'status': 'error',
-                                    'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
+                                    'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
         else:
             return  Response({'status': 'failed',
                             'Message' : "Only consultant and Contractor can fill this form"} , status= status.HTTP_401_UNAUTHORIZED)
@@ -462,8 +486,19 @@ class NewTereeManagementView(generics.GenericAPIView):
                     lat=float(serializer.validated_data['latitude'])
                     long=float(serializer.validated_data['longitude'])
                     location=Point(long,lat,srid=4326)
-                    water_data =serializer.save(location=location , user = request.user)
-                    data = NewTreeManagmentviewserializer(water_data).data
+                    file_fields = {
+                        'photographs' : 'NewTreeManagement/Photographs',
+                        'documents' : 'NewTreeManagement/Documents'
+                        }
+
+                    file_mapping = {}
+                    for field, file_path in file_fields.items():
+                        files = request.FILES.getlist(field)
+                        file_mapping[field] = []
+                        save_multiple_files(files, file_mapping, file_path , field)
+
+                    new_tree_data =serializer.save(location=location , user = request.user, **file_mapping)
+                    data = NewTreeManagmentviewserializer(new_tree_data).data
                     return Response({'status': 'success' ,
                                     'Message' : 'data saved successfully',
                                     'data' : data }, status = 200)
@@ -471,7 +506,7 @@ class NewTereeManagementView(generics.GenericAPIView):
                 key, value =list(serializer.errors.items())[0]
                 error_message = str(key)+" ," + str(value[0])
                 return Response({'status': 'error',
-                                'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
+                                'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
 
         elif "consultant" in request.user.groups.values_list("name",flat=True):
                 # return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
@@ -481,8 +516,19 @@ class NewTereeManagementView(generics.GenericAPIView):
                     lat=float(serializer.validated_data['latitude'])
                     long=float(serializer.validated_data['longitude'])
                     location=Point(long,lat,srid=4326)
-                    water_data =serializer.save(location=location , user = request.user)
-                    data = NewTreeManagmentviewserializer(water_data).data
+                    file_fields = {
+                        'photographs' : 'NewTreeManagement/Photographs',
+                        'documents' : 'NewTreeManagement/Documents'
+                        }
+
+                    file_mapping = {}
+                    for field, file_path in file_fields.items():
+                        files = request.FILES.getlist(field)
+                        file_mapping[field] = []
+                        save_multiple_files(files, file_mapping, file_path , field)
+
+                    new_tree_data =serializer.save(location=location , user = request.user, **file_mapping)
+                    data = NewTreeManagmentviewserializer(new_tree_data).data
                     return Response({'status': 'success' ,
                                         'Message' : 'data saved successfully',
                                         'data' : data }, status = 200)
@@ -490,7 +536,7 @@ class NewTereeManagementView(generics.GenericAPIView):
                     key, value =list(serializer.errors.items())[0]
                     error_message = str(key)+" ," + str(value[0])
                     return Response({'status': 'error',
-                                   'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
+                                   'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
         else:
         # except Exception:
             return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
@@ -525,7 +571,18 @@ class WasteTreatmentsView(generics.GenericAPIView):
                         long=float(serializer.validated_data['longitude'])
                         location=Point(long,lat,srid=4326)
 
-                        waste_data =serializer.save(location=location , wasteHandlingLocation = waste_location , user = request.user)
+                        file_fields = {
+                        'photographs' : 'wastetreatment/Photographs',
+                        'documents' : 'wastetreatment/documents'
+                        }
+
+                        file_mapping = {}
+                        for field, file_path in file_fields.items():
+                            files = request.FILES.getlist(field)
+                            file_mapping[field] = []
+                            save_multiple_files(files, file_mapping, file_path , field)
+
+                        waste_data =serializer.save(location=location , wasteHandlingLocation = waste_location , user = request.user, **file_mapping)
                         data = wastetreatmentsViewserializer(waste_data).data
                         return Response({'status': 'success' ,
                                         'Message' : 'data saved successfully',
@@ -547,7 +604,19 @@ class WasteTreatmentsView(generics.GenericAPIView):
                     long=float(serializer.validated_data['longitude'])
                     location=Point(long,lat,srid=4326)
 
-                    waste_data =serializer.save( location=location , wasteHandlingLocation = waste_location , user = request.user)
+                    file_fields = {
+                        'photographs' : 'wastetreatment/Photographs',
+                        'documents' : 'wastetreatment/documents'
+                        }
+
+                    file_mapping = {}
+                    for field, file_path in file_fields.items():
+                        files = request.FILES.getlist(field)
+                        file_mapping[field] = []
+                        save_multiple_files(files, file_mapping, file_path , field)
+
+                    waste_data =serializer.save(location=location , wasteHandlingLocation = waste_location , user = request.user, **file_mapping)
+
                     data = wastetreatmentsViewserializer(waste_data).data
                     return Response({'status': 'success' ,
                                         'Message' : 'data saved successfully',
@@ -603,8 +672,20 @@ class MaterialSourcingView(generics.GenericAPIView):
                         storagelong = float(serializer.validated_data['storageLongitude'])
                         storagelat = float(serializer.validated_data['storageLatitude'])
                         storageLocation = Point(storagelong , storagelat , srid = 4326 )
+                        file_fields = {
+                        'photographs' : 'MaterialManagement/Photographs',
+                        'documents' : 'MaterialManagement/Documents',
+                        'approvals' : 'MaterialManagement/Approvals',
+                        'materialStoragePhotograph' : 'MaterialManagement/StoragePhotograph',
+                        }
 
-                        material_data =serializer.save(location=location , storageLocation = storageLocation , user = request.user)
+                        file_mapping = {}
+                        for field, file_path in file_fields.items():
+                            files = request.FILES.getlist(field)
+                            file_mapping[field] = []
+                            save_multiple_files(files, file_mapping, file_path , field)
+
+                        material_data =serializer.save(location=location , storageLocation = storageLocation , user = request.user, **file_mapping)
                         data = MaterialSourcingViewserializer(material_data).data
                         return Response({'status': 'success' ,
                                         'Message' : 'data saved successfully',
@@ -613,9 +694,8 @@ class MaterialSourcingView(generics.GenericAPIView):
                     key, value =list(serializer.errors.items())[0]
                     error_message = str(key)+" ," + str(value[0])
                     return Response({'status': 'error',
-                                    'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
+                                    'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
             elif "consultant" in request.user.groups.values_list("name",flat=True):
-            #   return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
                 serializer = self.get_serializer(data = request.data , context={'request': request})
                 if serializer.is_valid():
                     lat=float(serializer.validated_data['latitude'])
@@ -625,7 +705,21 @@ class MaterialSourcingView(generics.GenericAPIView):
                     storagelong = float(serializer.validated_data['storageLongitude'])
                     storagelat = float(serializer.validated_data['storageLatitude'])
                     storageLocation = Point(storagelong , storagelat , srid = 4326 )
-                    material_data =serializer.save( location=location , storageLocation = storageLocation , user = request.user)
+                    file_fields = {
+                        'photographs' : 'MaterialManagement/Photographs',
+                        'documents' : 'MaterialManagement/Documents',
+                        'approvals' : 'MaterialManagement/Approvals',
+                        'materialStoragePhotograph' : 'MaterialManagement/StoragePhotograph',
+                        }
+
+                    file_mapping = {}
+                    for field, file_path in file_fields.items():
+                        files = request.FILES.getlist(field)
+                        file_mapping[field] = []
+                        save_multiple_files(files, file_mapping, file_path , field)
+
+                    material_data =serializer.save(location=location , storageLocation = storageLocation , user = request.user, **file_mapping)
+
                     data = MaterialSourcingViewserializer(material_data).data
                     return Response({'status': 'success' ,
                                         'Message' : 'data saved successfully',
@@ -634,7 +728,7 @@ class MaterialSourcingView(generics.GenericAPIView):
                     key, value =list(serializer.errors.items())[0]
                     error_message = str(key)+" ," + str(value[0])
                     return Response({'status': 'error',
-                                    'Message' :value[0]} , status = status.HTTP_400_BAD_REQUEST)
+                                    'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
             else:
                 return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
 
