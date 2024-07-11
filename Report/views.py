@@ -560,11 +560,11 @@ class RehabilitationReportPackageExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',
-                   'categoryOfPap','firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
+                   'firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
                    'cashCompensationAmount',
                    'typeOfCompensation', 'otherCompensationType' ,
                    'addressLine1','streetName','pincode',
-                   'rehabLocation', 'allowance',
+                   'rehabLocation', 'allowance', 'area',
                    'landProvidedArea', 'alternateAccomodationArea', 'commercialUnitArea',
                    'isShiftingAllowance','shiftingAllowanceAmount',
                    'isLivelihoodSupport', 'livelihoodSupportAmount',
@@ -644,12 +644,11 @@ class RehabilitationReportQuarterExcelDownload(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',
-                   'categoryOfPap','firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
+                   'firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
                    'cashCompensationAmount',
                    'typeOfCompensation', 'otherCompensationType' ,
                    'addressLine1','streetName','pincode',
-                   'rehabLocation', 'allowance',
-                   'landProvidedArea', 'alternateAccomodationArea', 'commercialUnitArea',
+                   'rehabLocation', 'allowance', 'area',
                    'isShiftingAllowance','shiftingAllowanceAmount',
                    'isLivelihoodSupport', 'livelihoodSupportAmount',
                    'isTraining','trainingRemarks', 'typeOfStructure',

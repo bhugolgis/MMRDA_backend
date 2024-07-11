@@ -171,12 +171,11 @@ class RehabilitationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rehabilitation
         fields = ('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',
-                   'categoryOfPap','firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
+                   'firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
                    'cashCompensationAmount',
                    'typeOfCompensation', 'otherCompensationType' ,
                    'addressLine1','streetName','pincode',
-                   'rehabLocation', 'allowance',
-                   'landProvidedArea', 'alternateAccomodationArea', 'commercialUnitArea',
+                   'rehabLocation', 'allowance', 'area',
                    'isShiftingAllowance','shiftingAllowanceAmount',
                    'isLivelihoodSupport', 'livelihoodSupportAmount',
                    'isTraining','trainingRemarks', 'typeOfStructure',

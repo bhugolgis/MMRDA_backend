@@ -102,7 +102,6 @@ class Rehabilitation(Baseclass):
     ID = models.ForeignKey( PAP, related_name='rehabilitation', on_delete=models.CASCADE, blank=True, null=True)
     dateOfRehabilitation = models.DateField(blank=True, null=True) # what is date of rehab
     PAPID = models.CharField(max_length=255, blank=True, null=True)
-    categoryOfPap = models.CharField( max_length=255,  null=True, blank=True)
 
     # Location Details
 
@@ -127,10 +126,7 @@ class Rehabilitation(Baseclass):
     # Rehab Location is common location
     rehabLocation = models.CharField( max_length=255, null=True, blank=True ) # common for land provided area, alternate location accomodation, commercial unit)
     allowance = models.FloatField( null=True, blank=True)
-    
-    landProvidedArea = models.FloatField(null=True, blank=True)
-    alternateAccomodationArea = models.FloatField(null=True, blank=True)
-    commercialUnitArea = models.FloatField(null=True, blank=True)
+    area = models.FloatField(null=True, blank=True)
 
     typeOfStructure = models.CharField(max_length=255, blank=True) # (values: Tenaments, House, Flat)
     

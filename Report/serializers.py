@@ -124,12 +124,11 @@ class RehabilitationReportSerializer(GeoFeatureModelSerializer):
         model = Rehabilitation
         # fields = "__all__"
         fields =  ('quarter', 'packages','dateOfRehabilitation' ,'PAPID',
-                   'categoryOfPap','firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
+                   'firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
                    'cashCompensationAmount',
                    'typeOfCompensation', 'otherCompensationType' ,
                    'addressLine1','streetName','pincode',
-                   'rehabLocation', 'allowance',
-                   'landProvidedArea', 'alternateAccomodationArea', 'commercialUnitArea',
+                   'rehabLocation', 'allowance','area',
                    'isShiftingAllowance','shiftingAllowanceAmount',
                    'isLivelihoodSupport', 'livelihoodSupportAmount',
                    'isTraining','trainingRemarks', 'typeOfStructure',
@@ -145,12 +144,11 @@ class RehabilitationReportExcelSerializer(serializers.ModelSerializer):
         model = Rehabilitation
         # fields = "__all__"
         fields =  ('quarter', 'packages','dateOfRehabilitation' ,'PAPID',
-                   'categoryOfPap','firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
+                   'firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
                    'cashCompensationAmount',
                    'typeOfCompensation', 'otherCompensationType' ,
                    'addressLine1','streetName','pincode',
-                   'rehabLocation', 'allowance',
-                   'landProvidedArea', 'alternateAccomodationArea', 'commercialUnitArea',
+                   'rehabLocation', 'allowance','area',
                    'isShiftingAllowance','shiftingAllowanceAmount',
                    'isLivelihoodSupport', 'livelihoodSupportAmount',
                    'isTraining','trainingRemarks', 'typeOfStructure',
