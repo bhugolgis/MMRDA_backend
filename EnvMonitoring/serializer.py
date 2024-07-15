@@ -310,7 +310,7 @@ class AirmanagementSerializer(serializers.ModelSerializer):
 class NoisemanagementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Noise
-        fields = ['noiseLevel','monitoringPeriod','location','packages','quarter', 'noiseLevel_day', 'monitoringPeriod_day', 'monitoringPeriod_night', 'noiseLevel_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night']
+        fields = ['monitoringPeriod','location','packages','quarter', 'noiseLevel_day', 'monitoringPeriod_day', 'monitoringPeriod_night', 'noiseLevel_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night']
 
     def validate(self, data):
         missing_fields = [field for field in self.Meta.fields if field not in data or data[field] is None]
@@ -324,7 +324,7 @@ class NoisemanagementSerializer(serializers.ModelSerializer):
 class NoiseWhihinLimitSerializer(serializers.ModelSerializer):
     class Meta:
         model = Noise
-        fields = ['noiseLevel','location','packages','quarter', 'noiseLevel_day', 'monitoringPeriod_day', 'monitoringPeriod_night', 'noiseLevel_night', 'typeOfArea']
+        fields = ['noiseLevel_day', 'noiseLevel_night', 'typeOfArea']
 
     def validate(self, data):
         missing_fields = [field for field in self.Meta.fields if field not in data or data[field] is None]
