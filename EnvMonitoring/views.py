@@ -847,7 +847,7 @@ class WatermanagmentAPI(generics.GenericAPIView):
 
 
 class NoiseWhithinLimitAPI(generics.GenericAPIView):
-    serializer_class = NoisemanagementSerializer
+    serializer_class = NoiseWhihinLimitSerializer
     parser_classes = [MultiPartParser]
     def post(self, request, *args, **kwargs):
         # typeOfArea = self.request.query_params.get("typeOfArea")
