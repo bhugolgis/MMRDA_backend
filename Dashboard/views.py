@@ -20,64 +20,34 @@ class PAPCategoryDashboardView(ListAPIView):
     queryset = PAP.objects.all()
 
     def get(self, request, *args, **kwargs):
-        land_use_type = [
-    "Residential Land",
-    "Private Land",
-    "Other",
-    "Institutional Land",
-    "Government Land",
-    "Commercial Land"
-        ]
         packages = self.request.query_params.get("packages")
         quarter = self.request.query_params.get("quarter")
-        #if package and quarter are given
+
+        # Apply filters if parameters are provided
         if packages and quarter:
-            categoryOfPap = PAP.objects.filter(packages = packages , quarter = quarter).values('categoryOfPap').annotate(count=Count('categoryOfPap'))
-            print(categoryOfPap)
-
-            if not categoryOfPap:
-                return Response({'message': 'no data found'}, status=status.HTTP_400_BAD_REQUEST)
-
-            lable = [count['categoryOfPap'] for count in categoryOfPap]
-            dataset_PAP = [count['count'] for count in categoryOfPap]
-            # # if no values when filtered
-            # for value in land_use_type:
-            #     if value not in lable:
-            #         lable.append(value)
-            #         dataset_PAP.append(0)
+            category_of_pap = PAP.objects.filter(packages=packages, quarter=quarter).values('categoryOfPap').annotate(count=Count('categoryOfPap'))
         else:
-            categoryOfPap = PAP.objects.values('categoryOfPap').annotate(count=Count('categoryOfPap'))
-            print(categoryOfPap)
+            category_of_pap = PAP.objects.values('categoryOfPap').annotate(count=Count('categoryOfPap'))
 
-            if not categoryOfPap:
-                return Response({'message': 'no data found'}, status=status.HTTP_400_BAD_REQUEST)
-            lable = [count['categoryOfPap'] for count in categoryOfPap]
-            lable.sort(reverse=True)
-            dataset_PAP = [count['count'] for count in categoryOfPap]
-            dataset_PAP.sort(reverse=True)
-            # print(dataset_PAP)
-        # lable_PAP = [count['categoryOfPap'] for count in categoryOfPap]
+        # Check if any data is found
+        if not category_of_pap:
+            return Response({'message': 'No data found'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # dataset_PAP = [22 , 22 , 20 , 25 , 23 , 22]
-        # dataset_Rehabilitations = [13 ,13 , 8 , 17, 13 , 17]
-        # result = []
-        # for i in range(len(dataset_PAP)):
-        #     percentage = int((dataset_Rehabilitations[i] / dataset_PAP[i]) * 100)
-        #     result.append(percentage)
-        # totel_identified = sum(dataset_PAP)
-        # total_Rehabilitations = sum(dataset_Rehabilitations)
-        # total_percentage = int(total_Rehabilitations / totel_identified * 100)
+        # Extract labels and counts, handle None values
+        labels = [item['categoryOfPap'] for item in category_of_pap if item['categoryOfPap'] is not None]
+        dataset_pap = [item['count'] for item in category_of_pap if item['categoryOfPap'] is not None]
 
-        return Response({'status': 'success',
-                        'Message': 'Data Fetched successfully',
-                        'label' : lable ,
-                        'dataset_PAP': dataset_PAP,
-                        # 'dataset_Rehabilitations' : dataset_Rehabilitations ,
-                        # 'percentage' : result ,
-                        # 'totel_identified' : totel_identified, 
-                        # 'total_Rehabilitations' : total_Rehabilitations , 
-                        # 'total_percentage' : total_percentage , 
-                         })
+        # Sort labels and dataset_pap together
+        sorted_labels_and_counts = sorted(zip(labels, dataset_pap), reverse=True)
+        sorted_labels = [label for label, _ in sorted_labels_and_counts]
+        sorted_dataset_pap = [count for _, count in sorted_labels_and_counts]
+
+        return Response({
+            'status': 'success',
+            'Message': 'Data fetched successfully',
+            'label': sorted_labels,
+            'dataset_PAP': sorted_dataset_pap,
+        }, status=status.HTTP_200_OK)
 
 
 class CategoryWiseCompensationChart(APIView):
@@ -463,39 +433,45 @@ class AirChartView(generics.GenericAPIView):
 class SocialMonitoringCountDashboardView(APIView):
     serializer_class = SocialMonitoringCountDashboardViewSerializer
     #Need to be optimized
-    def get(self, request,quarter, packages, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        quarter = request.query_params.get('quarter')
+        packages = request.query_params.get('packages')
 
-        PAPCount = PAP.objects.all().filter(packages=packages, quarter=quarter).count()
-        EligiblePAPCount = PAP.objects.filter(eligibility='Eligible', packages=packages, quarter=quarter).count()
-        NonEligiblePAPCount = PAP.objects.filter(eligibility='Not Eligible', packages=packages, quarter=quarter).count()
-        ReallocateCount = Rehabilitation.objects.all().filter(packages=packages, quarter=quarter).count()
+        # Base queryset
+        pap_queryset = PAP.objects.all()
+        rehab_queryset = Rehabilitation.objects.all()
+
+        # Apply filters if parameters are provided
+        if quarter:
+            pap_queryset = pap_queryset.filter(quarter=quarter)
+            rehab_queryset = rehab_queryset.filter(quarter=quarter)
+        if packages:
+            pap_queryset = pap_queryset.filter(packages=packages)
+            rehab_queryset = rehab_queryset.filter(packages=packages)
+
+        # Calculate counts
+        PAPCount = pap_queryset.count()
+        EligiblePAPCount = pap_queryset.filter(eligibility='Eligible').count()
+        NonEligiblePAPCount = pap_queryset.filter(eligibility='Not Eligible').count()
+        ReallocateCount = rehab_queryset.count()
         NonReallocateCount = PAPCount - ReallocateCount
 
-
+        # Print debug information
         print('eligible_count:', EligiblePAPCount, 'none_count:', NonEligiblePAPCount)
 
-        # for obj in queryset:
-        #   print(obj.__dict__)
-
-        # # Serialize the queryset using your custom serializer
-        # serializer = SocialMonitoringCountDashboardViewSerializer(queryset, many=True)
-        # serialized_data = serializer.data
-
-        # for obj in serialized_data:
-        #   print(obj)
-
+        # Return response
         if PAPCount == 0:
-            return Response({'Message': 'No data Found',
-                            'status': 'success'})
+            return Response({'Message': 'No data Found', 'status': 'success'})
 
-        return Response({'status': 'success',
-                        'Message': 'Data Fetched successfully',
-                         'PAPcount': PAPCount,
-                         'EligiblePAPCount': EligiblePAPCount,
-                         'NonEligiblePAPCount': NonEligiblePAPCount,
-                         'ReallocateCount': ReallocateCount,
-                         'NonReallocateCount': NonReallocateCount,
-                         }, status=200)
+        return Response({
+            'status': 'success',
+            'Message': 'Data Fetched successfully',
+            'PAPcount': PAPCount,
+            'EligiblePAPCount': EligiblePAPCount,
+            'NonEligiblePAPCount': NonEligiblePAPCount,
+            'ReallocateCount': ReallocateCount,
+            'NonReallocateCount': NonReallocateCount,
+        }, status=200)
     
 
 

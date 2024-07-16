@@ -7,7 +7,7 @@ urlpatterns = [
      path('CategoryWiseCompensationChart', CategoryWiseCompensationChart.as_view() , name='PAP Dashboard View'),
      path('IdentifiedPAPView', IdentifiedPAPDashboardView.as_view(), name='PAP Dashboard View'),
      
-     path('SocialMonitoringDashboardCount/<str:quarter>/<str:packages>', SocialMonitoringCountDashboardView.as_view(), name='PAP Count'),
+     path('SocialMonitoringDashboardCount/', SocialMonitoringCountDashboardView.as_view(), name='PAP Count'),
 
      path('LabourcampFaciliteis<str:labourCampName>/<str:quarter>',LabourCampFacilitiesDashboardView.as_view(), name='labour Dashboard View'),
      path('campFaciliteisOverAll',LabourCampFacilitiesOverallDashboardView.as_view(), name='labour Dashboard View'),
