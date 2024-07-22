@@ -37,11 +37,36 @@ class PAPCategoryDashboardView(ListAPIView):
         labels = [item['categoryOfPap'] for item in category_of_pap if item['categoryOfPap'] is not None]
         dataset_pap = [item['count'] for item in category_of_pap if item['categoryOfPap'] is not None]
 
-        # Sort labels and dataset_pap together
-        sorted_labels_and_counts = sorted(zip(labels, dataset_pap), reverse=True)
-        sorted_labels = [label for label, _ in sorted_labels_and_counts]
-        sorted_dataset_pap = [count for _, count in sorted_labels_and_counts]
 
+        desired_order = [
+            "Residential Land",
+            "Commercial Land",
+            "Private Land",
+            "Government Land",
+            "Institutional Land",
+            "Other"
+        ]
+
+        # Sort labels and dataset_pap together
+        # sorted_labels_and_counts = sorted(zip(labels, dataset_pap), reverse=True)
+        # sorted_labels = [label for label, _ in sorted_labels_and_counts]
+        # sorted_dataset_pap = [count for _, count in sorted_labels_and_counts]
+
+        sorted_labels = []
+        sorted_dataset_pap = []
+        for category in desired_order:
+            for item in category_of_pap:
+                if item['categoryOfPap'] == category:
+                    sorted_labels.append(category)
+                    sorted_dataset_pap.append(item['count'])
+                    break  # Stop iterating through category_of_pap once a match is found
+
+        # Handle cases where categories are not present in data
+        missing_categories = set(desired_order) - set(sorted_labels)
+        for category in missing_categories:
+            sorted_labels.append(category)
+            sorted_dataset_pap.append(0)  # Add 0 count for missing categories
+        
         return Response({
             'status': 'success',
             'Message': 'Data fetched successfully',
@@ -52,53 +77,27 @@ class PAPCategoryDashboardView(ListAPIView):
 
 class CategoryWiseCompensationChart(APIView):
     # not working when not passing parameters
-    def get(self, request, *args , **kwargs,):
-        packages = self.request.query_params.get("packages")
-        quarter = self.request.query_params.get("quarter")
-        print(packages)
-        print(quarter)
-        # Rehabilitations = Rehabilitation.objects.filter(packages = packages , quarter = quarter).values('categoryOfPap').annotate(count=Count('categoryOfPap'))
-        # dataset_Rehabilitations = [count['count'] for count in Rehabilitations]
-        # print(Rehabilitations)
-        # label = [count['categoryOfPap'] for count in Rehabilitations]
-        # print(label)
+    def get(self, request, *args, **kwargs):
+        packages = request.query_params.get("packages")
+        quarter = request.query_params.get("quarter")
 
         if packages and quarter:
             Compensation_Status = Rehabilitation.objects.filter(packages=packages, quarter=quarter).values('compensationStatus').annotate(count=Count('compensationStatus'))
-            
-            if not Compensation_Status:
-                return Response({'message': 'no data found'}, status=status.HTTP_400_BAD_REQUEST)
-
-            label_Compensation_Status = [count['compensationStatus'] for count in Compensation_Status]
-            # print(label_Compensation_Status)
-            dataset_Compensation_Status = [count['count'] for count in Compensation_Status]
-            # print(dataset_Compensation_Status)
-
-            return Response({'status': 'success',
-                            'Message': 'Data Fetched successfully',
-                            # 'label' : label ,
-                            # 'dataset_Rehabilitations': dataset_Rehabilitations,
-                            'label_Compensation_Status' : label_Compensation_Status ,
-                            'dataset_Compensation_Status': dataset_Compensation_Status
-                            })
         else:
             Compensation_Status = Rehabilitation.objects.values('compensationStatus').annotate(count=Count('compensationStatus'))
 
-            if not Compensation_Status:
-                return Response({'message': 'no data found'}, status=status.HTTP_400_BAD_REQUEST)
+        if not Compensation_Status:
+            return Response({'message': 'no data found'}, status=status.HTTP_400_BAD_REQUEST)
 
-            label_Compensation_Status = [count['compensationStatus'] for count in Compensation_Status]
-            # print(label_Compensation_Status)
-            dataset_Compensation_Status = [count['count'] for count in Compensation_Status]
-            # print(dataset_Compensation_Status)
+        label_Compensation_Status = [item['compensationStatus'] for item in Compensation_Status]
+        dataset_Compensation_Status = [item['count'] for item in Compensation_Status]
 
-            return Response({'status': 'success',
-                            'Message': 'Data Fetched successfully',
-                            # 'label' : label ,
-                            # 'dataset_Rehabilitations': dataset_Rehabilitations,
-                            'label_Compensation_Status' : label_Compensation_Status ,
-                            'dataset_Compensation_Status': dataset_Compensation_Status
-                            })
+        return Response({
+            'status': 'success',
+            'Message': 'Data Fetched successfully',
+            'label_Compensation_Status': label_Compensation_Status,
+            'dataset_Compensation_Status': dataset_Compensation_Status
+        }, status=status.HTTP_200_OK)
 
 
 class IdentifiedPAPDashboardView(APIView):
@@ -117,6 +116,7 @@ class IdentifiedPAPDashboardView(APIView):
 
 class RehabilitatedPAPDashboardView(GenericAPIView):
     serializer_class = RehabilationDashboardSerializer
+    parser_classes = [MultiPartParser]
 
     def get(self, request):
         packages = self.request.query_params.get("packages")
