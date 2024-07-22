@@ -95,7 +95,7 @@ class CategoryWiseCompensationChart(APIView):
         desired_order = [
             "Cash Compensation",
             "Land Provided Area",
-            "Alternate Accommodation",
+            "Alternate accommodation",
             "Commercial Unit"
         ]
 
