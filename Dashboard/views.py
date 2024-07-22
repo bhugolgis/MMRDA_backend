@@ -92,11 +92,34 @@ class CategoryWiseCompensationChart(APIView):
         label_Compensation_Status = [item['compensationStatus'] for item in Compensation_Status]
         dataset_Compensation_Status = [item['count'] for item in Compensation_Status]
 
+        desired_order = [
+            "Cash Compensation",
+            "Land Provided Area",
+            "Alternate Accommodation",
+            "Commercial Unit"
+        ]
+
+        sorted_label_Compensation_Status = []
+        sorted_dataset_Compensation_Status = []
+        for category in desired_order:
+            for item in Compensation_Status:
+                if item['compensationStatus'] == category:
+                    sorted_label_Compensation_Status.append(category)
+                    sorted_dataset_Compensation_Status.append(item['count'])
+                    break  # Stop iterating through Compensation_Status once a match is found
+
+        # Handle missing categories
+        missing_categories = set(desired_order) - set(sorted_label_Compensation_Status)
+        for category in missing_categories:
+            sorted_label_Compensation_Status.append(category)
+            sorted_dataset_Compensation_Status.append(0)  # Add 0 count for missing categories
+
+
         return Response({
             'status': 'success',
             'Message': 'Data Fetched successfully',
-            'label_Compensation_Status': label_Compensation_Status,
-            'dataset_Compensation_Status': dataset_Compensation_Status
+            'label_Compensation_Status': sorted_label_Compensation_Status,
+            'dataset_Compensation_Status': sorted_dataset_Compensation_Status
         }, status=status.HTTP_200_OK)
 
 
