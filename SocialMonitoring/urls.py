@@ -15,6 +15,7 @@ urlpatterns = [
 
     path('rehabitation' , RehabilitationView.as_view() , name = "rehabitation"),
     path('rehabitationpapid/<str:PAPID>' , RehabilatedPAPIDView.as_view() , name = "rehabitation"),
+    path ('rehabitation/<int:id>' , RehabilitationUpdateView.as_view() , name = "rehabitationUpdate"),
        
     
 

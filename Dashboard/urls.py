@@ -24,7 +24,7 @@ urlpatterns = [
 
      path('Sourceofmaterial',MaterialSourceTypeCountChart.as_view() , name = 'Material'),
      path('Materilcondition',MaterialConditionChart.as_view() , name = 'Material'),
-     path('Incidenttype/<str:quarter>/<str:packages>',IncidenttypeCountchart.as_view() , name = 'Incident Type char'),
+     path('Incidenttype',IncidenttypeCountchart.as_view() , name = 'Incident Type char'),
      path('WaterCondition',WaterConditionChart.as_view() , name = 'Water condition char'),
      path('AirChartView/<str:month>/<int:year>',AirChartView.as_view() , name = 'AIr chart'),
      path('AirAQIChartDashboardView/<str:quarter>/<str:packages>',AirAQIChartDashboardView.as_view() , name = 'AIr chart'),

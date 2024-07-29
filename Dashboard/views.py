@@ -77,7 +77,7 @@ class PAPCategoryDashboardView(ListAPIView):
 
 class CategoryWiseCompensationChart(APIView):
     # not working when not passing parameters
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         packages = request.query_params.get("packages")
         quarter = request.query_params.get("quarter")
 
@@ -394,20 +394,52 @@ class MaterialConditionChart(APIView):
 
 class IncidenttypeCountchart(APIView):
 # need proper response for no data available like only CA-08 and July September data is available
-    def get(self, request, packages, quarter):
-        counts = occupationalHealthSafety.objects.values('typeOfIncident').filter(packages=packages, quarter=quarter).exclude(typeOfIncident="Man Days Lost").annotate(count = Count('typeOfIncident'))
-        label = [count['typeOfIncident'] for count in counts]
-        dataset = [count['count'] for count in counts]
-        
+    def get(self, request):
 
-        if not label:
-            return Response({ 'Message': 'No data found', 
-                         }, status=status.HTTP_404_NOT_FOUND)
+        packages = request.query_params.get("packages")
+        quarter = request.query_params.get("quarter")
+
+        if packages and quarter:
+            Incident_Type = occupationalHealthSafety.objects.filter(packages=packages, quarter=quarter).values('typeOfIncident').annotate(count=Count('typeOfIncident'))
+        else:
+            Incident_Type = occupationalHealthSafety.objects.values('typeOfIncident').annotate(count=Count('typeOfIncident'))
+
+        if not Incident_Type:
+            return Response({'message': 'no data found'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        desired_order = [
+            "Palm tree has broken",
+            "Major (Road accident)",
+            "Property damage",
+            "Near Miss",
+            "3rd Party Incident",
+            "First Aid Cases",
+            "Reportable Non-Fatal Accident",
+            "Dangerous Occurrences",
+            "Natural Death",
+            "Road Incident",
+            "Reportable Accident"
+        ]
+
+        sorted_label_Compensation_Status = []
+        sorted_dataset_Compensation_Status = []
+        for category in desired_order:
+            for item in Incident_Type:
+                if item['typeOfIncident'] == category:
+                    sorted_label_Compensation_Status.append(category)
+                    sorted_dataset_Compensation_Status.append(item['count'])
+                    break  # Stop iterating through Compensation_Status once a match is found
+
+        # Handle missing categories
+        missing_categories = set(desired_order) - set(sorted_label_Compensation_Status)
+        for category in missing_categories:
+            sorted_label_Compensation_Status.append(category)
+            sorted_dataset_Compensation_Status.append(0)  # Add 0 count for missing categories
 
         return Response({'status': 'success',
                         'Message': 'Data was successfully fetched',
-                        'dataset': dataset,
-                        'label' : label , 
+                        'dataset': sorted_dataset_Compensation_Status,
+                        'label' : sorted_label_Compensation_Status , 
                          })
         
 

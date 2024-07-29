@@ -139,12 +139,13 @@ class PapUpdateSerialzier(serializers.ModelSerializer):
         The function validates the longitude and latitude values in a given data dictionary, ensuring
         that they have at most 6 digits after the decimal point.
         """
-        long = data['longitude'].split('.')[-1]
-        if len(long) > 6:
-            raise serializers.ValidationError("longitude must have at most 6 digits after the decimal point.")
-        lat =  data['latitude'].split('.')[-1]
-        if len(lat) > 6:
-            raise serializers.ValidationError("latitude must have at most 6 digits after the decimal point.")
+        if data['longitude'] and data['latitude']:
+            long = data['longitude'].split('.')[-1]
+            if len(long) > 6:
+                raise serializers.ValidationError("longitude must have at most 6 digits after the decimal point.")
+            lat =  data['latitude'].split('.')[-1]
+            if len(lat) > 6:
+                raise serializers.ValidationError("latitude must have at most 6 digits after the decimal point.")
         return data
 
 class papviewserialzer(GeoFeatureModelSerializer):
@@ -208,6 +209,14 @@ class RehabilitationSerializer(serializers.ModelSerializer):
         Rehabilitation_data = Rehabilitation.objects.create(**data)
   
         return Rehabilitation_data
+
+
+# Rehab update 
+class RehabilitationUpdateSerialzer(GeoFeatureModelSerializer):
+    class Meta:
+        model = Rehabilitation
+        fields = '__all__'
+        geo_field = 'location'
 
 
 class RehabilitationViewSerializer(GeoFeatureModelSerializer):

@@ -177,12 +177,23 @@ class PapView(generics.GenericAPIView):
                                 'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
+        
+    # queryset = PAP.objects.all()
+    # serializer_class = PapSerailzer
+
+    # def patch(self, request, *args, **kwargs):
+    #     partial = True  # Allow partial updates
+    #     instance = self.get_object()
+    #     serializer = self.get_serializer(instance, data=request.data, partial=partial)
+    #     serializer.is_valid(raise_exception=True)
+    #     self.perform_update(serializer)
+    #     return Response(serializer.data)
 
     
 # The `papupdateView` class is a view in a Django REST framework API that handles updating a PAP
 # object with partial data.
 class papupdateView(generics.UpdateAPIView):
-    serializer_class = PapUpdateSerialzier
+    serializer_class = papviewserialzer
     renderer_classes = [ErrorRenderer]
     #parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated]
@@ -194,11 +205,11 @@ class papupdateView(generics.UpdateAPIView):
         
         """
         try:
-            instance = PAP.objects.get(PAPID=id, user=request.user.id)
+            instance = PAP.objects.get(id=id, user=request.user.id)
         except Exception:
             return Response({"message": "There is no PAP data for user %s" % (request.user.username)})
 
-        serializer = PapUpdateSerialzier(
+        serializer = papviewserialzer(
             instance, data=request.data, partial=True)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -339,6 +350,35 @@ class RehabilitationView(generics.GenericAPIView):
                                 'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
+
+
+
+# Rehab Edit
+
+class RehabilitationUpdateView(generics.UpdateAPIView):
+    serializer_class = RehabilitationUpdateSerialzer
+    renderer_classes = [ErrorRenderer]
+    #parser_classes = [MultiPartParser]
+    permission_classes = [IsAuthenticated]
+
+    def update(self, request, id,  **kwargs):
+        """
+        The function updates a PAP object with the given ID and user ID, using the provided request data
+        and a serializer.
+        
+        """
+        try:
+            instance = Rehabilitation.objects.get(id=id, user=request.user.id)
+        except Exception:
+            return Response({"message": "There is no PAP data for user %s" % (request.user.username)})
+
+        serializer = RehabilitationUpdateSerialzer(
+            instance, data=request.data, partial=True)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response({"Message": "Please Enter a valid data"})
 
 
 # ----------------------------- Labour Camp details View --------------------------------
