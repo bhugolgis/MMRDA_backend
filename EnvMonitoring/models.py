@@ -33,7 +33,7 @@ class sensors(models.Model):
     def __str__(self) -> str:
         return self.Name
 
-
+# Why is user a field, what is it used for ? testing/debugging which user created which data? or to track
 class  Air(Baseclass):
     # sensor = models.ForeignKey(sensors , related_name="sensor_name" , on_delete=models.CASCADE , null = True , blank = True)
     user = models.ForeignKey(User, related_name='airs_user', on_delete=models.CASCADE, null=True, blank=True)

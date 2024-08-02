@@ -25,6 +25,7 @@ class PostSensorLocationDetailsViewSerializer(GeoFeatureModelSerializer):
         fields = '__all__'
         geo_field = 'location'
 
+
 class AirSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     longitude=serializers.CharField(max_length=50,required=True )
@@ -50,6 +51,28 @@ class AirSerializer(serializers.ModelSerializer):
         data.pop('longitude')
         return Air.objects.create(**data)
 
+
+class AirUpdateSerializer(serializers.ModelSerializer):
+    longitude = serializers.CharField(max_length=50, required=False)
+    latitude = serializers.CharField(max_length=50, required=False)
+    quarter = serializers.CharField(required=False)
+    packages = serializers.CharField(required=False)
+
+    class Meta:
+        model = Air
+        fields = (
+            'quarter', 'packages', 'month', 'longitude', 'latitude', 'place_location', 
+            'dateOfMonitoring', 'PM10', 'PM2_5', 'SO2', 'NOx', 'CO', 'AQI', 'Remarks'
+        )
+
+    def validate(self, data):
+        long = data.get('longitude', '').split('.')[-1]
+        if long and len(long) > 6:
+            raise serializers.ValidationError("Longitude must have at most 6 digits after the decimal point.")
+        lat = data.get('latitude', '').split('.')[-1]
+        if lat and len(lat) > 6:
+            raise serializers.ValidationError("Latitude must have at most 6 digits after the decimal point.")
+        return data
 
 
 class AirViewSerializer(GeoFeatureModelSerializer):
@@ -99,6 +122,36 @@ class waterviewserializer(GeoFeatureModelSerializer):
         geo_field='location'
 
 
+# Update
+class WaterUpdateSerializer(serializers.ModelSerializer):
+    longitude = serializers.CharField(max_length=50, required=False)
+    latitude = serializers.CharField(max_length=50, required=False)
+    quarter = serializers.CharField(required=False)
+    packages = serializers.CharField(required=False)
+
+    class Meta:
+        model = water
+        fields = (
+            'quarter', 'packages', 'month', 'dateOfMonitoringTwo', 'longitude', 'latitude',
+            'qualityOfWater', 'sourceOfWater', 'waterDisposal', 'pH', 'trueColor', 'turbidity',
+            'odour', 'totalDissolvedSolids', 'totalAlkalinityAsCaCO3', 'totalHardnessAsCaCO3',
+            'calcium', 'magnesium', 'chlorides', 'fluoride', 'sulphate', 'nitrate', 'iron',
+            'zinc', 'copper', 'aluminum', 'nickel', 'manganese', 'phenolicCompounds', 'sulphide',
+            'cadmium', 'cyanide', 'lead', 'mercury', 'totalArsenic', 'totalChromium',
+            'totalColiform', 'eColi', 'WQI'
+        )
+
+    def validate(self, data):
+        long = data.get('longitude', '').split('.')[-1]
+        if long and len(long) > 6:
+            raise serializers.ValidationError("Longitude must have at most 6 digits after the decimal point.")
+        lat = data.get('latitude', '').split('.')[-1]
+        if lat and len(lat) > 6:
+            raise serializers.ValidationError("Latitude must have at most 6 digits after the decimal point.")
+        return data
+    
+    
+
 class NoiseSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     longitude=serializers.CharField(max_length=50,required=False)
@@ -125,6 +178,29 @@ class NoiseSerializer(serializers.ModelSerializer):
         data.pop('longitude')
         return Noise.objects.create(**data)
 
+
+class NoiseUpdateSerializer(serializers.ModelSerializer):
+    longitude = serializers.CharField(max_length=50, required=False)
+    latitude = serializers.CharField(max_length=50, required=False)
+    quarter = serializers.CharField(required=False)
+    packages = serializers.CharField(required=False)
+
+    class Meta:
+        model = Noise
+        fields = (
+            'quarter', 'month', 'packages', 'longitude', 'latitude', 'dateOfMonitoringThree',
+            'noiseLevel_day', 'noiseLevel_night', 'monitoringPeriod_day', 'monitoringPeriod_night',
+            'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night'
+        )
+
+    def validate(self, data):
+        long = data.get('longitude', '').split('.')[-1]
+        if long and len(long) > 6:
+            raise serializers.ValidationError("Longitude must have at most 6 digits after the decimal point.")
+        lat = data.get('latitude', '').split('.')[-1]
+        if lat and len(lat) > 6:
+            raise serializers.ValidationError("Latitude must have at most 6 digits after the decimal point.")
+        return data
 
 
 class Noiseviewserializer(GeoFeatureModelSerializer):

@@ -14,11 +14,11 @@ urlpatterns = [
     path('airList', AirListView.as_view() , name = 'ListAirView'),
 
     path('water' , WaterView.as_view() , name = 'water Details'),
-    path('water<int:id>' , waterupdateView.as_view() , name = 'water Details'),
+    path('water/<int:id>' , WaterUpdateView.as_view() , name = 'water Details'),
     path('waterList' , waterListView.as_view() , name = 'water Details'),
 
     path('noise' , NoiseView.as_view() , name = "Noise Details"),
-    path('noise<int:id>' , NoiseupdateView.as_view() , name = "Noise Details"),
+    path('noise/<int:id>' , NoiseUpdateView.as_view() , name = "Noise Details"),
     path('noiseList' ,NoiseListView.as_view() , name = "Noise"),
     path('noiseWhithinLimit' ,NoiseWhithinLimitAPI.as_view() , name = "noiseWhithinLimit"),
 

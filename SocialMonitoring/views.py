@@ -190,7 +190,7 @@ class PapUpdateView(generics.UpdateAPIView):
         Retrieve the PAP object based on the ID and ensure it's owned by the current user.
         """
         try:
-            return PAP.objects.get(id=self.kwargs['id'], user=self.request.user)
+            return PAP.objects.get(id=self.kwargs['id'])
         except PAP.DoesNotExist:
             return None
 
@@ -389,7 +389,7 @@ class RehabilitationUpdateView(generics.UpdateAPIView):
         Retrieve the Rehabilitation object based on the ID and ensure it's owned by the current user.
         """
         try:
-            return Rehabilitation.objects.get(id=self.kwargs['id'], user=self.request.user)
+            return Rehabilitation.objects.get(id=self.kwargs['id'])
         except Rehabilitation.DoesNotExist:
             return None
 

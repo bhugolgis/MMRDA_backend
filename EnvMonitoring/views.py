@@ -149,26 +149,52 @@ class AirView(generics.GenericAPIView):
                             'message' : "Only consultant and Contractor can fill this form"}, status=status.HTTP_401_UNAUTHORIZED)
 
 class AirUpdateView(generics.UpdateAPIView):
-    serializer_class = AirSerializer
-    # renderer_classes = [ErrorRenderer]
-    permission_classes = [IsAuthenticated , IsConsultant]
-    parser_classes = [MultiPartParser]
+    serializer_class = AirUpdateSerializer
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
+    queryset = Air.objects.all()
 
-    def update(self, request , id ,  **kwargs):
+    def get_object(self):
+        """
+        Retrieve the Air object based on the ID and ensure it's owned by the current user.
+        """
         try:
-            instance = Air.objects.get(id=id,user=request.user.id)
-        except Exception:
-            return Response({'success' : 'success' ,
-                            "message": "There is no Air data for user %s" % (request.user.username)})
+            return Air.objects.get(id=self.kwargs['id'])
+        except Air.DoesNotExist:
+            return None
 
-        serializer = AirSerializer(instance , data=request.data , partial = True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response({'success' : 'success' ,
-                            'message' : 'Data Updated Successfully'} , status= 200)
-        else:
-            return Response({'status' : 'failed' ,
-                            "message": "Please Enter a valid data"} , status= 400)
+    def patch(self, request, *args, **kwargs):
+        """
+        Handle PATCH requests for updating the Air instance.
+        """
+        # Get the object to update
+        air_instance = self.get_object()
+        if not air_instance:
+            return Response({"message": "Air data not found for user."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Use the serializer with the partial flag
+        serializer = self.get_serializer(air_instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Handle latitude and longitude to update location
+        lat = request.data.get('latitude')
+        long = request.data.get('longitude')
+        if lat and long:
+            try:
+                location = Point(float(long), float(lat), srid=4326)
+                air_instance.location = location
+            except (ValueError, TypeError):
+                return Response({"message": "Invalid latitude or longitude values."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Save the updated instance
+        updated_air = serializer.save()
+        data = AirViewSerializer(updated_air).data
+
+        return Response({
+            'status': 'success',
+            'message': 'Data updated successfully',
+            'data': data
+        }, status=status.HTTP_200_OK)
+        
 
 class AirListView(generics.ListAPIView):
 
@@ -235,26 +261,51 @@ class WaterView(generics.GenericAPIView):
                             'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
 
 
-class waterupdateView(generics.UpdateAPIView):
-    # renderer_classes = [ErrorRenderer]
-    serializer_class = waterviewserializer
-    permission_classes = [IsAuthenticated , IsConsultant]
-    parser_classes = [MultiPartParser]
+class WaterUpdateView(generics.UpdateAPIView):
+    serializer_class = WaterUpdateSerializer
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
+    queryset = water.objects.all()
 
-    def update(self, request , id , **kwargs):
+    def get_object(self):
+        """
+        Retrieve the Water object based on the ID and ensure it's owned by the current user.
+        """
         try:
-            instance = water.objects.get(id=id,user=request.user.id)
-        except Exception:
-            return Response({'status' : 'success',
-                            "Message": "There is no Water data for user %s" % (request.user.username)})
-        serializer = AirSerializer(instance , data=request.data , partial = True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response({'status': 'success' ,
-                            'Message' : 'data saved successfully'}, status = 200)
-        else:
-            return Response({'status' : 'failed' ,
-                            "Message": "Please Enter a valid data"} , status= 400)
+            return water.objects.get(id=self.kwargs['id'])
+        except water.DoesNotExist:
+            return None
+
+    def patch(self, request, *args, **kwargs):
+        """
+        Handle PATCH requests for updating the Water instance.
+        """
+        water_instance = self.get_object()
+        print(water_instance)
+        if not water_instance:
+            return Response({"message": "Water data not found for user."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(water_instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Handle latitude and longitude to update location
+        lat = request.data.get('latitude')
+        long = request.data.get('longitude')
+        if lat and long:
+            try:
+                location = Point(float(long), float(lat), srid=4326)
+                water_instance.location = location
+            except (ValueError, TypeError):
+                return Response({"message": "Invalid latitude or longitude values."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Save the updated instance
+        updated_water = serializer.save()
+        data = WaterUpdateSerializer(updated_water).data
+
+        return Response({
+            'status': 'success',
+            'message': 'Data updated successfully',
+            'data': data
+        }, status=status.HTTP_200_OK)
 
 class waterListView(generics.ListAPIView):
     serializer_class = waterviewserializer
@@ -321,22 +372,52 @@ class NoiseView(generics.GenericAPIView):
             return  Response({'status': 'failed',
                             'Message' : "Only consultant and Contractor can fill this form"} , status= status.HTTP_401_UNAUTHORIZED)
 
-class NoiseupdateView(generics.UpdateAPIView):
-    serializer_class = NoiseSerializer
-    parser_classes = [MultiPartParser]
-    permission_classes = [IsAuthenticated , IsConsultant]
+class NoiseUpdateView(generics.UpdateAPIView):
+    serializer_class = NoiseUpdateSerializer
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
+    queryset = Noise.objects.all()
 
-    def update(self, request , id , **kwargs):
+    def get_object(self):
+        """
+        Retrieve the Noise object based on the ID.
+        """
         try:
-            instance = Noise.objects.get(id=id,user=request.user.id)
-        except Exception:
-            return Response({"Message": "There is no Noise data for user %s" % (request.user.username)})
-        serializer = NoiseSerializer(instance , data=request.data , partial = True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response({"msg": "Please Enter a valid data"})
+            return Noise.objects.get(id=self.kwargs['id'])
+        except Noise.DoesNotExist:
+            return None
+
+    def patch(self, request, *args, **kwargs):
+        """
+        Handle PATCH requests for updating the Noise instance.
+        """
+        # Get the object to update
+        noise_instance = self.get_object()
+        if not noise_instance:
+            return Response({"message": "Noise data not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Use the serializer with the partial flag
+        serializer = self.get_serializer(noise_instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Handle latitude and longitude to update location
+        lat = request.data.get('latitude')
+        long = request.data.get('longitude')
+        if lat and long:
+            try:
+                location = Point(float(long), float(lat), srid=4326)
+                noise_instance.location = location
+            except (ValueError, TypeError):
+                return Response({"message": "Invalid latitude or longitude values."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Save the updated instance
+        updated_noise = serializer.save()
+        data = NoiseUpdateSerializer(updated_noise).data
+
+        return Response({
+            'status': 'success',
+            'message': 'Data updated successfully',
+            'data': data
+        }, status=status.HTTP_200_OK)
 
 
 class NoiseListView(generics.ListAPIView):
