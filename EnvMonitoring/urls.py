@@ -10,7 +10,7 @@ urlpatterns = [
     path('generate-aqi' , GenerateAQI.as_view() , name = 'GenerateAQI'),
     path('generate-wqi' , GenerateWQI.as_view() , name = 'GenerateWQI'),
     path('air' , AirView.as_view() , name = 'Air Details'),
-    path('air<int:id>' , AirUpdateView.as_view() , name = 'Air Details'),
+    path('air/<int:id>' , AirUpdateView.as_view() , name = 'Air Details'),
     path('airList', AirListView.as_view() , name = 'ListAirView'),
 
     path('water' , WaterView.as_view() , name = 'water Details'),

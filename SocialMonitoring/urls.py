@@ -10,12 +10,13 @@ urlpatterns = [
     path('labourCampdetailsViewSearch' , labourCampdetailsViewSearch.as_view() , name = "labourCampdetailsView"),
  
     path ('pap' , PapView.as_view() , name = "project affected Person "),
-    path ('pap/<int:id>' , papupdateView.as_view() , name = "project affected Person "),
+    path ('pap/<int:id>' , PapUpdateView.as_view() , name = "project affected Person "),
     path ('paplist' , PapListView.as_view() , name = "project affected Person List "),
 
+    # Rehab spelling is inconsistent (rehabilitation)
     path('rehabitation' , RehabilitationView.as_view() , name = "rehabitation"),
     path('rehabitationpapid/<str:PAPID>' , RehabilatedPAPIDView.as_view() , name = "rehabitation"),
-    path ('rehabitation/<int:id>' , RehabilitationUpdateView.as_view() , name = "rehabitationUpdate"),
+    path('rehabilitation/<int:id>', RehabilitationUpdateView.as_view(), name='rehabilitation-update'),
        
     
 

@@ -6,7 +6,8 @@ from rest_framework.response import Response
 from .renderers import ErrorRenderer
 from django.contrib.gis.geos import Point
 from .models import *
-from .permissions import *
+from .permissions import * # need to optimize / import only that functions that are required
+from .permissions import IsConsultantOrRNR # already imported in above statement, will remove the above statement if all the functions are not being used
 from rest_framework import status
 from rest_framework import filters
 from Training.utils import save_multiple_files
@@ -178,44 +179,68 @@ class PapView(generics.GenericAPIView):
         else:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
         
-    # queryset = PAP.objects.all()
-    # serializer_class = PapSerailzer
 
-    # def patch(self, request, *args, **kwargs):
-    #     partial = True  # Allow partial updates
-    #     instance = self.get_object()
-    #     serializer = self.get_serializer(instance, data=request.data, partial=partial)
-    #     serializer.is_valid(raise_exception=True)
-    #     self.perform_update(serializer)
-    #     return Response(serializer.data)
+class PapUpdateView(generics.UpdateAPIView):
+    serializer_class = PapUpdateSerailzer
+    permission_classes = [IsAuthenticated, IsConsultantOrRNR]
+    # parser_classes = [MultiPartParser]
 
-    
-# The `papupdateView` class is a view in a Django REST framework API that handles updating a PAP
-# object with partial data.
-class papupdateView(generics.UpdateAPIView):
-    serializer_class = papviewserialzer
-    renderer_classes = [ErrorRenderer]
-    #parser_classes = [MultiPartParser]
-    permission_classes = [IsAuthenticated]
-
-    def update(self, request, id,  **kwargs):
+    def get_object(self):
         """
-        The function updates a PAP object with the given ID and user ID, using the provided request data
-        and a serializer.
-        
+        Retrieve the PAP object based on the ID and ensure it's owned by the current user.
         """
         try:
-            instance = PAP.objects.get(id=id, user=request.user.id)
-        except Exception:
-            return Response({"message": "There is no PAP data for user %s" % (request.user.username)})
+            return PAP.objects.get(id=self.kwargs['id'], user=self.request.user)
+        except PAP.DoesNotExist:
+            return None
 
-        serializer = papviewserialzer(
-            instance, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response({"Message": "Please Enter a valid data"})
+    def patch(self, request, *args, **kwargs):
+        """
+        Handle PATCH requests for updating the PAP instance.
+        """
+        # Get the object to update
+        pap_instance = self.get_object()
+        if not pap_instance:
+            return Response({"message": "PAP data not found for user."}, status=status.HTTP_404_NOT_FOUND)
+        
+        # Use the serializer with the partial flag
+        serializer = self.get_serializer(pap_instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        
+         # Handle latitude and longitude to update location
+        lat = request.data.get('latitude')
+        long = request.data.get('longitude')
+        if lat and long:
+            try:
+                location = Point(float(long), float(lat), srid=4326)
+                pap_instance.location = location
+            except (ValueError, TypeError):
+                return Response({"message": "Invalid latitude or longitude values."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Handle file fields
+        file_fields = {
+            'cadastralMapDocuments': 'PAP/PAP_cadastralMapDocuments',
+            'legalDocuments': 'PAP/PAP_legalDocuments',
+            'presentPhotograph': 'PAP/presentphotograph',
+            'documents': 'PAP/documents',
+        }
+
+        file_mapping = {}
+        for field, file_path in file_fields.items():
+            files = request.FILES.getlist(field)
+            if files:
+                file_mapping[field] = []
+                save_multiple_files(files, file_mapping, file_path, field)
+
+        # Save the updated instance
+        updated_pap = serializer.save(**file_mapping)
+        data = self.get_serializer(updated_pap).data
+
+        return Response({
+            'Message': 'Data updated successfully',
+            'status': 'success',
+            'data': data
+        }, status=status.HTTP_200_OK)
 
 
 class PapListView(generics.ListAPIView):
@@ -354,31 +379,62 @@ class RehabilitationView(generics.GenericAPIView):
 
 
 # Rehab Edit
-
+# Not showing all fields updated, check the return response
 class RehabilitationUpdateView(generics.UpdateAPIView):
-    serializer_class = RehabilitationUpdateSerialzer
-    renderer_classes = [ErrorRenderer]
-    #parser_classes = [MultiPartParser]
-    permission_classes = [IsAuthenticated]
+    serializer_class = RehabilitationUpdateSerializer
+    permission_classes = [IsAuthenticated, IsConsultantOrRNR]
 
-    def update(self, request, id,  **kwargs):
+    def get_object(self):
         """
-        The function updates a PAP object with the given ID and user ID, using the provided request data
-        and a serializer.
-        
+        Retrieve the Rehabilitation object based on the ID and ensure it's owned by the current user.
         """
         try:
-            instance = Rehabilitation.objects.get(id=id, user=request.user.id)
-        except Exception:
-            return Response({"message": "There is no PAP data for user %s" % (request.user.username)})
+            return Rehabilitation.objects.get(id=self.kwargs['id'], user=self.request.user)
+        except Rehabilitation.DoesNotExist:
+            return None
 
-        serializer = RehabilitationUpdateSerialzer(
-            instance, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response({"Message": "Please Enter a valid data"})
+    def patch(self, request, *args, **kwargs):
+        """
+        Handle PATCH requests for updating the Rehabilitation instance.
+        """
+        rehabilitation_instance = self.get_object()
+        if not rehabilitation_instance:
+            return Response({"message": "Rehabilitation data not found for user."}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = self.get_serializer(rehabilitation_instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Handle latitude and longitude to update location
+        lat = request.data.get('latitude')
+        long = request.data.get('longitude')
+        if lat and long:
+            try:
+                location = Point(float(long), float(lat), srid=4326)
+                rehabilitation_instance.location = location
+            except (ValueError, TypeError):
+                return Response({"message": "Invalid latitude or longitude values."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Handle file fields
+        file_fields = {
+            'photographs': 'rehabitation/Rehabilitationphotographs',
+            'documents': 'rehabitation/documents',
+        }
+
+        file_mapping = {}
+        for field, file_path in file_fields.items():
+            files = request.FILES.getlist(field)
+            if files:
+                file_mapping[field] = []
+                save_multiple_files(files, file_mapping, file_path, field)
+
+        updated_rehabilitation = serializer.save(**file_mapping)
+        data = self.get_serializer(updated_rehabilitation).data
+
+        return Response({
+            'Message': 'Data updated successfully',
+            'status': 'success',
+            'data': data
+        }, status=status.HTTP_200_OK)
 
 
 # ----------------------------- Labour Camp details View --------------------------------

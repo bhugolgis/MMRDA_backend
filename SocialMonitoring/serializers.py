@@ -124,29 +124,69 @@ class PapSerailzer(serializers.ModelSerializer):
         return PAP.objects.create(**data)
     
    
+class PapUpdateSerailzer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+    longitude = serializers.CharField(max_length=50, required=False)
+    latitude = serializers.CharField(max_length=50, required=False)
+    legalDocuments = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    presentPhotograph = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    cadastralMapDocuments = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    documents = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    cadastralMapID = serializers.CharField(required=False)  # Optional in PATCH
 
-class PapUpdateSerialzier(serializers.ModelSerializer):
-    longitude = serializers.CharField(max_length=10, required=False)
-    latitude = serializers.CharField(max_length=10, required=False)
     class Meta:
         model = PAP
-        fields = ('quarter', 'packages', 'longitude', 'latitude', 'dateOfIdentification',
-                  'addressLine1','streetName','pincode','eligibility', 'categoryOfPap',
-                  'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
-                   'actionTaken', 'notAgreedReason','presentPhotograph','remarks')
-    def validate(self,data):
+        fields = ('quarter', 'packages', 'longitude', 'latitude', 'dateOfMonitoring', 'user', 'dateOfIdentification', 'PAPID', 'cadastralMapID', 'cadastralMapDocuments', 'firstName', 'middleName', 'lastName',
+                  'addressLine1', 'streetName', 'pincode', 'eligibility', 'categoryOfPap',
+                  'areaOfAsset', 'typeOfStructure', 'legalStatus', 'legalDocuments', 'presentPhotograph',
+                  'actionTaken', 'notAgreedReason', 'documents', 'remarks')
+
+    def validate(self, data):
         """
-        The function validates the longitude and latitude values in a given data dictionary, ensuring
+        Validates the longitude and latitude values, ensuring
         that they have at most 6 digits after the decimal point.
         """
-        if data['longitude'] and data['latitude']:
-            long = data['longitude'].split('.')[-1]
-            if len(long) > 6:
-                raise serializers.ValidationError("longitude must have at most 6 digits after the decimal point.")
-            lat =  data['latitude'].split('.')[-1]
-            if len(lat) > 6:
-                raise serializers.ValidationError("latitude must have at most 6 digits after the decimal point.")
+        longitude = data.get('longitude', '')
+        latitude = data.get('latitude', '')
+        
+        if longitude and not self._is_valid_decimal(longitude):
+            raise serializers.ValidationError("Longitude must have at most 6 digits after the decimal point.")
+        if latitude and not self._is_valid_decimal(latitude):
+            raise serializers.ValidationError("Latitude must have at most 6 digits after the decimal point.")
+        
         return data
+
+    def _is_valid_decimal(self, value):
+        """
+        Helper method to check if a value has at most 6 digits after the decimal point.
+        """
+        if '.' in value:
+            return len(value.split('.')[-1]) <= 6
+        return True
+
+
+# class PapUpdateSerialzier(serializers.ModelSerializer):
+#     longitude = serializers.CharField(max_length=10, required=False)
+#     latitude = serializers.CharField(max_length=10, required=False)
+#     class Meta:
+#         model = PAP
+#         fields = ('quarter', 'packages', 'longitude', 'latitude', 'dateOfIdentification',
+#                   'addressLine1','streetName','pincode','eligibility', 'categoryOfPap',
+#                   'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
+#                    'actionTaken', 'notAgreedReason','presentPhotograph','remarks')
+#     def validate(self,data):
+#         """
+#         The function validates the longitude and latitude values in a given data dictionary, ensuring
+#         that they have at most 6 digits after the decimal point.
+#         """
+#         if data['longitude'] and data['latitude']:
+#             long = data['longitude'].split('.')[-1]
+#             if len(long) > 6:
+#                 raise serializers.ValidationError("longitude must have at most 6 digits after the decimal point.")
+#             lat =  data['latitude'].split('.')[-1]
+#             if len(lat) > 6:
+#                 raise serializers.ValidationError("latitude must have at most 6 digits after the decimal point.")
+#         return data
 
 class papviewserialzer(GeoFeatureModelSerializer):
     class Meta:
@@ -211,12 +251,37 @@ class RehabilitationSerializer(serializers.ModelSerializer):
         return Rehabilitation_data
 
 
-# Rehab update 
-class RehabilitationUpdateSerialzer(GeoFeatureModelSerializer):
+# Rehab update (PATCH) check for PUT
+class RehabilitationUpdateSerializer(serializers.ModelSerializer):
+    longitude = serializers.CharField(max_length=50, required=False)
+    latitude = serializers.CharField(max_length=50, required=False)
+    documents = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    photographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+
     class Meta:
         model = Rehabilitation
-        fields = '__all__'
-        geo_field = 'location'
+        fields = ('quarter', 'longitude', 'latitude', 'packages', 'dateOfRehabilitation', 'PAPID',
+                  'firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
+                  'cashCompensationAmount', 'typeOfCompensation', 'otherCompensationType',
+                  'addressLine1', 'streetName', 'pincode', 'rehabLocation', 'allowance', 'area',
+                  'isShiftingAllowance', 'shiftingAllowanceAmount', 'isLivelihoodSupport', 'livelihoodSupportAmount',
+                  'isTraining', 'trainingRemarks', 'typeOfStructure', 'isRelocationAllowance', 'RelocationAllowanceAmount',
+                  'isfinancialSupport', 'financialSupportAmount', 'isCommunityEngagement', 'isEngagementType',
+                  'photographs', 'documents', 'remarks')
+
+    def validate(self, data):
+        """
+        The function validates the longitude and latitude values in a given data dictionary, ensuring
+        that they have at most 6 digits after the decimal point.
+        """
+        long = data.get('longitude', '').split('.')[-1]
+        if long and len(long) > 6:
+            raise serializers.ValidationError("longitude must have at most 6 digits after the decimal point.")
+        lat = data.get('latitude', '').split('.')[-1]
+        if lat and len(lat) > 6:
+            raise serializers.ValidationError("latitude must have at most 6 digits after the decimal point.")
+        return data
+
 
 
 class RehabilitationViewSerializer(GeoFeatureModelSerializer):

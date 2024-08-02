@@ -70,3 +70,6 @@ class IsRNR(BasePermission):
 #         'DELETE': ['%(app_label)s.delete_%(model_name)s'],
 #     }
 
+class IsConsultantOrRNR(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.groups.filter(name__in=['consultant', 'RNR']).exists()
