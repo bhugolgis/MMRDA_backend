@@ -427,12 +427,12 @@ class NoiseListView(generics.ListAPIView):
     queryset = Noise.objects.all()
 
 
-
+#check this API uncommented permission_classes
 class ExistingTreeManagementView(generics.GenericAPIView):
     serializer_class = TreeManagementSerailizer
     # renderer_classes = [ErrorRenderer]
     parser_classes = [MultiPartParser]
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
 
 
     def post(self , request):
@@ -504,22 +504,67 @@ class ExistingTreeManagementView(generics.GenericAPIView):
                             'Message' : "Only consultant and Contractor can fill this form"} , status= status.HTTP_401_UNAUTHORIZED)
 
 
+# Update Existing Tree
 
-class ExistingTreeManagmentUpdateView(generics.UpdateAPIView):
-    serializer_class = TreeManagementSerailizer
-    permission_classes = [IsAuthenticated, IsConsultant]
+class ExistingTreeManagementUpdateView(generics.UpdateAPIView):
+    serializer_class = TreeManagementUpdateSerializer
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
+    queryset = ExistingTreeManagment.objects.all()
 
-    def update(self, request , id , **kwargs):
+    def get_object(self):
+        """
+        Retrieve the ExistingTreeManagment object based on the ID.
+        """
         try:
-            instance = ExistingTreeManagment.objects.get(id=id,user=request.user.id)
-        except Exception:
-            return Response({"msg": "There is no Tree data for user %s" % (request.user.username)})
-        serializer = TreeManagementSerailizer(instance , data=request.data , partial = True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response({"msg": "Please Enter a valid data"})
+            return ExistingTreeManagment.objects.get(id=self.kwargs['id'])
+        except ExistingTreeManagment.DoesNotExist:
+            return None
+
+    def patch(self, request, *args, **kwargs):
+        """
+        Handle PATCH requests for updating the ExistingTreeManagment instance.
+        """
+        # Get the object to update
+        tree_instance = self.get_object()
+        if not tree_instance:
+            return Response({"message": "Tree data not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Use the serializer with the partial flag
+        serializer = self.get_serializer(tree_instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Handle latitude and longitude to update location
+        lat = request.data.get('latitude')
+        long = request.data.get('longitude')
+        if lat and long:
+            try:
+                location = Point(float(long), float(lat), srid=4326)
+                tree_instance.location = location
+            except (ValueError, TypeError):
+                return Response({"message": "Invalid latitude or longitude values."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Handle file fields
+        file_fields = {
+            'photographs': 'ExistingTreeManagement/Photographs',
+            'documents': 'ExistingTreeManagement/documents'
+        }
+
+        file_mapping = {}
+        for field, file_path in file_fields.items():
+            files = request.FILES.getlist(field)
+            file_mapping[field] = []
+            save_multiple_files(files, file_mapping, file_path, field)
+
+        # Save the updated instance
+        updated_tree = serializer.save(**file_mapping)
+        # serializer doesn't show all fields ideally it should show updated field
+        data = TreeManagementUpdateSerializer(updated_tree).data
+
+        return Response({
+            'status': 'success',
+            'message': 'Data updated successfully',
+            'data': data
+        }, status=status.HTTP_200_OK)
 
 
 class ExistingTereeManagementView(generics.ListAPIView):
@@ -623,7 +668,65 @@ class NewTereeManagementView(generics.GenericAPIView):
             return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
 
 
+# New Tree Update
+class NewTreeManagementUpdateView(generics.UpdateAPIView):
+    serializer_class = NewTreeManagmentUpdateSerializer
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
+    queryset = NewTreeManagement.objects.all()
 
+    def get_object(self):
+        """
+        Retrieve the NewTreeManagement object based on the ID.
+        """
+        try:
+            return NewTreeManagement.objects.get(id=self.kwargs['id'])
+        except NewTreeManagement.DoesNotExist:
+            return None
+
+    def patch(self, request, *args, **kwargs):
+        """
+        Handle PATCH requests for updating the NewTreeManagement instance.
+        """
+        # Get the object to update
+        tree_instance = self.get_object()
+        if not tree_instance:
+            return Response({"message": "Tree data not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Use the serializer with the partial flag
+        serializer = self.get_serializer(tree_instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Handle latitude and longitude to update location
+        lat = request.data.get('latitude')
+        long = request.data.get('longitude')
+        if lat and long:
+            try:
+                location = Point(float(long), float(lat), srid=4326)
+                tree_instance.location = location
+            except (ValueError, TypeError):
+                return Response({"message": "Invalid latitude or longitude values."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Handle file fields
+        file_fields = {
+            'photographs': 'NewTreeManagement/Photographs',
+            'documents': 'NewTreeManagement/Documents'
+        }
+
+        file_mapping = {}
+        for field, file_path in file_fields.items():
+            files = request.FILES.getlist(field)
+            file_mapping[field] = []
+            save_multiple_files(files, file_mapping, file_path, field)
+
+        # Save the updated instance
+        updated_tree = serializer.save(**file_mapping)
+        data = NewTreeManagmentUpdateSerializer(updated_tree).data
+
+        return Response({
+            'status': 'success',
+            'message': 'Data updated successfully',
+            'data': data
+        }, status=status.HTTP_200_OK)
 
 class WasteTreatmentsView(generics.GenericAPIView):
     serializer_class = WasteTreatmentsSerializer
@@ -715,22 +818,51 @@ class WasteTreatmentsView(generics.GenericAPIView):
                 return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
 
 
-class wastemanagementUpdateView(generics.UpdateAPIView):
-    serializer_class = wastetreatmentsViewserializer
-    parser_classes = [MultiPartParser]
-    permission_classes = [IsAuthenticated, IsConsultant]
+class WasteTreatmentsUpdateView(generics.UpdateAPIView):
+    serializer_class = WasteTreatmentsUpdateSerializer
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
 
-    def update(self, request , id , **kwargs):
+    def get_object(self):
         try:
-            instance = WasteTreatments.objects.get(id=id,user=request.user.id)
-        except Exception:
-            return Response({"msg": "There is no Tree data for user %s" % (request.user.username)})
-        serializer = WasteTreatmentsSerializer(instance , data=request.data , partial = True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response({"msg": "Please Enter a valid data"})
+            return WasteTreatments.objects.get(id=self.kwargs['id'])
+        except WasteTreatments.DoesNotExist:
+            return None
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Handle coordinates if provided
+        if 'latitude' in request.data and 'longitude' in request.data:
+            lat = float(request.data['latitude'])
+            long = float(request.data['longitude'])
+            instance.location = Point(long, lat, srid=4326)
+        
+        if 'waste_latitude' in request.data and 'waste_longitude' in request.data:
+            waste_lat = float(request.data['waste_latitude'])
+            waste_long = float(request.data['waste_longitude'])
+            instance.wasteHandlingLocation = Point(waste_long, waste_lat, srid=4326)
+        
+        # Handle file fields
+        file_fields = {
+            'photographs': 'Wastetreatment/Photographs',
+            'documents': 'Wastetreatment/documents',
+            'GISPermitsTransportationDocuments': 'Wastetreatment/GISPermitsTransportationDocuments',
+            'TransportationVechicalHasPermissionDocuments': 'Wastetreatment/TransportationVechicalHasPermissionDocuments'
+        }
+
+        file_mapping = {}
+        for field, file_path in file_fields.items():
+            files = request.FILES.getlist(field)
+            file_mapping[field] = []
+            save_multiple_files(files, file_mapping, file_path, field)
+
+        updated_instance = serializer.save(**file_mapping)
+        data = WasteTreatmentsUpdateSerializer(updated_instance).data
+
+        return Response({'status': 'success', 'message': 'Data updated successfully', 'data': data}, status=status.HTTP_200_OK)
+
 
 class MaterialSourcingView(generics.GenericAPIView):
     serializer_class = MaterialManagmentSerializer
@@ -818,23 +950,50 @@ class MaterialSourcingView(generics.GenericAPIView):
                 return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
 
 
-class materialmanagemantUpdate(generics.UpdateAPIView):
-    serializer_class = MaterialManagmentSerializer
-    # renderer_classes = [ErrorRenderer]
-    parser_classes = [MultiPartParser]
-    permission_classes = [IsAuthenticated]
+class MaterialSourcingUpdateView(generics.UpdateAPIView):
+    serializer_class = MaterialManagmentUpdateSerializer
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
 
-    def update(self, request , id , **kwargs):
+    def get_object(self):
         try:
-            instance = MaterialManegmanet.objects.get(id=id,user=request.user.id)
-        except Exception:
-            return Response({"msg": "There is no Tree data for user %s" % (request.user.username)})
-        serializer = MaterialManagmentSerializer(instance , data=request.data , partial = True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data)
-        else:
-            return Response({"msg": "Please Enter a valid data"})
+            return MaterialManegmanet.objects.get(id=self.kwargs['id'])
+        except MaterialManegmanet.DoesNotExist:
+            return None
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Handle coordinates if provided
+        if 'latitude' in request.data and 'longitude' in request.data:
+            lat = float(request.data['latitude'])
+            long = float(request.data['longitude'])
+            instance.location = Point(long, lat, srid=4326)
+        
+        if 'storageLatitude' in request.data and 'storageLongitude' in request.data:
+            storagelat = float(request.data['storageLatitude'])
+            storagelong = float(request.data['storageLongitude'])
+            instance.storageLocation = Point(storagelong, storagelat, srid=4326)
+        
+        # Handle file fields
+        file_fields = {
+            'photographs': 'MaterialManagement/Photographs',
+            'documents': 'MaterialManagement/Documents',
+            'approvals': 'MaterialManagement/Approvals',
+            'materialStoragePhotograph': 'MaterialManagement/StoragePhotograph',
+        }
+
+        file_mapping = {}
+        for field, file_path in file_fields.items():
+            files = request.FILES.getlist(field)
+            file_mapping[field] = []
+            save_multiple_files(files, file_mapping, file_path, field)
+
+        updated_instance = serializer.save(**file_mapping)
+        data = MaterialManagmentUpdateSerializer(updated_instance).data
+
+        return Response({'status': 'success', 'message': 'Data updated successfully', 'data': data}, status=status.HTTP_200_OK)
 
 
 class TreemanagmentAPI(generics.GenericAPIView):

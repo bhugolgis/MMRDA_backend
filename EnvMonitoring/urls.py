@@ -24,15 +24,17 @@ urlpatterns = [
 
     # path('envview' , envMonitoringView.as_view() , name = 'EnvQualityMonitoring'),
     path('IdentifiedTree' , ExistingTreeManagementView.as_view() , name = "Tree Management"),
-    path('treeupdate<int:id>' , ExistingTreeManagmentUpdateView.as_view() , name =" Tree Management"),
+    path('ExistingTree/<int:id>' , ExistingTreeManagementUpdateView.as_view() , name =" Existing Tree Management"),
     path('treeView' , ExistingTereeManagementView.as_view() , name = "Tree Management list"),
     path('GetExistingTreeIDView/<str:treeID>' , GetExistingTreeIDView.as_view() , name = "Tree Management list"),
 
     path('NewTree' , NewTereeManagementView.as_view() , name = "Tree Management"),
+    path('NewTree/<int:id>' , NewTreeManagementUpdateView.as_view() , name = "New Tree Management"),
 
     path('waste' , WasteTreatmentsView.as_view() , name = "Waste Management"),
-    path('materialmanagement' , MaterialSourcingView.as_view() , name = "Material Sourcing") ,
-    path('materialManagement<int:id>' , materialmanagemantUpdate.as_view() , name = "Material Sourcing") ,
+    path('Waste/<int:id>' , WasteTreatmentsUpdateView.as_view() , name = "Waste Management Update"),
+    path('materialmanagement' , MaterialSourcingView.as_view() , name = "MaterialSourcingCreate"),
+    path('materialManagement/<int:id>' , MaterialSourcingUpdateView.as_view() , name = "MaterialSourcingUpdate"),
 
     path('treemanagement/<str:packages>' , TreemanagmentAPI.as_view() , name = "TreemanagmentAPI"),
     path('Airmanagement/<str:packages>' , AirAPI.as_view() , name = "AirAPI"),

@@ -238,6 +238,49 @@ class TreeManagementSerailizer(serializers.ModelSerializer):
         data.pop('longitude')
         return ExistingTreeManagment.objects.create(**data)
 
+
+class TreeManagementUpdateSerializer(serializers.ModelSerializer):
+    longitude = serializers.CharField(max_length=50, required=False)
+    latitude = serializers.CharField(max_length=50, required=False)
+    documents = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    photographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+
+    class Meta:
+        model = ExistingTreeManagment
+        fields = ('quarter', 'month', 'dateOfMonitoring', 'packages', 'longitude', 'latitude', 'treeID', 'commanName',
+                  'botanicalName', 'condition', 'actionTaken', 'photographs', 'documents', 'remarks')
+
+    def validate(self, data):
+        long = data.get('longitude', '').split('.')[-1]
+        if long and len(long) > 6:
+            raise serializers.ValidationError("Longitude must have at most 6 digits after the decimal point.")
+        lat = data.get('latitude', '').split('.')[-1]
+        if lat and len(lat) > 6:
+            raise serializers.ValidationError("Latitude must have at most 6 digits after the decimal point.")
+        return data
+
+
+class NewTreeManagmentUpdateSerializer(serializers.ModelSerializer):
+    longitude = serializers.CharField(max_length=50, required=False)
+    latitude = serializers.CharField(max_length=50, required=False)
+    documents = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    photographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+
+    class Meta:
+        model = NewTreeManagement
+        fields = ('tree', 'quarter', 'month', 'dateOfMonitoring', 'packages', 'longitude', 'latitude',
+                  'commanName', 'botanicalName', 'condition', 'photographs', 'documents', 'remarks')
+
+    def validate(self, data):
+        long = data.get('longitude', '').split('.')[-1]
+        if long and len(long) > 6:
+            raise serializers.ValidationError("Longitude must have at most 6 digits after the decimal point.")
+        lat = data.get('latitude', '').split('.')[-1]
+        if lat and len(lat) > 6:
+            raise serializers.ValidationError("Latitude must have at most 6 digits after the decimal point.")
+        return data
+
+
 class TreeManagmentviewserializer(GeoFeatureModelSerializer):
     class Meta:
         model = ExistingTreeManagment
@@ -328,6 +371,50 @@ class WasteTreatmentsSerializer(serializers.ModelSerializer):
         return WasteTreatments.objects.create(**data)
 
 
+# Update Waste Treatment
+class WasteTreatmentsUpdateSerializer(serializers.ModelSerializer):
+    longitude = serializers.CharField(max_length=50, required=False)
+    latitude = serializers.CharField(max_length=50, required=False)
+    waste_longitude = serializers.CharField(max_length=50, required=False)
+    waste_latitude = serializers.CharField(max_length=50, required=False)
+    documents = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    photographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    GISPermitsTransportationDocuments = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    TransportationVechicalHasPermissionDocuments = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+
+    class Meta:
+        model = WasteTreatments
+        fields = ('quarter', 'month', 'packages', 'longitude', 'latitude', 'dateOfMonitoring', 'wastetype', 
+                  'wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 
+                  'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 
+                  'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 
+                  'iswasteOilQnt', 'isCCPCPaintSludgeQnt', 'isfilterQnt', 'isairFiltersQnt', 'isusedCartridgesQnt', 
+                  'isplasticQnt', 'ispaperQnt', 'iswoodQnt', 'isbottlesQnt', 'isrubberQnt', 'isbioDegradableQuantity', 
+                  'isbioMedicalQuantity', 'ismetalScrapeQuantity', 'iseWasteQuantity', 'isconstructionWasteQuantity', 
+                  'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 
+                  'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments', 
+                  'wastehandling', 'waste_longitude', 'waste_latitude', 'photographs', 'documents', 'remarks')
+
+    def validate(self, data):
+        if 'longitude' in data:
+            long = data['longitude'].split('.')[-1]
+            if len(long) > 6:
+                raise serializers.ValidationError("Longitude must have at most 6 digits after the decimal point.")
+        if 'latitude' in data:
+            lat = data['latitude'].split('.')[-1]
+            if len(lat) > 6:
+                raise serializers.ValidationError("Latitude must have at most 6 digits after the decimal point.")
+        if 'waste_longitude' in data:
+            waste_long = data['waste_longitude'].split('.')[-1]
+            if len(waste_long) > 6:
+                raise serializers.ValidationError("Waste longitude must have at most 6 digits after the decimal point.")
+        if 'waste_latitude' in data:
+            waste_lat = data['waste_latitude'].split('.')[-1]
+            if len(waste_lat) > 6:
+                raise serializers.ValidationError("Waste latitude must have at most 6 digits after the decimal point.")
+        return data
+    
+
 class wastetreatmentsViewserializer(GeoFeatureModelSerializer):
     class Meta:
         model = WasteTreatments
@@ -362,6 +449,45 @@ class MaterialManagmentSerializer(serializers.ModelSerializer):
         data.pop('storageLongitude')
         data.pop('storageLatitude')
         return MaterialManegmanet.objects.create(**data)
+    
+    
+class MaterialManagmentUpdateSerializer(serializers.ModelSerializer):
+    longitude = serializers.CharField(max_length=50, required=False)
+    latitude = serializers.CharField(max_length=50, required=False)
+    storageLongitude = serializers.CharField(max_length=50, required=False)
+    storageLatitude = serializers.CharField(max_length=50, required=False)
+    materialStoragePhotograph = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    approvals = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    documents = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    photographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+
+    class Meta:
+        model = MaterialManegmanet
+        fields = ('quarter', 'month', 'packages', 'longitude', 'latitude', 'dateOfMonitoring', 'typeOfMaterial',
+                  'source', 'sourceOfQuarry', 'materialStorageType', 'storageLongitude', 'storageLatitude',
+                  'materialStorageCondition', 'materialStoragePhotograph', 'approvals', 'documents', 'photographs',
+                  'remarks')
+        
+    def validate(self, data):
+        if 'longitude' in data:
+            long = data['longitude'].split('.')[-1]
+            if len(long) > 6:
+                raise serializers.ValidationError("Longitude must have at most 6 digits after the decimal point.")
+        if 'latitude' in data:
+            lat = data['latitude'].split('.')[-1]
+            if len(lat) > 6:
+                raise serializers.ValidationError("Latitude must have at most 6 digits after the decimal point.")
+        if 'storageLongitude' in data:
+            storage_long = data['storageLongitude'].split('.')[-1]
+            if len(storage_long) > 6:
+                raise serializers.ValidationError("Storage longitude must have at most 6 digits after the decimal point.")
+        if 'storageLatitude' in data:
+            storage_lat = data['storageLatitude'].split('.')[-1]
+            if len(storage_lat) > 6:
+                raise serializers.ValidationError("Storage latitude must have at most 6 digits after the decimal point.")
+        return data
+
+
 
 
 
