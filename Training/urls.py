@@ -11,7 +11,8 @@ urlpatterns = [
     path('photographsList' , photographsListView.as_view() , name = 'photographs list '),
     # path('PhotographsViewupdate/<int:pk>' , updatephotographview.as_view() , name = 'photograph update'),
 
-    path('occupational' , occupationalHealthSafety.as_view() , name = 'occupational Health & Safety') ,
+    path('occupational' , occupationalHealthSafetyView.as_view() , name = 'occupational Health & Safety') ,
+    path('occupational/<int:id>' , OccupationalHealthSafetyUpdateView.as_view() , name = 'OHSUpdate') ,
     path('contactus' , ContactUsView.as_view() , name = 'occupational update'),
     path('contactussearch' , ContactusListView.as_view() , name = 'occupational update'),
     

@@ -1,14 +1,30 @@
 from django.db import models
 from Auth.models import User
-from django.contrib.gis.db.models import PointField, LineStringField
+from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point, Polygon, LineString
-# Create your models here.
+from django.core.exceptions import ValidationError
+
+
+def validate_location_precision(value):
+    """
+    The function `validate_location_precision` checks if a given location value has at most 6 decimal
+    places.
+    
+    :param value: The `value` parameter is expected to be a tuple containing two elements: the latitude
+    and longitude coordinates of a location
+    """
+    # Ensure that the value has at most 6 decimal places
+    if isinstance(value, tuple) and len(value) == 2:
+        lat, lon = value
+        if isinstance(lat, float) and isinstance(lon, float):
+            if len(str(lat).split('.')[-1]) > 6 or len(str(lon).split('.')[-1]) > 6:
+                raise ValidationError("The location must have at most 6 digits after the decimal point.")
 
 
 class Baseclass(models.Model):
     quarter = models.CharField(max_length=255, null=True, blank=True)
     packages = models.CharField(max_length=255,   null=True, blank=True)
-    location = PointField(null=True, blank=True)
+    location = models.PointField(null=True, blank=True  , validators=[validate_location_precision])
     dateOfMonitoring = models.DateField(null=True, blank=True)
 
     class Meta:
@@ -52,7 +68,7 @@ class photographs(models.Model):
     photograph_title = models.CharField(max_length=255, null=True, blank=True)
     photographs_uploaded_by = models.CharField(
         max_length=100, null=True, blank=True)
-    location = PointField(null=True, blank=True)
+    location = models.PointField(null=True, blank=True)
     date = models.DateTimeField(null=True, blank=True)
     site_photographs = models.ImageField(
         upload_to='site_photographs/', null=True, blank=True)
@@ -63,10 +79,7 @@ class photographs(models.Model):
 # information, including various conditions, remarks, and incident details.
 class occupationalHealthSafety(Baseclass):
     choices = [('Complied' , 'Complied'),('Not-Complied' ,'Not-Complied')]
-    
     user = models.ForeignKey(User, related_name='occupational_health_safety_User', on_delete=models.CASCADE, blank=True)
-    location = PointField(blank=True)
-
     # Occupational Facilities
     
     joiningMedicalCheckup = models.BooleanField(null=True, blank=True)
@@ -124,7 +137,6 @@ class occupationalHealthSafety(Baseclass):
     natureOfAccident = models.CharField(max_length=255, blank=True, null=True)
     typeOfIncident = models.CharField(max_length=255,  blank=True, null=True)
     incidentReportingStatus = models.CharField(max_length=255,  blank=True, null=True)
-    incidentLocation = PointField(null=True, blank=True)
     incidentDetails = models.TextField(max_length=255, blank=True, null=True)
     identifiedCauseOfIncident = models.CharField( max_length=255, blank=True, null=True)
     outcome = models.CharField(max_length=255, blank=True, null=True)
@@ -144,7 +156,7 @@ class Contactus(models.Model):
     name = models.CharField(max_length=255, null=True, blank=True)
     email = models.EmailField(max_length=255, verbose_name='Email')
     messsage = models.TextField(max_length=255, blank=True, null=True)
-    location = PointField(blank=True, null=True)
+    location = models.PointField(blank=True, null=True)
     documents = models.CharField(max_length=255 , blank = True , null = True )
     image = models.CharField(max_length=255 , blank = True , null = True )
 

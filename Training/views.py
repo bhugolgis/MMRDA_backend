@@ -4,8 +4,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.parsers import MultiPartParser , FormParser
 from rest_framework.response import Response
 from django.contrib.gis.geos import Point 
-from .models import traning, photographs
-from .permission import IsConsultant
+from .models import *
+# from .models import traning, photographs
+from .permission import IsConsultant, IsContractor
 from rest_framework import filters
 from rest_framework import status
 from MMRDA.utils import error_simplifier
@@ -111,8 +112,8 @@ class photographsListView(generics.GenericAPIView):
 # This code defines an API view that allows authenticated users to create new occupational health and safety records.
 # The view first validates the data submitted by the user. If the data is valid, the view saves the record to the database and returns a success message.
 #  Otherwise, the view returns an error message.
-
-class occupationalHealthSafety (generics.GenericAPIView):
+# Check for incident location
+class occupationalHealthSafetyView(generics.GenericAPIView):
     serializer_class = occupationalHealthSafetySerialziers
     # parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated]
@@ -128,18 +129,10 @@ class occupationalHealthSafety (generics.GenericAPIView):
         if serializer.is_valid():
             lat = float(serializer.validated_data['latitude'])
             long = float(serializer.validated_data['longitude'])
-
             location = Point(long, lat, srid=4326)
-
-            # try: 
-            #     incidentlatitude = float(serializer.validated_data['incidentlatitude'])
-            #     incidentlongitude = float(serializer.validated_data['incidentlongitude'])
-            #     incidentLocation = Point(incidentlongitude, incidentlatitude, srid=4326)
-                
-            # except:
-            #     incidentLocation = None
-
-
+              
+              
+                    
             file_fields = {
                         'documents': 'OccupationalHealth&Safety',
                         'photographs': 'OccupationalHealth&Safety' ,}
@@ -149,8 +142,8 @@ class occupationalHealthSafety (generics.GenericAPIView):
                 files = request.FILES.getlist(field)
                 file_mapping[field] = []
                 save_multiple_files(files, file_mapping, file_path , field)
-                
-            data = serializer.save(location=location, user = request.user , **file_mapping) # , incidentLocation = incidentLocation
+
+            data = serializer.save(location=location, user = request.user , **file_mapping)
             data = occupationalHealthSafetyViewSerializer(data).data
             return Response({'status' : 'success',
                              'Message' : 'Data Saved Successfully'}, status=200)
@@ -158,10 +151,67 @@ class occupationalHealthSafety (generics.GenericAPIView):
             key, value =list(serializer.errors.items())[0]
             # error_message = key+" ,"+ value[0]
             return Response({'status': 'error',
-                            'Message' : value[0]} , status = status.HTTP_400_BAD_REQUEST)
+                            'Message' : value[0],
+                            'data': data} , status = status.HTTP_400_BAD_REQUEST)
 
-   
-      
+
+# Update PATCH API
+class OccupationalHealthSafetyUpdateView(generics.UpdateAPIView):
+    serializer_class = OccupationalHealthSafetyUpdateSerializer
+    permission_classes = [IsAuthenticated, IsConsultant | IsContractor]
+
+    def get_object(self):
+        """
+        Retrieve the occupationalHealthSafety object based on the ID.
+        """
+        try:
+            return occupationalHealthSafety.objects.get(id=self.kwargs['id'])
+        except occupationalHealthSafety.DoesNotExist:
+            return None
+
+    def patch(self, request, *args, **kwargs):
+        """
+        Handle PATCH requests for updating the occupationalHealthSafety instance.
+        """
+        ohs_instance = self.get_object()
+        if not ohs_instance:
+            return Response({"message": "Occupational Health and Safety data not found."}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = self.get_serializer(ohs_instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Handle latitude and longitude to update location
+        lat = request.data.get('latitude')
+        long = request.data.get('longitude')
+        if lat and long:
+            try:
+                location = Point(float(long), float(lat), srid=4326)
+                ohs_instance.location = location
+            except (ValueError, TypeError):
+                return Response({"message": "Invalid latitude or longitude values."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Handle file fields
+        file_fields = {
+            'documents': 'OccupationalHealth&Safety',
+            'photographs': 'OccupationalHealth&Safety',
+        }
+
+        file_mapping = {}
+        for field, file_path in file_fields.items():
+            files = request.FILES.getlist(field)
+            if files:
+                file_mapping[field] = []
+                save_multiple_files(files, file_mapping, file_path, field)
+
+        updated_ohs = serializer.save(**file_mapping)
+        data = self.get_serializer(updated_ohs).data
+
+        return Response({
+            'Message': 'Data updated successfully',
+            'status': 'success',
+            'data': data
+        }, status=status.HTTP_200_OK)
+
 
 class ContactUsView(generics.GenericAPIView):
     serializer_class = ContactusSerializezr

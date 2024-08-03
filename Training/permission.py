@@ -28,3 +28,16 @@ class IsConsultant(BasePermission):
         has_group_permission = _has_group_permission(
             request.user, self.required_group)
         return request.user and has_group_permission
+    
+
+class IsContractor(BasePermission):
+    required_group = ["contractor"]
+
+    def has_permission(self, request, view):
+        """
+        The function checks if the user has a specific group permission.
+        
+        """
+        has_group_permission = _has_group_permission(
+            request.user, self.required_group)
+        return request.user and has_group_permission

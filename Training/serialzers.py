@@ -54,11 +54,11 @@ class photographsViewSerializer(serializers.ModelSerializer):
 # The `occupationalHealthSafetySerialziers` class is a serializer class in Python that defines the
 # fields and behavior for serializing and deserializing data related to occupational health and safety
 # incidents.
+
+# Find a way to create location data by getting lat long and make it  optional , handel that case, currently this situation is not occured.
 class occupationalHealthSafetySerialziers(serializers.ModelSerializer):
-    longitude = serializers.CharField(max_length= 255 , required = False) # longitude
-    # incidentlongitude = serializers.CharField(max_length= 255 , required = False) # longitude
-    latitude = serializers.CharField(max_length= 255, required = False) # latitude
-    # incidentlatitude = serializers.CharField(max_length= 255, required = False) # latitude
+    longitude = serializers.CharField(max_length= 255 , required = True) # longitude
+    latitude = serializers.CharField(max_length= 255, required = True) # latitude
     documents = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
     photographs = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
 
@@ -70,14 +70,48 @@ class occupationalHealthSafetySerialziers(serializers.ModelSerializer):
         'safeMomentPassage' ,'materialKeepingPractice','accidentalCheck','safetyGearStatus',
         'barricading','natureOfAccident' ,'typeOfIncident' , 'incidentReportingStatus', 'incidentDetails' ,
         'identifiedCauseOfIncident' ,'outcome' ,'compensationPaid' ,'manDaysLostCount', 'manDaysLostReason', 'photographs' , 'documents' , 'remarks']
-        # 'incidentlatitude','incidentlongitude',
     
     def create(self,data):
         data.pop('longitude')
         data.pop('latitude')
-        # data.pop('incidentlongitude')
-        # data.pop('incidentlatitude')
         return occupationalHealthSafety.objects.create(**data)
+    
+
+# Update (PATCH) Serializer
+class OccupationalHealthSafetyUpdateSerializer(serializers.ModelSerializer):
+    longitude = serializers.CharField(max_length=255, required=False)
+    latitude = serializers.CharField(max_length=255, required=False)
+    documents = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False), write_only=True, required=False)
+    photographs = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False), write_only=True, required=False)
+
+    class Meta:
+        model = occupationalHealthSafety
+        fields = ['dateOfMonitoring', 'packages', 'quarter', 'longitude', 'latitude',
+                  'joiningMedicalCheckup', 'ppeKit', 'trainingToWorkers', 'houseKeeping',
+                  'powerSupplySystem', 'assemblyArea', 'ambulanceArrangement', 'toiletFacility',
+                  'safeMomentPassage', 'materialKeepingPractice', 'accidentalCheck', 'safetyGearStatus',
+                  'barricading', 'natureOfAccident', 'typeOfIncident', 'incidentReportingStatus', 'incidentDetails',
+                  'identifiedCauseOfIncident', 'outcome', 'compensationPaid', 'manDaysLostCount', 'manDaysLostReason',
+                  'photographs', 'documents', 'remarks']
+
+    def validate(self, data):
+        """
+        Validate the longitude and latitude values, ensuring they have at most 6 digits after the decimal point.
+        """
+        longitude = data.get('longitude')
+        latitude = data.get('latitude')
+        
+        if longitude:
+            long = longitude.split('.')[-1]
+            if len(long) > 6:
+                raise serializers.ValidationError("Longitude must have at most 6 digits after the decimal point.")
+        
+        if latitude:
+            lat = latitude.split('.')[-1]
+            if len(lat) > 6:
+                raise serializers.ValidationError("Latitude must have at most 6 digits after the decimal point.")
+        
+        return data
     
 
 class occupationalHealthSafetyViewSerializer(GeoFeatureModelSerializer):
