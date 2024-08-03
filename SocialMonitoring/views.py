@@ -437,16 +437,16 @@ class RehabilitationUpdateView(generics.UpdateAPIView):
         }, status=status.HTTP_200_OK)
 
 
-# ----------------------------- Labour Camp details View --------------------------------
+# ----------------------------- Labour Camp View --------------------------------
 
 # The `LabourCampDetailsView` class is a view in a Django REST framework API that allows authenticated
 # users who are either consultants or contractors to submit data for a labour camp, with different
 # validation and response logic based on the user's role.
 
-class LabourCampDetailsView(generics.GenericAPIView):
+class LabourCampView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
     parser_classes = [MultiPartParser]
-    serializer_class = LabourCampDetailSerializer
+    serializer_class = LabourCampSerializer
 
     def post(self, request):
         """
@@ -548,29 +548,73 @@ class LabourCampDetailsView(generics.GenericAPIView):
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
 
 
-# The `labourCampUpdateView` class is a view in a Django REST framework API that allows authenticated
-# consultants to update labour camp data.
-class labourCampUpdateView(generics.UpdateAPIView):
-    serializer_class = LabourCampUpdateSerialzier
-    renderer_classes = [ErrorRenderer]
-    #parser_classes = [MultiPartParser]
-    permission_classes = [IsAuthenticated, IsConsultant]
+# PATCH API 
+class LabourCampUpdateView(generics.UpdateAPIView):
+    serializer_class = LabourCampUpdateSerializer
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
 
-    def update(self, request, id,  **kwargs):
+    def get_object(self):
+        """
+        Retrieve the LabourCamp object based on the ID.
+        """
         try:
-            instance = LabourCamp.objects.get(id=id, user=request.user.id)
-        except Exception:
-            return Response({"msg": "There is no labour Camp data for user %s" % (request.user.username)})
+            return LabourCamp.objects.get(id=self.kwargs['id'])
+        except LabourCamp.DoesNotExist:
+            return None
 
-        serializer = LabourCampUpdateSerialzier(
-            instance, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response({'Message': 'data saved successfully',
-                                     'status' : 'success'}, status=200)
-        else:
-            return Response({'Message': "Please enter a valid data",
-                            'error': serializer.errors, 'Status': 'failed'} , status= 400)
+    def patch(self, request, *args, **kwargs):
+        """
+        Handle PATCH requests for updating the LabourCamp instance.
+        """
+        labour_camp_instance = self.get_object()
+        if not labour_camp_instance:
+            return Response({"message": "LabourCamp data not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(labour_camp_instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Handle latitude and longitude to update location
+        lat = request.data.get('latitude')
+        long = request.data.get('longitude')
+        if lat and long:
+            try:
+                location = Point(float(long), float(lat), srid=4326)
+                labour_camp_instance.location = location
+            except (ValueError, TypeError):
+                return Response({"message": "Invalid latitude or longitude values."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Handle file fields
+        file_fields = {
+            'toiletPhotograph': 'Labour Camp/toilet_photographs',
+            'drinkingWaterPhotographs': 'Labour Camp/drinkingWater_photographs',
+            'demarkationOfPathwaysPhotographs': 'Labour Camp/demarkingPathways_photographs',
+            'signagesLabelingPhotographs': 'Labour Camp/signagesLabeling_Photographs',
+            'kitchenAreaPhotographs': 'Labour Camp/KitchenArea_photographs',
+            'fireExtinguishPhotographs': 'Labour Camp/fireExtinguish_photographs',
+            'roomsOrDomsPhotographs': 'Labour Camp/rooms_photographs',
+            'segregationOfWastePhotographs': 'Labour Camp/segrigationOfWaste_Photographs',
+            'regularHealthCheckupPhotographs': 'Labour Camp/RegularHealthCheckup_Photographs',
+            'availabilityOfDoctorPhotographs': 'Labour Camp/AvailabilityOfDoctor_photographs',
+            'firstAidKitPhotographs': 'Labour Camp/FirstAidKit_photographs',
+            'photographs': 'Labour Camp/GenralPhotographs',
+            'documents': 'labourcamp_documents',
+        }
+
+        file_mapping = {}
+        for field, file_path in file_fields.items():
+            files = request.FILES.getlist(field)
+            if files:
+                file_mapping[field] = []
+                save_multiple_files(files, file_mapping, file_path, field)
+
+        updated_labour_camp = serializer.save(**file_mapping)
+        data = self.get_serializer(updated_labour_camp).data
+
+        return Response({
+            'Message': 'Data updated successfully',
+            'status': 'success',
+            'data': data
+        }, status=status.HTTP_200_OK)
 
 # ------------------------------------ Construction site View -----------------------------------------------------
 
@@ -672,34 +716,68 @@ class constructionSiteView(generics.GenericAPIView):
 
 
 # The ConstructionSiteUpdateView class is a view in a Python Django application that handles updating construction site data.
-class ConstructionSiteUpdateView(generics.GenericAPIView):
-    serializer_class = constructionSiteSerializer
-    renderer_classes = [ErrorRenderer]
-    #parser_classes = [MultiPartParser]
-    permission_classes = [IsAuthenticated, IsConsultant]
+class ConstructionSiteUpdateView(generics.UpdateAPIView):
+    serializer_class = ConstructionSiteUpdateSerializer
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
 
-    def update(self, request, id,  **kwargs):
+    def get_object(self):
         """
-        The function updates a construction site record with the provided data if it exists, and returns a
-        success message if the update is successful, or an error message if the data is invalid.
-        
+        Retrieve the ConstructionSiteDetails object based on the ID.
         """
         try:
-            instance = ConstructionSiteDetails.objects.get(
-                id=id, user=request.user.id)
-        except Exception:
-            return Response({"Message": "There is no Construction site data for user %s" % (request.user.username),
-                            'status': 'success'} , status=200)
+            return ConstructionSiteDetails.objects.get(id=self.kwargs['id'])
+        except ConstructionSiteDetails.DoesNotExist:
+            return None
 
-        serializer = constructionSiteSerializer(
-            instance, data=request.data, partial=True)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response({'Message': 'data updated successfully',
-                            'status' : 'success'}, status=200)
-        else:
-            return Response({"Message": "Please Enter a valid data" ,
-                            'status' : 'failed'}, status= 400)
+    def patch(self, request, *args, **kwargs):
+        """
+        Handle PATCH requests for updating the ConstructionSiteDetails instance.
+        """
+        construction_site_instance = self.get_object()
+        if not construction_site_instance:
+            return Response({"message": "Construction Site data not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(construction_site_instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Handle latitude and longitude to update location
+        lat = request.data.get('latitude')
+        long = request.data.get('longitude')
+        if lat and long:
+            try:
+                location = Point(float(long), float(lat), srid=4326)
+                construction_site_instance.location = location
+            except (ValueError, TypeError):
+                return Response({"message": "Invalid latitude or longitude values."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Handle file fields
+        file_fields = {
+            'demarkationOfPathwaysPhotographs': 'constructionSite/demarkingPathways_photographs',
+            'signagesLabelingPhotographs': 'constructionSite/signagesLabeling_Photographs',
+            'regularHealthCheckupPhotographs': 'constructionSite/RegularHealthCheckup_Photographs',
+            'availabilityOfDoctorPhotographs': 'constructionSite/AvailabilityOfDoctor_photographs',
+            'firstAidKitPhotographs': 'constructionSite/FirstAidKit_photographs',
+            'drinkingWaterPhotographs': 'constructionSite/drinkingWater_photographs',
+            'toiletPhotograph': 'constructionSite/toilet_photographs',
+            'documents': 'constructionSite/documents',
+            'genralphotographs': 'constructionSite/genral_photograph',
+        }
+
+        file_mapping = {}
+        for field, file_path in file_fields.items():
+            files = request.FILES.getlist(field)
+            if files:
+                file_mapping[field] = []
+                save_multiple_files(files, file_mapping, file_path, field)
+
+        updated_construction_site = serializer.save(**file_mapping)
+        data = ConstructionSiteDetailsViewSerializer(updated_construction_site).data
+
+        return Response({
+            'Message': 'Data updated successfully',
+            'status': 'success',
+            'data': data
+        }, status=status.HTTP_200_OK)
 
 
 # The ConstructionSiteListView class is a generic ListAPIView that uses the constructionSiteSerializer

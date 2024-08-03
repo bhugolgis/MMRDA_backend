@@ -733,6 +733,7 @@ class WasteTreatmentsView(generics.GenericAPIView):
     # renderer_classes = [ErrorRenderer]
     parser_classes = [MultiPartParser]
     permission_classes = [ IsAuthenticated , ]
+    
 
     def post(self , request):
         # try:

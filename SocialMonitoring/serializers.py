@@ -274,10 +274,10 @@ class RehabilatedPAPIDSerializer(serializers.ModelSerializer):
         model = PAP
         fields = ('id', 'PAPID', 'categoryOfPap'  , 'actionTaken', 'firstName', 'middleName', 'lastName', 'addressLine1', 'streetName', 'pincode', 'location')
 
-# -------------------------------- Labour camp details Serialzier --------------------------------      
+# -------------------------------- Labour camp Serialzier --------------------------------      
 # The `LabourCampDetailSerializer` class is a serializer for the `LabourCamp` model in Python, which
 # includes various fields and nested fields for serialization and deserialization.
-class LabourCampDetailSerializer(serializers.ModelSerializer):
+class LabourCampSerializer(serializers.ModelSerializer):
     # user = serializers.HiddenField(default=serializers.CurrentUserDefault())
     dateOfMonitoring = serializers.DateField(required=True)
     packages = serializers.CharField(validators=[MinLengthValidator(3)] , required=True)
@@ -343,23 +343,53 @@ class LabourCampDetailSerializer(serializers.ModelSerializer):
         return LabourCamp.objects.create(**data)
 
         
+# Labour Camp Update
+class LabourCampUpdateSerializer(serializers.ModelSerializer):
+    longitude = serializers.CharField(max_length=50, required=False)
+    latitude = serializers.CharField(max_length=50, required=False)
+    toiletPhotograph = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    drinkingWaterPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    demarkationOfPathwaysPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    signagesLabelingPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    kitchenAreaPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    fireExtinguishPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    roomsOrDomsPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    segregationOfWastePhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    regularHealthCheckupPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    availabilityOfDoctorPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    firstAidKitPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    photographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    documents = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
 
-class LabourCampUpdateSerialzier(serializers.ModelSerializer):
     class Meta:
         model = LabourCamp
-        fields = ('labourCampId' , 'labourCampName','isToilet','toiletCondition','toiletPhotograph','toiletRemarks',
-                 'isDrinkingWater','drinkingWaterCondition' , 'drinkingWaterPhotographs', 'drinkingWaterRemarks',
-                 'isDemarkationOfPathways','demarkationOfPathwaysCondition','demarkationOfPathwaysPhotographs' ,'demarkationOfPathwaysRemark',
-                 'isSignagesLabeling','signagesLabelingPhotographs' ,'signagesLabelingRemarks' ,
-                 'isKitchenArea','kitchenAreaCondition','kitchenAreaPhotographs','kitchenAreaRemarks',
-                'isFireExtinguish','fireExtinguishCondition','fireExtinguishPhotographs','fireExtinguishRemarks',
-                     'isRoomsOrDoms' ,'roomsOrDomsCondition','roomsOrDomsPhotographs' ,'roomsOrDomsRemarks',
-                     'isSegregationOfWaste','segregationOfWasteCondition','segregationOfWastePhotographs','segregationOfWasteRemarks',
-                    'isRegularHealthCheckup','regularHealthCheckupCondition','regularHealthCheckupPhotographs','regularHealthCheckupRemarks',
-                     'isAvailabilityOfDoctor', 'availabilityOfDoctorCondition','availabilityOfDoctorPhotographs','availabilityOfDoctorRemarks',
-                      'isFirstAidKit','firstAidKitCondition' ,'firstAidKitPhotographs','firstAidKitRemarks',
-                    'transportationFacility' ,'transportationFacilityCondition', 'modeOfTransportation','distanceFromSite',
-                    'photographs' ,'documents','remarks')
+        fields = (
+            'quarter', 'packages', 'dateOfMonitoring', 'longitude', 'latitude', 'labourCampName', 'labourCampId',
+            'isToilet', 'toiletCondition', 'toiletPhotograph', 'toiletRemarks',
+            'isDrinkingWater', 'drinkingWaterCondition', 'drinkingWaterPhotographs', 'drinkingWaterRemarks',
+            'isDemarkationOfPathways', 'demarkationOfPathwaysCondition', 'demarkationOfPathwaysPhotographs', 'demarkationOfPathwaysRemark',
+            'isSignagesLabeling', 'signagesLabelingCondition', 'signagesLabelingPhotographs', 'signagesLabelingRemarks',
+            'isKitchenArea', 'kitchenAreaCondition', 'kitchenAreaPhotographs', 'kitchenAreaRemarks',
+            'isFireExtinguish', 'fireExtinguishCondition', 'fireExtinguishPhotographs', 'fireExtinguishRemarks',
+            'isRoomsOrDoms', 'roomsOrDomsCondition', 'roomsOrDomsPhotographs', 'roomsOrDomsRemarks',
+            'isSegregationOfWaste', 'segregationOfWasteCondition', 'segregationOfWastePhotographs', 'segregationOfWasteRemarks',
+            'isRegularHealthCheckup', 'regularHealthCheckupCondition', 'regularHealthCheckupPhotographs', 'regularHealthCheckupRemarks',
+            'isAvailabilityOfDoctor', 'availabilityOfDoctorCondition', 'availabilityOfDoctorPhotographs', 'availabilityOfDoctorRemarks',
+            'isFirstAidKit', 'firstAidKitCondition', 'firstAidKitPhotographs', 'firstAidKitRemarks',
+            'transportationFacility', 'transportationFacilityCondition', 'modeOfTransportation', 'distanceFromSite',
+            'photographs', 'documents', 'remarks'
+        )
+
+    def validate(self, data):
+        if 'longitude' in data:
+            long = data['longitude'].split('.')[-1]
+            if len(long) > 6:
+                raise serializers.ValidationError("Longitude must have at most 6 digits after the decimal point.")
+        if 'latitude' in data:
+            lat = data['latitude'].split('.')[-1]
+            if len(lat) > 6:
+                raise serializers.ValidationError("Latitude must have at most 6 digits after the decimal point.")
+        return data
 
 
     
@@ -424,6 +454,56 @@ class constructionSiteSerializer(serializers.ModelSerializer):
         return ConstructionSiteDetails.objects.create(**data)
     
 
+# Update Construction Site (PATCH)
+class ConstructionSiteUpdateSerializer(serializers.ModelSerializer):
+    quarter = serializers.CharField(validators=[MinLengthValidator(3)], required=False)
+    dateOfMonitoring = serializers.DateField(required=False)
+    packages = serializers.CharField(validators=[MinLengthValidator(3)], required=False)
+    longitude = serializers.CharField(max_length=10, required=False)
+    latitude = serializers.CharField(max_length=10, required=False)
+    constructionSiteId = serializers.CharField(max_length=255, required=False)
+    constructionSiteName = serializers.CharField(max_length=255, required=False)
+
+    demarkationOfPathwaysPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    signagesLabelingPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    regularHealthCheckupPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    availabilityOfDoctorPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    firstAidKitPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    drinkingWaterPhotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    toiletPhotograph = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    genralphotographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    documents = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+
+    class Meta:
+        model = ConstructionSiteDetails
+        fields = ('quarter', 'packages', 'dateOfMonitoring', 'longitude', 'latitude', 'constructionSiteName', 'constructionSiteId',
+                  'isDemarkationOfPathways', 'demarkationOfPathwaysCondition', 'demarkationOfPathwaysPhotographs', 'demarkationOfPathwaysRemark',
+                  'isSignagesLabelingCheck', 'signagesLabelingCondition', 'signagesLabelingPhotographs', 'signagesLabelingRemarks',
+                  'isRegularHealthCheckup', 'regularHealthCheckupCondition', 'regularHealthCheckupPhotographs', 'regularHealthCheckupRemarks',
+                  'isAvailabilityOfDoctor', 'availabilityOfDoctorCondition', 'availabilityOfDoctorPhotographs', 'availabilityOfDoctorRemarks',
+                  'isFirstAidKit', 'firstAidKitCondition', 'firstAidKitPhotographs', 'firstAidKitRemarks',
+                  'isDrinkingWaterCheck', 'drinkingWaterCondition', 'drinkingWaterPhotographs', 'drinkingWaterRemarks',
+                  'isToilet', 'toiletCondition', 'toiletPhotograph', 'toiletRemarks',
+                  'genralphotographs', 'documents', 'remarks')
+
+    def validate(self, data):
+        """
+        Validate the longitude and latitude values, ensuring they have at most 6 digits after the decimal point.
+        """
+        longitude = data.get('longitude')
+        latitude = data.get('latitude')
+        
+        if longitude:
+            long = longitude.split('.')[-1]
+            if len(long) > 6:
+                raise serializers.ValidationError("Longitude must have at most 6 digits after the decimal point.")
+        
+        if latitude:
+            lat = latitude.split('.')[-1]
+            if len(lat) > 6:
+                raise serializers.ValidationError("Latitude must have at most 6 digits after the decimal point.")
+        
+        return data
 
 
 ''' This serializer for view the data - Amol Bhore'''
@@ -439,10 +519,6 @@ class LabourCampDetailViewSerializer(GeoFeatureModelSerializer):
         fields = '__all__'
         geo_field = 'location'
 
-# class testserialzier(serializers.ModelSerializer):
-#     class Meta:
-#         model = Test
-#         fields = '__all__'
 
 class PAPSerializer(serializers.ModelSerializer):
     class Meta:

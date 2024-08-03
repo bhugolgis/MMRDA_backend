@@ -2,9 +2,6 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-
-    
-    # path ('test' , testAPiView.as_view() , name = "testAPiView "),
     path ('Postlabourcampdetails' , PostlabourCampdetails.as_view() , name = "labourCampdetails "),
     path('labourCampdetailsView' , labourCampdetailsView.as_view() , name = "labourCampdetailsView"),
     path('labourCampdetailsViewSearch' , labourCampdetailsViewSearch.as_view() , name = "labourCampdetailsView"),
@@ -15,17 +12,13 @@ urlpatterns = [
 
     # Rehab spelling is inconsistent (rehabilitation)
     path('rehabitation' , RehabilitationView.as_view() , name = "rehabitation"),
-    path('rehabitationpapid/<str:PAPID>' , RehabilatedPAPIDView.as_view() , name = "rehabitation"),
+    path('rehabitationpapid/<str:PAPID>' , RehabilatedPAPIDView.as_view() , name = "rehabitationPapID"),
     path('rehabilitation/<int:id>', RehabilitationUpdateView.as_view(), name='rehabilitation-update'),
-       
-    
-
+        
     path ('constructionsite' , constructionSiteView.as_view() , name = "constructionSiteView"),
-    path ('constructionsite<int:id>', ConstructionSiteUpdateView.as_view() , name = "constructionSiteUpdateView"),
+    path ('constructionsite/<int:id>', ConstructionSiteUpdateView.as_view() , name = "constructionSiteUpdateView"),
     path ('constructionsiteList' , ConstructionSiteListView.as_view() , name = "ConstructionSiteListView"),
 
-    path ('labourcamp' , LabourCampDetailsView.as_view() , name = "LabourCampDetailsView"),
-    path('labourcamp/<int:id>', labourCampUpdateView.as_view() , name =  "LabourCampDetailsView"),
-
-
+    path ('labourcamp' , LabourCampView.as_view() , name = "LabourCampDetailsView"),
+    path('labourcamp/<int:id>', LabourCampUpdateView.as_view() , name =  "LabourCampUpdateView"),
 ]
