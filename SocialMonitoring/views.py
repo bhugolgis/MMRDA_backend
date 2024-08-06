@@ -498,7 +498,8 @@ class LabourCampView(generics.GenericAPIView):
                     data = LabourCampDetailViewSerializer(LabourCampDetails).data
 
                     return Response({'Message': 'data saved successfully',
-                                    'status' : 'success'}, status=200)
+                                    'status' : 'success',
+                                    'data': data}, status=200)
             else:
                 key, value =list(serializer.errors.items())[0]
                 error_message = key+" ,"+value[0]
