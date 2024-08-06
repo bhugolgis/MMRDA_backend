@@ -543,7 +543,8 @@ class LabourCampView(generics.GenericAPIView):
                 key, value =list(serializer.errors.items())[0]
                 error_message = key+" ,"+value[0]
                 return Response({'status': 'error',
-                                'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
+                                'Message' :error_message,
+                                'data': data} , status = status.HTTP_400_BAD_REQUEST)
         else:
         # except Exception:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
