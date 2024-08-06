@@ -538,13 +538,14 @@ class LabourCampView(generics.GenericAPIView):
                 LabourCampDetails = serializer.save(location=location , user = request.user , **file_mapping)
                 data = LabourCampDetailViewSerializer(LabourCampDetails).data
                 return Response({'Message': 'data saved successfully',
-                                    'status' : 'success'}, status=200)
+                                    'status' : 'success',
+                                    'data': data}, status=200)
             else:
                 key, value =list(serializer.errors.items())[0]
                 error_message = key+" ,"+value[0]
                 return Response({'status': 'error',
-                                'Message' :error_message,
-                                'data': data} , status = status.HTTP_400_BAD_REQUEST)
+                                'Message' :error_message
+                                } , status = status.HTTP_400_BAD_REQUEST)
         else:
         # except Exception:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
