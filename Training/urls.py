@@ -17,7 +17,9 @@ urlpatterns = [
     path('contactussearch' , ContactusListView.as_view() , name = 'occupational update'),
     
     path('PreConstructionStageCompliance' , PreConstructionStageComplianceView.as_view() , name = ' PreConstructionStageCompliance'),
+    path('PreConstructionStageCompliance/<int:id>' , PreConstructionStageComplianceUpdateView.as_view() , name = ' PreConstructionStageUpdateCompliance'),
     path('ConstructionStageComplaince' , ConstructionStageComplainceView.as_view() , name = ' ConstructionStageCompliance'),
+    path('ConstructionStageComplaince/<int:id>' , ConstructionStageComplianceUpdateView.as_view() , name = ' ConstructionStageCompliance'),
    
     
     # path(' ContactUsimagesCompress' , ContactUsimagesCompress.as_view() , name = ' PreConstructionStageCompliance'),

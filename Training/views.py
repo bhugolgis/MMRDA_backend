@@ -322,6 +322,56 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
         
         else:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
+
+
+
+# Update (PATCH)
+class PreConstructionStageComplianceUpdateView(generics.GenericAPIView):
+    serializer_class = PreConstructionStageComplianceSerializer
+    parser_classes = [MultiPartParser]
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
+
+    def get_object(self):
+        """
+        Retrieve the PreConstructionStage object based on the ID.
+        """
+        try:
+            return PreConstructionStage.objects.get(id=self.kwargs['id'])
+        except PreConstructionStage.DoesNotExist:
+            return None
+
+    def patch(self, request, *args, **kwargs):
+        pre_construction_stage = self.get_object()
+        if not pre_construction_stage:
+            return Response({'status': 'error', 'Message': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(pre_construction_stage, data=request.data, partial=True)
+        if serializer.is_valid():
+            file_fields = {
+                'ShiftingofUtilitiesDocuments': 'env_monitoring/compliance/pre_construction/shifting_of_utilities_documents',
+                'PermissionForFellingOfTreesDocuments': 'env_monitoring/compliance/pre_construction/permission_for_felling_of_trees_documents',
+                'CRZClearanceDocuments': 'env_monitoring/compliance/pre_construction/CRZ_clearance_documents',
+                'ForestClearanceDocuments': 'env_monitoring/compliance/pre_construction/forest_clearance_documents',
+            }
+
+            file_mapping = {}
+            for field, file_path in file_fields.items():
+                if field in request.FILES:
+                    files = request.FILES.getlist(field)
+                    file_mapping[field] = []
+                    save_multiple_files(files, file_mapping, file_path, field)
+
+            compliance_details = serializer.save(**file_mapping)
+            data = PreConstructionStageComplianceSerializer(compliance_details).data
+
+            return Response({'Message': 'Data updated successfully', 'status': 'success', 'data': data}, status=200)
+        else:
+            key, value = list(serializer.errors.items())[0]
+            error_message = key + " ," + value[0]
+            return Response({'status': 'error',
+                             'Message': error_message,
+                             'data': data}
+                            , status=status.HTTP_400_BAD_REQUEST)
     
 
 # The serializer_class attribute of the ConstructionStageComplainceView class is set to the ConstructionStageComplainceSerializer class. This class is used to serialize and deserialize the data submitted by the user.
@@ -367,3 +417,50 @@ class ConstructionStageComplainceView(generics.GenericAPIView):
         else:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
 
+
+# Update (PATCH)
+class ConstructionStageComplianceUpdateView(generics.GenericAPIView):
+    serializer_class = ConstructionStageComplianceSerializer
+    parser_classes = [MultiPartParser]
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
+
+    def get_object(self):
+        """
+        Retrieve the ConstructionStage object based on the ID.
+        """
+        try:
+            return ConstructionStage.objects.get(id=self.kwargs['id'])
+        except ConstructionStage.DoesNotExist:
+            return None
+
+    def patch(self, request, *args, **kwargs):
+        construction_stage_instance = self.get_object()
+        if not construction_stage_instance:
+            return Response({'status': 'error', 'Message': 'Not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(construction_stage_instance, data=request.data, partial=True)
+        if serializer.is_valid():
+            file_fields = {
+                'ConsenttToEstablishOoperateDocuments': 'env_monitoring/compliance/construction/consent_to_establish_operate_documents',
+                'PermissionForSandMiningFromRiverbedDocuments': 'env_monitoring/compliance/construction/permission_for_sand_mining_from_riverbed_documents',
+                'PermissionForGroundWaterWithdrawalDocuments': 'env_monitoring/compliance/construction/permission_for_ground_water_withdrawal_documents',
+                'AuthorizationForCollectionDisposalManagementDocuments': 'env_monitoring/compliance/construction/authorization_for_collection_disposal_management_documents',
+                'AuthorizationForSolidWasteDocuments': 'env_monitoring/compliance/construction/authorization_for_solid_waste_documents',
+                'DisposalOfBituminousAndOtherWasteDocuments': 'env_monitoring/compliance/construction/disposal_of_bituminous_and_other_waste_documents',
+                'ConsentToDisposalOfsewagefromLabourCampsDocuments': 'env_monitoring/compliance/construction/consent_to_disposal_of_sewage_from_labour_camps_documents',
+                'PollutionUnderControlCertificateDocuments': 'env_monitoring/compliance/construction/pollution_under_control_certificate_documents',
+                'RoofTopRainWaterHarvestingDocuments': 'env_monitoring/compliance/construction/roof_top_rain_water_harvesting_documents',
+            }
+
+            file_mapping = {}
+            for field, file_path in file_fields.items():
+                files = request.FILES.getlist(field)
+                file_mapping[field] = []
+                save_multiple_files(files, file_mapping, file_path, field)
+
+            serializer.save(**file_mapping)
+            return Response({'Message': 'Data updated successfully', 'status': 'success', 'data': serializer.data}, status=status.HTTP_200_OK)
+        else:
+            key, value = list(serializer.errors.items())[0]
+            error_message = key + " ," + value[0]
+            return Response({'status': 'error', 'Message': error_message}, status=status.HTTP_400_BAD_REQUEST)
