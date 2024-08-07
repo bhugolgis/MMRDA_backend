@@ -299,10 +299,10 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
                 file_fields = {
-                    'ShiftingofUtilitiesDocuments': 'env_monitoring/compliance/pre_construction',
-                    'PermissionForFellingOfTreesDocuments': 'env_monitoring/compliance/pre_construction',
-                    'CRZClearanceDocuments': 'env_monitoring/compliance/pre_construction',
-                    'ForestClearanceDocuments': 'env_monitoring/compliance/pre_construction',
+                    'ShiftingofUtilitiesDocuments': 'env_monitoring/compliance/pre_construction/shifting_of_utilities_documents',
+                    'PermissionForFellingOfTreesDocuments': 'env_monitoring/compliance/pre_construction/permission_for_felling_of_trees_documents',
+                    'CRZClearanceDocuments': 'env_monitoring/compliance/pre_construction/CRZ_clearance_documents',
+                    'ForestClearanceDocuments': 'env_monitoring/compliance/pre_construction/forest_clearance_documents',
                 }
 
                 file_mapping = {}
@@ -328,45 +328,42 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
 # The permission_classes attribute of the ConstructionStageComplainceView class is set to the IsAuthenticated class. This class ensures that only authenticated users can use the view.
 # The post() method of the ConstructionStageComplainceView class first validates the data submitted by the user.
 # If the data is valid, the method then saves the record to the database and returns a success message. Otherwise, the view returns an error message.
-class ConstructionStageComplainceView(generics.CreateAPIView):
-    serializer_class = ConstructionStageComplainceSerializer
-    permission_classes = [IsAuthenticated]
-    #parser_classes = [MultiPartParser]
+class ConstructionStageComplainceView(generics.GenericAPIView):
+    serializer_class = ConstructionStageComplianceSerializer
+    parser_classes = [MultiPartParser]
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
 
-    def post(self , request):
-        """
-        The function `post` receives a request, validates the data using a serializer, saves the data if
-        valid, and returns a response with a success message or an error message if the data is invalid.
+    def post(self, request):
+        if "contractor" in request.user.groups.values_list("name", flat=True) or "consultant" in request.user.groups.values_list("name", flat=True):
+            serializer = self.get_serializer(data=request.data)
+            if serializer.is_valid():
+                file_fields = {
+                    'ConsenttToEstablishOoperateDocuments': 'env_monitoring/compliance/construction/consent_to_establish_operate_documents',
+                    'PermissionForSandMiningFromRiverbedDocuments': 'env_monitoring/compliance/construction/permission_for_sand_mining_from_riverbed_documents',
+                    'PermissionForGroundWaterWithdrawalDocuments': 'env_monitoring/compliance/construction/permission_for_ground_water_withdrawal_documents',
+                    'AuthorizationForCollectionDisposalManagementDocuments': 'env_monitoring/compliance/construction/authorization_for_collection_disposal_management_documents',
+                    'AuthorizationForSolidWasteDocuments': 'env_monitoring/compliance/construction/authorization_for_solid_waste_documents',
+                    'DisposalOfBituminousAndOtherWasteDocuments': 'env_monitoring/compliance/construction/disposal_of_bituminous_and_other_waste_documents',
+                    'ConsentToDisposalOfsewagefromLabourCampsDocuments': 'env_monitoring/compliance/construction/consent_to_disposal_of_sewage_from_labour_camps_documents',
+                    'PollutionUnderControlCertificateDocuments': 'env_monitoring/compliance/construction/pollution_under_control_certificate_documents',
+                    'RoofTopRainWaterHarvestingDocuments': 'env_monitoring/compliance/construction/roof_top_rain_water_harvesting_documents',
+                }
+
+                file_mapping = {}
+                for field, file_path in file_fields.items():
+                    files = request.FILES.getlist(field)
+                    file_mapping[field] = []
+                    save_multiple_files(files, file_mapping, file_path, field)
+
+                compliance_details = serializer.save(user=request.user, **file_mapping)
+                data = ConstructionStageComplianceSerializer(compliance_details).data
+
+                return Response({'Message': 'Data saved successfully', 'status': 'success', 'data': data}, status=200)
+            else:
+                key, value = list(serializer.errors.items())[0]
+                error_message = key + " ," + value[0]
+                return Response({'status': 'error', 'Message': error_message}, status=status.HTTP_400_BAD_REQUEST)
         
-        """
-        data = request.data
-        serializer= ConstructionStageComplainceSerializer(data = data)
-        if serializer.is_valid(raise_exception= True):
-
-            file_fields = {
-                        'ConsenttToEstablishOoperateDocuments': 'Training\Training_ConsenttToEstablishOoperateDocuments',
-                        'PermissionForSandMiningFromRiverbedDocuments': 'Training\Training_PermissionForSandMiningFromRiverbedDocuments',
-                        'PermissionForGroundWaterWithdrawalDocuments': 'Training\Training_PermissionForGroundWaterWithdrawalDocuments' ,
-                        'AuthorizationForCollectionDisposalManagementDocuments': 'Training\Training_AuthorizationForCollectionDisposalManagementDocuments',
-                        'AuthorizationForSolidWasteDocuments': 'Training\Training_AuthorizationForSolidWasteDocuments',
-                        'DisposalOfBituminousAndOtherWasteDocuments': 'Training\Training_DisposalOfBituminousAndOtherWasteDocuments',
-                        'ConsentToDisposalOfsewagefromLabourCampsDocuments': 'Training\Training_ConsentToDisposalOfsewagefromLabourCampsDocuments' ,
-                        'PollutionUnderControlCertificateDocuments': 'Training\Training_PollutionUnderControlCertificateDocuments',
-                        'RoofTopRainWaterHarvestingDocuments': 'Training\Training_RoofTopRainWaterHarvestingDocuments',
-                        }
-            
-            file_mapping = {}
-            for field, file_path in file_fields.items():
-                files = request.FILES.getlist(field)
-                file_mapping[field] = []
-                save_multiple_files(files, file_mapping, file_path, field)
-
-            serializer.save(user = self.request.user, **file_mapping)
-            return Response({'status': 'success' ,
-                            'Message': 'Data saved successfully'} , status= 200)
         else:
-            key, value =list(serializer.errors.items())[0]
-            error_message = key+" ,"+ value[0]
-            return Response({'status': 'error',
-                            'Message' : error_message} , status = status.HTTP_400_BAD_REQUEST)
+            return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
 
