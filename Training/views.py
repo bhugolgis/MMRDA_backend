@@ -265,28 +265,63 @@ class ContactusListView(generics.ListAPIView):
 # The post() method of the PreConstructionStageComplianceView class first validates the data submitted by the user.
 # If the data is valid, the method then saves the record to the database and returns a success message. Otherwise, the view returns an error message.
 class PreConstructionStageComplianceView(generics.GenericAPIView):
-    serializer_class = PreConstructionStageComplianceSerialzier
+    serializer_class = PreConstructionStageComplianceSerializer
     parser_classes = [MultiPartParser]
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
     
-    def post(self , request):
-        """
-        The above function is a POST request handler that saves data using a serializer and returns a
-        success message if the data is valid, or an error message if the data is invalid.
-        
-        """
+    def post(self, request):
+        if "contractor" in request.user.groups.values_list("name", flat=True):
+            serializer = self.get_serializer(data=request.data)
+            if serializer.is_valid():
+                file_fields = {
+                    'ShiftingofUtilitiesDocuments': 'env_monitoring/compliance/pre_construction/',
+                    'PermissionForFellingOfTreesDocuments': 'env_monitoring/compliance/pre_construction/',
+                    'CRZClearanceDocuments': 'env_monitoring/compliance/pre_construction/',
+                    'ForestClearanceDocuments': 'env_monitoring/compliance/pre_construction/',
+                }
 
-        serializer= PreConstructionStageComplianceSerialzier (data = request.data , context={'request': request})
-        if serializer.is_valid():
-            serializer.save(user = request.user)
-            return Response({'status': 'success' ,
-                            'Message': 'Data saved successfully'} , status= 200)
+                file_mapping = {}
+                for field, file_path in file_fields.items():
+                    files = request.FILES.getlist(field)
+                    file_mapping[field] = []
+                    save_multiple_files(files, file_mapping, file_path, field)
+
+                compliance_details = serializer.save(user=request.user, **file_mapping)
+                data = PreConstructionStageComplianceSerializer(compliance_details).data
+
+                return Response({'Message': 'Data saved successfully', 'status': 'success', 'data': data}, status=200)
+            else:
+                key, value = list(serializer.errors.items())[0]
+                error_message = key + " ," + value[0]
+                return Response({'status': 'error', 'Message': error_message}, status=status.HTTP_400_BAD_REQUEST)
+
+        elif "consultant" in request.user.groups.values_list("name", flat=True):
+            serializer = self.get_serializer(data=request.data)
+            if serializer.is_valid():
+                file_fields = {
+                    'ShiftingofUtilitiesDocuments': 'env_monitoring/compliance/pre_construction/',
+                    'PermissionForFellingOfTreesDocuments': 'env_monitoring/compliance/pre_construction/',
+                    'CRZClearanceDocuments': 'env_monitoring/compliance/pre_construction/',
+                    'ForestClearanceDocuments': 'env_monitoring/compliance/pre_construction/',
+                }
+
+                file_mapping = {}
+                for field, file_path in file_fields.items():
+                    files = request.FILES.getlist(field)
+                    file_mapping[field] = []
+                    save_multiple_files(files, file_mapping, file_path, field)
+
+                compliance_details = serializer.save(user=request.user, **file_mapping)
+                data = PreConstructionStageComplianceSerializer(compliance_details).data
+
+                return Response({'Message': 'Data saved successfully', 'status': 'success', 'data': data}, status=200)
+            else:
+                key, value = list(serializer.errors.items())[0]
+                error_message = key + " ," + value[0]
+                return Response({'status': 'error', 'Message': error_message}, status=status.HTTP_400_BAD_REQUEST)
         
         else:
-            key, value =list(serializer.errors.items())[0]
-            error_message = str(key)+" ,"+ str(value[0])
-            return Response({'status': 'error',
-                            'Message' : error_message } , status = status.HTTP_400_BAD_REQUEST)
+            return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
     
 
 # The serializer_class attribute of the ConstructionStageComplainceView class is set to the ConstructionStageComplainceSerializer class. This class is used to serialize and deserialize the data submitted by the user.

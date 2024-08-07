@@ -3,6 +3,7 @@ from Auth.models import User
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point, Polygon, LineString
 from django.core.exceptions import ValidationError
+from django.contrib.postgres.fields import ArrayField
 
 
 def validate_location_precision(value):
@@ -173,43 +174,33 @@ class PreConstructionStage(models.Model):
         User, on_delete=models.CASCADE, related_name='user')
     ShiftingofUtilities = models.BooleanField(default=False)
     RulesOfShiftingofUtilities = models.CharField(max_length=255, default='''High tension power line, water supply pipeline, sewer line, gas pipeline etc. as per MCGM guide lines''')
-    ResponsibilityOfShiftingofUtilities = models.CharField(
-        max_length=255, blank=True)
-    CurrentStatusOfShiftingofUtilities = models.CharField(
-        max_length=255, blank=True, null=True)
-    ShiftingofUtilitiesDocuments = models.FileField(upload_to='pre_construction/', blank=True, null=True)
+    ResponsibilityOfShiftingofUtilities = models.CharField(max_length=255, blank=True)
+    CurrentStatusOfShiftingofUtilities = models.CharField(max_length=255, blank=True, null=True)
+    ShiftingofUtilitiesDocuments = ArrayField(models.CharField(max_length=255, blank=True, null=True), blank=True, null=True)
 
     PermissionForFellingOfTrees = models.BooleanField(default=False)
-    RulesOfPermissionForFellingOfTrees = models.CharField(
-        max_length=255, default= 'Forest Conservation Act 1980, Guideline as per the department of Environment, Govt. of Maharashtra. Maharashtra (Urban Area) Protection of trees Act 1975' , blank=True, null=True)
-    ResponsibilityOfPermissionForFellingOfTrees = models.CharField(
-        max_length=255, blank=True, null=True)
-    CurrentStatusPermissionForFellingOfTrees = models.CharField(
-        max_length=255, blank=True, null=True)
-    PermissionForFellingOfTreesDocuments = models.FileField(upload_to='pre_construction/', blank=True, null=True)
+    RulesOfPermissionForFellingOfTrees = models.CharField(max_length=255, default= 'Forest Conservation Act 1980, Guideline as per the department of Environment, Govt. of Maharashtra. Maharashtra (Urban Area) Protection of trees Act 1975' , blank=True, null=True)
+    ResponsibilityOfPermissionForFellingOfTrees = models.CharField(max_length=255, blank=True, null=True)
+    CurrentStatusPermissionForFellingOfTrees = models.CharField(max_length=255, blank=True, null=True)
+    PermissionForFellingOfTreesDocuments = ArrayField(models.CharField(max_length=255, blank=True, null=True), blank=True, null=True)
 
     CRZClearance = models.BooleanField(default=False)
-    RulesOfCRZClearance = models.CharField(
-        max_length=255, default='''As per CRZ Rules, MOEF&CC.''', blank=True, null=True)
-    ResponsibilityOfCRZClearance = models.CharField(
-        max_length=255, blank=True, null=True)
-    CurrentStatusCRZClearance = models.CharField(
-        max_length=255, blank=True, null=True)
-    CRZClearanceDocuments = models.FileField(upload_to='pre_construction/', blank=True, null=True)
+    RulesOfCRZClearance = models.CharField(max_length=255, default='''As per CRZ Rules, MOEF&CC.''', blank=True, null=True)
+    ResponsibilityOfCRZClearance = models.CharField(max_length=255, blank=True, null=True)
+    CurrentStatusCRZClearance = models.CharField(max_length=255, blank=True, null=True)
+    CRZClearanceDocuments = ArrayField(models.CharField(max_length=255, blank=True, null=True), blank=True, null=True)
 
     ForestClearance = models.BooleanField(default=False)
-    RulesOfForestClearance = models.CharField(
-        max_length=255, default='''Forest Conservation Act, 1980, amended 1988.''', blank=True, null=True)
-    ResponsibilityOfForestClearance = models.CharField(
-        max_length=255, blank=True, null=True)
-    CurrentStatusOfForestClearance = models.CharField(
-        max_length=255, blank=True, null=True)
-    ForestClearanceDocuments = models.FileField(upload_to='pre_construction/', blank=True, null=True)
+    RulesOfForestClearance = models.CharField(max_length=255, default='''Forest Conservation Act, 1980, amended 1988.''', blank=True, null=True)
+    ResponsibilityOfForestClearance = models.CharField(max_length=255, blank=True, null=True)
+    CurrentStatusOfForestClearance = models.CharField(max_length=255, blank=True, null=True)
+    ForestClearanceDocuments = ArrayField(models.CharField(max_length=255, blank=True, null=True), blank=True, null=True)
 
 
 # The above class represents a construction stage with various permissions, rules, responsibilities,
 # and current statuses related to environmental regulations and waste management.
 class ConstructionStage(models.Model):
+    #guideline is rules
     user = models.ForeignKey(User,  on_delete=models.CASCADE,
                              related_name='user_ConstructionStage', null=True)  # User profile
     ConsenttToEstablishOoperate = models.BooleanField(default=False)
