@@ -274,10 +274,10 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
                 file_fields = {
-                    'ShiftingofUtilitiesDocuments': 'env_monitoring/compliance/pre_construction/',
-                    'PermissionForFellingOfTreesDocuments': 'env_monitoring/compliance/pre_construction/',
-                    'CRZClearanceDocuments': 'env_monitoring/compliance/pre_construction/',
-                    'ForestClearanceDocuments': 'env_monitoring/compliance/pre_construction/',
+                    'ShiftingofUtilitiesDocuments': 'env_monitoring/compliance/pre_construction',
+                    'PermissionForFellingOfTreesDocuments': 'env_monitoring/compliance/pre_construction',
+                    'CRZClearanceDocuments': 'env_monitoring/compliance/pre_construction',
+                    'ForestClearanceDocuments': 'env_monitoring/compliance/pre_construction',
                 }
 
                 file_mapping = {}
@@ -299,10 +299,10 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
                 file_fields = {
-                    'ShiftingofUtilitiesDocuments': 'env_monitoring/compliance/pre_construction/',
-                    'PermissionForFellingOfTreesDocuments': 'env_monitoring/compliance/pre_construction/',
-                    'CRZClearanceDocuments': 'env_monitoring/compliance/pre_construction/',
-                    'ForestClearanceDocuments': 'env_monitoring/compliance/pre_construction/',
+                    'ShiftingofUtilitiesDocuments': 'env_monitoring/compliance/pre_construction',
+                    'PermissionForFellingOfTreesDocuments': 'env_monitoring/compliance/pre_construction',
+                    'CRZClearanceDocuments': 'env_monitoring/compliance/pre_construction',
+                    'ForestClearanceDocuments': 'env_monitoring/compliance/pre_construction',
                 }
 
                 file_mapping = {}
