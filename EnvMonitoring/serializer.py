@@ -35,15 +35,27 @@ class AirSerializer(serializers.ModelSerializer):
         fields = ('quarter','packages','month','longitude','latitude','place_location', 'dateOfMonitoring','PM10',
                   'PM2_5','SO2','NOx','CO','AQI','Remarks')
         # geo_field='location'
-    def validate(self,data):
-        if data['quarter']=="" or data['quarter']==None:
-            raise serializers.ValidationError("quarter cannot be empty!!")
-        long = data['longitude'].split('.')[-1]
-        if len(long) > 6:
-            raise serializers.ValidationError("longitude must have at most 6 digits after the decimal point.")
-        lat =  data['latitude'].split('.')[-1]
-        if len(lat) > 6:
-            raise serializers.ValidationError("latitude must have at most 6 digits after the decimal point.")
+    def validate(self, data):
+        quarter = data.get('quarter')
+        if not quarter:
+            raise serializers.ValidationError("Quarter cannot be empty!!")
+
+        packages = data.get('packages')
+        if not quarter:
+            raise serializers.ValidationError("Package cannot be empty!!")
+        
+        longitude = data.get('longitude')
+        if longitude:
+            long_part = longitude.split('.')[-1]
+            if len(long_part) > 6:
+                raise serializers.ValidationError("Longitude must have at most 6 digits after the decimal point.")
+        
+        latitude = data.get('latitude')
+        if latitude:
+            lat_part = latitude.split('.')[-1]
+            if len(lat_part) > 6:
+                raise serializers.ValidationError("Latitude must have at most 6 digits after the decimal point.")
+        
         return data
 
     def create(self,data):
