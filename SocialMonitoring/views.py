@@ -306,7 +306,7 @@ class RehabilatedPAPIDView(generics.GenericAPIView):
 class RehabilitationView(generics.GenericAPIView):
     serializer_class = RehabilitationSerializer
     parser_classes = [MultiPartParser]
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         """
