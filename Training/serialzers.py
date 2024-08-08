@@ -11,8 +11,8 @@ class TraningSerializer(serializers.ModelSerializer):
     longitude=serializers.CharField(max_length=10,required=True)
     latitude=serializers.CharField(max_length=10,required=True)
 
-    documents = serializers.ListField(child=serializers.FileField(allow_empty_file=True, use_url=False),write_only=True , required = False)
-    photographs = serializers.ListField(child=serializers.ImageField(allow_empty_file=True, use_url=False),write_only=True , required = False)
+    documents = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    photographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
     
     class Meta:
         model = traning
@@ -20,11 +20,35 @@ class TraningSerializer(serializers.ModelSerializer):
                  'longitude' , 'latitude' ,'inchargePerson' , 'traninigInitiatedBy' , 
                  'conductDate' , 'traningDate' ,  'photographs' , 'documents')
 
-    def create(self,data):  
+    def create(self,data):
         data.pop('longitude')
         data.pop('latitude')
         return traning.objects.create(**data)
 
+
+# Update (PATCH)
+class TrainingUpdateSerializer(serializers.ModelSerializer):
+    longitude = serializers.CharField(max_length=10, required=False)
+    latitude = serializers.CharField(max_length=10, required=False)
+    documents = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    photographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+
+    class Meta:
+        model = traning
+        fields = ('quarter', 'packages', 'dateOfMonitoring', 'category', 'traningTitle', 'noOfAttends', 'noOfTimesTrainingConducted',
+                  'male', 'female', 'longitude', 'latitude', 'inchargePerson', 'traninigInitiatedBy', 'conductDate',
+                  'traningDate', 'photographs', 'documents')
+
+    def validate(self, data):
+        if 'longitude' in data:
+            long = data['longitude'].split('.')[-1]
+            if len(long) > 6:
+                raise serializers.ValidationError("Longitude must have at most 6 digits after the decimal point.")
+        if 'latitude' in data:
+            lat = data['latitude'].split('.')[-1]
+            if len(lat) > 6:
+                raise serializers.ValidationError("Latitude must have at most 6 digits after the decimal point.")
+        return data
 
 # The `photographsSerializer` class is a serializer for the `photographs` model in Python, which
 # includes fields for longitude and latitude and a create method that removes latitude and longitude

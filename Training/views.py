@@ -23,7 +23,7 @@ from .utils import save_multiple_files
 class TraningView(generics.GenericAPIView):
     serializer_class = TraningSerializer
     permission_classes = [IsAuthenticated]
-    #parser_classes = [MultiPartParser]
+    parser_classes = [MultiPartParser]
 
     def post(self, request):
         """
@@ -38,8 +38,8 @@ class TraningView(generics.GenericAPIView):
             location = Point(long, lat, srid=4326)
 
             file_fields = {
-                        'documents': 'traning_photographs',
-                        'photographs': 'traning_photographs' ,}
+                        'documents': 'training/documents',
+                        'photographs': 'training/photographs' ,}
 
             file_mapping = {}
             for field, file_path in file_fields.items():
@@ -58,6 +58,49 @@ class TraningView(generics.GenericAPIView):
                             'Message' : error_message} , status = status.HTTP_400_BAD_REQUEST)
 
 
+
+# Update (PATCH)
+class TrainingUpdateView(generics.UpdateAPIView):
+    serializer_class = TrainingUpdateSerializer
+    permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
+    parser_classes = [MultiPartParser]
+
+    def get_object(self):
+        try:
+            return traning.objects.get(id=self.kwargs['id'])
+        except traning.DoesNotExist:
+            return None
+
+    def patch(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if not instance:
+            return Response({'status': 'error', 'message': 'Instance not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+
+        # Handle coordinates if provided
+        if 'latitude' in request.data and 'longitude' in request.data:
+            lat = float(request.data['latitude'])
+            long = float(request.data['longitude'])
+            instance.location = Point(long, lat, srid=4326)
+        
+        # Handle file fields
+        file_fields = {
+            'photographs': 'training/photographs',
+            'documents': 'training/documents'
+        }
+
+        file_mapping = {}
+        for field, file_path in file_fields.items():
+            files = request.FILES.getlist(field)
+            file_mapping[field] = []
+            save_multiple_files(files, file_mapping, file_path, field)
+
+        updated_instance = serializer.save(**file_mapping)
+        data = TrainingUpdateSerializer(updated_instance).data
+
+        return Response({'status': 'success', 'message': 'Data updated successfully', 'data': data}, status=status.HTTP_200_OK)
 
 # The below code is gives all of the object in a list from Traning table
 class TrainingListView(generics.ListAPIView):

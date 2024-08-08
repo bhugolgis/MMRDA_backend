@@ -37,24 +37,19 @@ class Baseclass(models.Model):
 # conducted, male and female participants, incharge person, training initiator, conduct date, training
 # date, photographs, and documents.
 class traning(Baseclass):
-    user = models.ForeignKey(
-        User, related_name='training_User', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='training_User', on_delete=models.CASCADE)
     category = models.CharField(max_length=255, null=True, blank=True)
     traningTitle = models.CharField(max_length=255, null=True, blank=True)
-    # location = models.CharField(max_length=255, blank=True, null=True)
     noOfAttends = models.IntegerField(null=True, blank=True)
     noOfTimesTrainingConducted = models.IntegerField(default= 0)
     male = models.CharField(max_length=255, null=True, blank=True)
     female = models.CharField(max_length=255, null=True, blank=True)
     inchargePerson = models.CharField(max_length=253, null=True, blank=True)
-    traninigInitiatedBy = models.CharField(
-        max_length=255, null=True, blank=True)
-    conductDate = models.DateField(   auto_now=True, null=True, blank=True)
+    traninigInitiatedBy = models.CharField(max_length=255, null=True, blank=True)
+    conductDate = models.DateField(auto_now=True, null=True, blank=True)
     traningDate = models.DateField(auto_now=True, null=True, blank=True)
-    # description = models.CharField(max_length=255, null=True, blank=True)
-    photographs = models.CharField(
-        max_length=255, null=True, blank=True)
-    documents =  models.CharField(max_length=255 , null= True , blank= True )
+    photographs = ArrayField(models.CharField(max_length=255, blank=True, null=True), blank=True, null=True)
+    documents = ArrayField(models.CharField(max_length=255, blank=True, null=True), blank=True, null=True)
 
 
 # #----------------------------- PHOTOGRAPHS MODEL-----------------------------------------
@@ -170,8 +165,7 @@ class ContactusImage(models.Model):
 # The `PreConstructionStage` class represents the pre-construction stage of a project and includes
 # fields for various permissions and clearances required.
 class PreConstructionStage(models.Model):
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name='user')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
     ShiftingofUtilities = models.BooleanField(default=False)
     RulesOfShiftingofUtilities = models.CharField(max_length=255, default='''High tension power line, water supply pipeline, sewer line, gas pipeline etc. as per MCGM guide lines''')
     ResponsibilityOfShiftingofUtilities = models.CharField(max_length=255, blank=True)
