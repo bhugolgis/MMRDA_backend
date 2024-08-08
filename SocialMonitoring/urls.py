@@ -1,24 +1,30 @@
 from django.urls import path
 from .views import *
 
+
+# Use snake case for all new api created for endpoints and name attribute for better readability and standard practice
 urlpatterns = [
     path ('Postlabourcampdetails' , PostlabourCampdetails.as_view() , name = "labourCampdetails "),
     path('labourCampdetailsView' , labourCampdetailsView.as_view() , name = "labourCampdetailsView"),
     path('labourCampdetailsViewSearch' , labourCampdetailsViewSearch.as_view() , name = "labourCampdetailsView"),
  
     path ('pap' , PapView.as_view() , name = "project affected Person "),
-    path ('pap/<int:id>' , PapUpdateView.as_view() , name = "project affected Person "),
+    path ('pap/<int:id>' , PapView.as_view() , name = "get_pap "),
+    path ('pap/<int:id>' , PapUpdateView.as_view() , name = "update-pap"),
     path ('paplist' , PapListView.as_view() , name = "project affected Person List "),
 
     # Rehab spelling is inconsistent (rehabilitation)
-    path('rehabitation' , RehabilitationView.as_view() , name = "rehabitation"),
     path('rehabitationpapid/<str:PAPID>' , RehabilatedPAPIDView.as_view() , name = "rehabitationPapID"),
-    path('rehabilitation/<int:id>', RehabilitationUpdateView.as_view(), name='rehabilitation-update'),
+    path('rehabilitation' , RehabilitationView.as_view() , name = "rehabitation"),
+    path('rehabilitation/<int:id>', RehabilitationView.as_view(), name='get-rehabilitation'),
+    path('rehabilitation/<int:id>', RehabilitationUpdateView.as_view(), name='update-rehabilitation'),
         
     path ('constructionsite' , constructionSiteView.as_view() , name = "constructionSiteView"),
-    path ('constructionsite/<int:id>', ConstructionSiteUpdateView.as_view() , name = "constructionSiteUpdateView"),
+    path ('construction-site/<int:id>', constructionSiteView.as_view() , name = "get-construction-site"),
+    path ('construction-site/<int:id>', ConstructionSiteUpdateView.as_view() , name = "update-construction-site"),
     path ('constructionsiteList' , ConstructionSiteListView.as_view() , name = "ConstructionSiteListView"),
 
     path ('labourcamp' , LabourCampView.as_view() , name = "LabourCampDetailsView"),
-    path('labourcamp/<int:id>', LabourCampUpdateView.as_view() , name =  "LabourCampUpdateView"),
+    path('labour-camp/<int:id>', LabourCampView.as_view() , name =  "get-labour-camp"),
+    path('labour-camp/<int:id>', LabourCampUpdateView.as_view() , name =  "update-labour-camp"),
 ]

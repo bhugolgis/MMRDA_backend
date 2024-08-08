@@ -39,7 +39,7 @@ urlpatterns = [
     path('treemanagement/<str:packages>' , TreemanagmentAPI.as_view() , name = "TreemanagmentAPI"),
     path('Airmanagement/<str:packages>' , AirAPI.as_view() , name = "AirAPI"),
     path('Noisemanagement/<str:packages>' , NoiseAPI.as_view() , name = "NoiseAPI"),
-    path('wastemanagement/<str:packages>' , WasteTreatmentsAPI.as_view() , name = "NoiseAPI"),
+    path('wastemanagement/<str:packages>' , WasteTreatmentsAPI.as_view() , name = "waste_management"),
     path('materialmanagement/<str:packages>' , MaterialSourcingAPI.as_view() , name = "MaterialSourcingAPI"),
     path('watermanagement/<str:packages>' , WatermanagmentAPI.as_view() , name = "WatermanagmentAPI"),
  ]

@@ -178,8 +178,18 @@ class PapView(generics.GenericAPIView):
                                 'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
-        
 
+    def get(self, request, id):
+        try:
+            pap = PAP.objects.get(id=id)
+            data = papviewserialzer(pap).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except PAP.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'PAP not found'}, status=404)
+        
+# PATCH
 class PapUpdateView(generics.UpdateAPIView):
     serializer_class = PapUpdateSerailzer
     permission_classes = [IsAuthenticated, IsConsultantOrRNR]
@@ -377,6 +387,16 @@ class RehabilitationView(generics.GenericAPIView):
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
 
 
+    def get(self, request, id):
+        try:
+            rehab = Rehabilitation.objects.get(id=id)
+            data = RehabilitationSerializer(rehab).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except Rehabilitation.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Rehab data not found'}, status=404)
+
 
 # Rehab Edit
 # Not showing all fields updated, check the return response
@@ -550,6 +570,16 @@ class LabourCampView(generics.GenericAPIView):
         # except Exception:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
 
+    def get(self, request, id):
+        try:
+            labour_camp = LabourCamp.objects.get(id=id)
+            data = LabourCampDetailViewSerializer(labour_camp).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except LabourCamp.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Labour camp data not found'}, status=404)
+
 
 # PATCH API 
 class LabourCampUpdateView(generics.UpdateAPIView):
@@ -716,6 +746,17 @@ class constructionSiteView(generics.GenericAPIView):
                                     'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
+
+
+    def get(self, request, id):
+        try:
+            construction_site = ConstructionSiteDetails.objects.get(id=id)
+            data = ConstructionSiteDetailsserializer(construction_site).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except ConstructionSiteDetails.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Construction camp data not found'}, status=404)
 
 
 # The ConstructionSiteUpdateView class is a view in a Python Django application that handles updating construction site data.
