@@ -93,20 +93,15 @@ class Noise(Baseclass):
     noiseLevel = models.IntegerField( null=True, blank=True)
     noiseLevel_day = models.FloatField( null=True, blank=True)
     noiseLevel_night = models.FloatField( null=True, blank=True)
-    monitoringPeriod = models.CharField(
-        max_length=255, null=True, blank=True)
-    monitoringPeriod_day = models.CharField(
-        max_length=255, null=True, blank=True)
-    monitoringPeriod_night = models.CharField(
-        max_length=255, null=True, blank=True)
+    monitoringPeriod = models.CharField(max_length=255, null=True, blank=True)
+    monitoringPeriod_day = models.CharField(max_length=255, null=True, blank=True)
+    monitoringPeriod_night = models.CharField(max_length=255, null=True, blank=True)
     typeOfArea = models.CharField( max_length = 255, null=True, blank=True)
     isWithinLimit_day = models.CharField( max_length = 255, null=True, blank=True)
     isWithinLimit_night = models.CharField( max_length = 255, null=True, blank=True)
 
 
-
-
-
+# Also known as Identified Tree
 class ExistingTreeManagment(Baseclass):
     user = models.ForeignKey( User ,  related_name="Tree_user" , on_delete= models.CASCADE , blank = True)
     treeID = models.CharField(max_length=255,null = True ,blank = True , unique=True)
@@ -136,20 +131,15 @@ class NewTreeManagement(Baseclass):
     remarks = models.TextField(max_length= 255 , null = True , blank = True)
 
 
-
+# Also known as Waste Management
 class WasteTreatments(Baseclass):
-    user = models.ForeignKey(
-        User, related_name="waste_treatments", on_delete=models.CASCADE, blank=True)
-    wastetype = models.CharField(
-        max_length=255,  null=True, blank=True)
+    user = models.ForeignKey(User, related_name="waste_treatments", on_delete=models.CASCADE, blank=True)
+    wastetype = models.CharField(max_length=255,  null=True, blank=True)
     
-
     isGISPermitsTransportation = models.BooleanField(blank=True, null=True)
-    # GISPermitsTransportationDocuments = models.FileField(upload_to='waste_documents/GISPermitsTransportation' , null=True, blank=True)
     GISPermitsTransportationDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
 
     isTransportationVechicalHasPermission = models.BooleanField(blank=True, null=True)
-    # TransportationVechicalHasPermissionDocuments = models.FileField(upload_to='waste_documents/' , null=True, blank=True)
     TransportationVechicalHasPermissionDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
 
     # Hazardous Waste
@@ -197,15 +187,12 @@ class WasteTreatments(Baseclass):
     isconstructionWasteQuantity = models.BooleanField(blank=True, null=True)
     constructionWasteQuantity = models.FloatField(null=True, blank=True) # Kg
 
-    wastehandling = models.CharField(
-        max_length=255, blank=True, null=True)
+    wastehandling = models.CharField(max_length=255, blank=True, null=True)
     wasteHandlingLocation = models.PointField(null=True, blank=True)
 
+    # Documents and Remarks
     documents =ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
-
-    # photographs = models.ImageField(upload_to='waste_photographs/' ,null=True, blank=True)
-    # documents = models.FileField(upload_to='waste_documents/' , null=True, blank=True)
     remarks = models.CharField(max_length=255, null=True, blank=True)
 
 

@@ -148,6 +148,17 @@ class AirView(generics.GenericAPIView):
                  return  Response({'status' : 'failed',
                             'message' : "Only consultant and Contractor can fill this form"}, status=status.HTTP_401_UNAUTHORIZED)
 
+    def get(self, request, id):
+        try:
+            air = Air.objects.get(id=id)
+            data = AirViewSerializer(air).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except Air.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Air data not found'}, status=404)
+            
+
 class AirUpdateView(generics.UpdateAPIView):
     serializer_class = AirUpdateSerializer
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
@@ -260,6 +271,16 @@ class WaterView(generics.GenericAPIView):
             return  Response({'status': 'failed',
                             'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
 
+    def get(self, request, id):
+        try:
+            water_instance = water.objects.get(id=id)
+            data = waterviewserializer(water_instance).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except water.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Water data not found'}, status=404)
+            
 
 class WaterUpdateView(generics.UpdateAPIView):
     serializer_class = WaterUpdateSerializer
@@ -371,6 +392,17 @@ class NoiseView(generics.GenericAPIView):
         else:
             return  Response({'status': 'failed',
                             'Message' : "Only consultant and Contractor can fill this form"} , status= status.HTTP_401_UNAUTHORIZED)
+
+    def get(self, request, id):
+        try:
+            noise = Noise.objects.get(id=id)
+            data = Noiseviewserializer(noise).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except Noise.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Noise data not found'}, status=404)
+
 
 class NoiseUpdateView(generics.UpdateAPIView):
     serializer_class = NoiseUpdateSerializer
@@ -502,6 +534,17 @@ class ExistingTreeManagementView(generics.GenericAPIView):
         else:
             return  Response({'status': 'failed',
                             'Message' : "Only consultant and Contractor can fill this form"} , status= status.HTTP_401_UNAUTHORIZED)
+
+
+    def get(self, request, id):
+        try:
+            existing_tree = ExistingTreeManagment.objects.get(id=id)
+            data = TreeManagmentviewserializer(existing_tree).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except ExistingTreeManagment.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Identified tree data not found'}, status=404)
 
 
 # Update Existing Tree
@@ -668,6 +711,17 @@ class NewTereeManagementView(generics.GenericAPIView):
             return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
 
 
+    def get(self, request, id):
+        try:
+            new_tree = NewTreeManagement.objects.get(id=id)
+            data = NewTreeManagmentviewserializer(new_tree).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except NewTreeManagement.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'New tree data not found'}, status=404)
+
+
 # New Tree Update
 class NewTreeManagementUpdateView(generics.UpdateAPIView):
     serializer_class = NewTreeManagmentUpdateSerializer
@@ -818,6 +872,16 @@ class WasteTreatmentsView(generics.GenericAPIView):
             else:
                 return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
 
+    def get(self, request, id):
+        try:
+            waste_treatment = WasteTreatments.objects.get(id=id)
+            data = wastetreatmentsViewserializer(waste_treatment).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except WasteTreatments.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Waste treatment data not found'}, status=404)
+
 
 class WasteTreatmentsUpdateView(generics.UpdateAPIView):
     serializer_class = WasteTreatmentsUpdateSerializer
@@ -949,6 +1013,16 @@ class MaterialSourcingView(generics.GenericAPIView):
                                     'Message' :error_message} , status = status.HTTP_400_BAD_REQUEST)
             else:
                 return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
+
+    def get(self, request, id):
+        try:
+            material_management = MaterialManegmanet.objects.get(id=id)
+            data = MaterialSourcingViewserializer(material_management).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except MaterialManegmanet.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Material management data not found'}, status=404)
 
 
 class MaterialSourcingUpdateView(generics.UpdateAPIView):
