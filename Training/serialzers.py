@@ -26,6 +26,13 @@ class TraningSerializer(serializers.ModelSerializer):
         return traning.objects.create(**data)
 
 
+# GET
+class TrainingViewSerializer(GeoFeatureModelSerializer):
+    class Meta:
+        model = traning
+        fields = '__all__'
+        geo_field= 'location'
+
 # Update (PATCH)
 class TrainingUpdateSerializer(serializers.ModelSerializer):
     longitude = serializers.CharField(max_length=10, required=False)

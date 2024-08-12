@@ -130,16 +130,20 @@ class occupationalHealthSafety(Baseclass):
     barricadingCondition = models.CharField(max_length=50 , choices=choices)
     barricadingRemarks = models.CharField(max_length=255 , blank = True , null = True)
 
-    natureOfAccident = models.CharField(max_length=255, blank=True, null=True)
+
+    # Incident Details
     typeOfIncident = models.CharField(max_length=255,  blank=True, null=True)
     incidentReportingStatus = models.CharField(max_length=255,  blank=True, null=True)
+    
     incidentDetails = models.TextField(max_length=255, blank=True, null=True)
     identifiedCauseOfIncident = models.CharField( max_length=255, blank=True, null=True)
     outcome = models.CharField(max_length=255, blank=True, null=True)
     compensationPaid = models.PositiveIntegerField(blank=True, null=True)
-
+    natureOfAccident = models.CharField(max_length=255, blank=True, null=True)
     manDaysLostCount = models.PositiveBigIntegerField(blank=True, null=True)
     manDaysLostReason = models.TextField(max_length=255, blank=True, null=True)
+
+    # Document and Remarks
     photographs = models.CharField( max_length=255, null=True, blank=True)
     documents = models.CharField( max_length=255 , blank=True, null=True)
     remarks = models.TextField(max_length=255, blank=True, null=True)

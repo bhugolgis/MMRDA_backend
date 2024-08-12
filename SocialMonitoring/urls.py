@@ -9,7 +9,7 @@ urlpatterns = [
     path('labourCampdetailsViewSearch' , labourCampdetailsViewSearch.as_view() , name = "labourCampdetailsView"),
  
     path ('pap' , PapView.as_view() , name = "project affected Person "),
-    path ('pap/<int:id>' , PapView.as_view() , name = "get_pap "),
+    path ('pap/<int:id>' , PapView.as_view() , name = "get-pap "),
     path ('pap/<int:id>' , PapUpdateView.as_view() , name = "update-pap"),
     path ('paplist' , PapListView.as_view() , name = "project affected Person List "),
 

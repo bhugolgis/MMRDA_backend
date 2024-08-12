@@ -57,6 +57,15 @@ class TraningView(generics.GenericAPIView):
             return Response({'status': 'error',
                             'Message' : error_message} , status = status.HTTP_400_BAD_REQUEST)
 
+    def get(self, request, id):
+        try:
+            training_instance = traning.objects.get(id=id)
+            data = TrainingViewSerializer(training_instance).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except traning.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Training data not found'}, status=404)
 
 
 # Update (PATCH)
@@ -156,6 +165,8 @@ class photographsListView(generics.GenericAPIView):
 # The view first validates the data submitted by the user. If the data is valid, the view saves the record to the database and returns a success message.
 #  Otherwise, the view returns an error message.
 # Check for incident location
+
+# No authorization or contractor or consultant?
 class occupationalHealthSafetyView(generics.GenericAPIView):
     serializer_class = occupationalHealthSafetySerialziers
     # parser_classes = [MultiPartParser]
@@ -196,6 +207,16 @@ class occupationalHealthSafetyView(generics.GenericAPIView):
             return Response({'status': 'error',
                             'Message' : value[0],
                             'data': data} , status = status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, id):
+        try:
+            ohs = occupationalHealthSafety.objects.get(id=id)
+            data = occupationalHealthSafetyViewSerializer(ohs).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except traning.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Occupation Health and Safety data not found'}, status=404)
 
 
 # Update PATCH API
@@ -366,6 +387,15 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
         else:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
 
+    def get(self, request, id):
+        try:
+            pre_construction_stage = PreConstructionStage.objects.get(id=id)
+            data = PreConstructionStageComplianceSerializer(pre_construction_stage).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except PreConstructionStage.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Pre construction stage data not found'}, status=404)
 
 
 # Update (PATCH)
