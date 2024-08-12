@@ -183,6 +183,7 @@ class PapView(generics.GenericAPIView):
         try:
             pap = PAP.objects.get(id=id)
             data = papviewserialzer(pap).data
+            data['properties']['id'] = id
             return Response({'status': 'success',
                              'data': data}, status=200)
         except PAP.DoesNotExist:
@@ -391,6 +392,7 @@ class RehabilitationView(generics.GenericAPIView):
         try:
             rehab = Rehabilitation.objects.get(id=id)
             data = RehabilitationSerializer(rehab).data
+            data['properties']['id'] = id
             return Response({'status': 'success',
                              'data': data}, status=200)
         except Rehabilitation.DoesNotExist:

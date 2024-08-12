@@ -105,9 +105,9 @@ EMAIL_USE_TLS = True
 DATABASES={
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME':'MMRDA',
+        'NAME':'mmrda',
         'USER':'postgres',
-        'PASSWORD':'Bhugol@123',
+        'PASSWORD':'60Db!e$$',
         'HOST':'localhost',
         'PORT':'5432',
     }
@@ -125,13 +125,6 @@ DATABASES={
 #     }
 # }
 
-
-
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }# DATABASES = {
 
 
 # Password validation
@@ -236,8 +229,9 @@ SIMPLE_JWT = {
 
 TIME_ZONE =  'Asia/Kolkata'
 
-GDAL_LIBRARY_PATH = r"C:\OSGeo4W\bin\gdal308.dll"
+# GDAL_LIBRARY_PATH = r"C:\OSGeo4W\bin\gdal308.dll"
 # GDAL_LIBRARY_PATH = r"C:\OSGeo4W64\bin\gdal301.dll"
+# GDAL_LIBRARY_PATH = r"C:\OSGeo4W\bin\gdal307.dll"
 
 CORS_EXPOSE_HEADERS = [
     'Content-Type',
