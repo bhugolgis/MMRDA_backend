@@ -152,6 +152,7 @@ class AirView(generics.GenericAPIView):
         try:
             air = Air.objects.get(id=id)
             data = AirViewSerializer(air).data
+            data['properties']['id'] = id
             return Response({'status': 'success',
                              'data': data}, status=200)
         except Air.DoesNotExist:
@@ -275,6 +276,7 @@ class WaterView(generics.GenericAPIView):
         try:
             water_instance = water.objects.get(id=id)
             data = waterviewserializer(water_instance).data
+            data['properties']['id'] = id
             return Response({'status': 'success',
                              'data': data}, status=200)
         except water.DoesNotExist:
@@ -397,6 +399,7 @@ class NoiseView(generics.GenericAPIView):
         try:
             noise = Noise.objects.get(id=id)
             data = Noiseviewserializer(noise).data
+            data['properties']['id'] = id
             return Response({'status': 'success',
                              'data': data}, status=200)
         except Noise.DoesNotExist:
@@ -540,6 +543,7 @@ class ExistingTreeManagementView(generics.GenericAPIView):
         try:
             existing_tree = ExistingTreeManagment.objects.get(id=id)
             data = TreeManagmentviewserializer(existing_tree).data
+            data['properties']['id'] = id
             return Response({'status': 'success',
                              'data': data}, status=200)
         except ExistingTreeManagment.DoesNotExist:
@@ -715,6 +719,7 @@ class NewTereeManagementView(generics.GenericAPIView):
         try:
             new_tree = NewTreeManagement.objects.get(id=id)
             data = NewTreeManagmentviewserializer(new_tree).data
+            data['properties']['id'] = id
             return Response({'status': 'success',
                              'data': data}, status=200)
         except NewTreeManagement.DoesNotExist:
@@ -876,6 +881,7 @@ class WasteTreatmentsView(generics.GenericAPIView):
         try:
             waste_treatment = WasteTreatments.objects.get(id=id)
             data = wastetreatmentsViewserializer(waste_treatment).data
+            data['properties']['id'] = id
             return Response({'status': 'success',
                              'data': data}, status=200)
         except WasteTreatments.DoesNotExist:
@@ -1018,6 +1024,7 @@ class MaterialSourcingView(generics.GenericAPIView):
         try:
             material_management = MaterialManegmanet.objects.get(id=id)
             data = MaterialSourcingViewserializer(material_management).data
+            data['properties']['id'] = id
             return Response({'status': 'success',
                              'data': data}, status=200)
         except MaterialManegmanet.DoesNotExist:

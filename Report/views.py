@@ -49,13 +49,17 @@ class LabourcampReportPackageView(ListAPIView):
                 return JsonResponse({'status':'error','message':'Data Not Found'}, status=400 )           
             # latest_serializer = LabourcampReportSerializer(latest).data
            
-            previousData = self.serializer_class(previous, many=True)
-            latestData = self.serializer_class(latest)
+            previousData = self.serializer_class(previous, many=True).data
+            latestData = self.serializer_class(latest).data
+
+            latestData['properties']['id'] = latestData['id'] 
+            for feature in previousData['features']:
+                feature['properties']['id'] = feature['id']           
 
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                            'Previous': previousData.data,
-                             'latest': latestData.data}, status=status.HTTP_200_OK)
+                            'Previous': previousData,
+                             'latest': latestData}, status=status.HTTP_200_OK)
 
         except Exception as e:
             return Response({'Message': 'There is no data available for this Package or Quarter',
