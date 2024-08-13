@@ -136,11 +136,13 @@ class WasteTreatments(Baseclass):
     user = models.ForeignKey(User, related_name="waste_treatments", on_delete=models.CASCADE, blank=True)
     wastetype = models.CharField(max_length=255,  null=True, blank=True)
     
+
     isGISPermitsTransportation = models.BooleanField(blank=True, null=True)
     GISPermitsTransportationDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
 
     isTransportationVechicalHasPermission = models.BooleanField(blank=True, null=True)
     TransportationVechicalHasPermissionDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
+
 
     # Hazardous Waste
     iswasteOilQnt = models.BooleanField(blank=True, null=True)
