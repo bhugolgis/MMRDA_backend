@@ -1139,16 +1139,16 @@ class WasteTreatmentsPackageView(ListAPIView):
 
     def get(self, request, packages, *args, **kwargs):
         try:
-            data = WasteTreatments.objects.filter(
-                packages=packages).order_by('-id')
+            data = WasteTreatments.objects.filter(packages=packages).order_by('-id')
             if not data.exists():
-                return Response({'Message': 'No data found',
-                                 },  status=status.HTTP_400_BAD_REQUEST)
-            Waste_data = wasteTreatmentsSerializer(data, many=True).data
+                return Response({'Message': 'No data found',},  status=status.HTTP_400_BAD_REQUEST)
+            waste_data = wasteTreatmentsSerializer(data, many=True).data
+            for feature in waste_data['features']:
+                feature['properties']['id'] = feature['id']   
 
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                            "wasteManagementdata": Waste_data},
+                            "wasteManagementdata": waste_data},
                             status=status.HTTP_200_OK)
         except:
             return Response({'Message': 'There is no data available for the Package',
