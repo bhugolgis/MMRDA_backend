@@ -123,7 +123,7 @@ class RehabilitationReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Rehabilitation
         # fields = "__all__"
-        fields =  ('quarter', 'packages','dateOfRehabilitation' ,'PAPID',
+        fields =  ('id', 'quarter', 'packages','dateOfRehabilitation' ,'PAPID',
                    'firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
                    'cashCompensationAmount',
                    'typeOfCompensation', 'otherCompensationType' ,
