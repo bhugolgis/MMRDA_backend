@@ -899,7 +899,7 @@ class WasteTreatmentsView(generics.GenericAPIView):
                 return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
 
 
-class WasteTreatmentsUpdateView(generics.UpdateAPIView):
+class WasteTreatmentsGetUpdateDeleteView(generics.UpdateAPIView):
     serializer_class = WasteTreatmentsUpdateSerializer
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
 
@@ -955,6 +955,17 @@ class WasteTreatmentsUpdateView(generics.UpdateAPIView):
         except WasteTreatments.DoesNotExist:
             return Response({'status': 'error',
                              'Message': 'Waste treatment data not found'}, status=404)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the Rehab instance.
+        """
+        waste_instance = self.get_object()
+        if not waste_instance:
+            return Response({'status': 'error', 'Message': 'Waste management data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        waste_instance.delete()
+        return Response({'status': 'success', 'Message': 'Waste management deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class MaterialSourcingView(generics.GenericAPIView):
@@ -1042,19 +1053,8 @@ class MaterialSourcingView(generics.GenericAPIView):
             else:
                 return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
 
-    def get(self, request, id):
-        try:
-            material_management = MaterialManegmanet.objects.get(id=id)
-            data = MaterialSourcingViewserializer(material_management).data
-            data['properties']['id'] = id
-            return Response({'status': 'success',
-                             'data': data}, status=200)
-        except MaterialManegmanet.DoesNotExist:
-            return Response({'status': 'error',
-                             'Message': 'Material management data not found'}, status=404)
 
-
-class MaterialSourcingUpdateView(generics.UpdateAPIView):
+class MaterialSourcingGetUpdateDeleteView(generics.UpdateAPIView):
     serializer_class = MaterialManagmentUpdateSerializer
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
 
@@ -1099,7 +1099,29 @@ class MaterialSourcingUpdateView(generics.UpdateAPIView):
 
         return Response({'status': 'success', 'message': 'Data updated successfully', 'data': data}, status=status.HTTP_200_OK)
 
+    def get(self, request, id):
+        try:
+            material_management = MaterialManegmanet.objects.get(id=id)
+            data = MaterialSourcingViewserializer(material_management).data
+            data['properties']['id'] = id
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except MaterialManegmanet.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Material management data not found'}, status=404)
 
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the Rehab instance.
+        """
+        material_management_instance = self.get_object()
+        if not material_management_instance:
+            return Response({'status': 'error', 'Message': 'Material management data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        material_management_instance.delete()
+        return Response({'status': 'success', 'Message': 'Material management deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+    
 class TreemanagmentAPI(generics.GenericAPIView):
     serializer_class = TreemanagementSerializer
     def get(self, request,packages, *args, **kwargs):

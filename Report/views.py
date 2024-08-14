@@ -1283,16 +1283,17 @@ class MaterialManagementReporetpackageView(ListAPIView):
 
     def get(self, request, packages, *args, **kwargs):
         try:
-            data = MaterialManegmanet.objects.filter(
-                packages=packages).order_by('-id')
+            data = MaterialManegmanet.objects.filter(packages=packages).order_by('-id')
             if not data.exists():
-                return Response({'Message': 'No data found',
-                                 'status' : 'success'},  status=status.HTTP_400_BAD_REQUEST)
+                return Response({'Message': 'No data found','status' : 'success'},  status=status.HTTP_400_BAD_REQUEST)
 
-            Material_data = materialManagementSerializer(data, many=True).data
+            material_data = materialManagementSerializer(data, many=True).data
+            for feature in material_data['features']:
+                feature['properties']['id'] = feature['id']
+                 
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                            "materialManagementData": Material_data},
+                            "materialManagementData": material_data},
                             status=status.HTTP_200_OK)
         except:
             return Response({'Message': 'There is no data available for the Package',

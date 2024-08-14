@@ -39,12 +39,14 @@ urlpatterns = [
     path('new-tree/<int:id>' , NewTreeManagementGetUpdateDeleteView.as_view() , name = "delete-new-tree"),
 
     path('waste' , WasteTreatmentsView.as_view() , name = "Waste Management"),
-    path('waste-management/<int:id>' , WasteTreatmentsUpdateView.as_view() , name = "get-waste-management"),
-    path('waste-management/<int:id>' , WasteTreatmentsUpdateView.as_view() , name = "update-waste-management"),
+    path('waste-management/<int:id>' , WasteTreatmentsGetUpdateDeleteView.as_view() , name = "get-waste-management"),
+    path('waste-management/<int:id>' , WasteTreatmentsGetUpdateDeleteView.as_view() , name = "update-waste-management"),
+    path('waste-management/<int:id>' , WasteTreatmentsGetUpdateDeleteView.as_view() , name = "delete-waste-management"),
     
     path('materialmanagement' , MaterialSourcingView.as_view() , name = "MaterialSourcingCreate"),
-    path('material-management/<int:id>' , MaterialSourcingView.as_view() , name = "get-material-management"),
-    path('materialManagement/<int:id>' , MaterialSourcingUpdateView.as_view() , name = "MaterialSourcingUpdate"),
+    path('material-management/<int:id>' , MaterialSourcingGetUpdateDeleteView.as_view() , name = "get-material-management"),
+    path('materialManagement/<int:id>' , MaterialSourcingGetUpdateDeleteView.as_view() , name = "update-material-management"),
+    path('materialManagement/<int:id>' , MaterialSourcingGetUpdateDeleteView.as_view() , name = "delete-material-management"),
 
     path('treemanagement/<str:packages>' , TreemanagmentAPI.as_view() , name = "TreemanagmentAPI"),
     path('Airmanagement/<str:packages>' , AirAPI.as_view() , name = "AirAPI"),
