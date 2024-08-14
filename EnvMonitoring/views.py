@@ -725,20 +725,8 @@ class NewTereeManagementView(generics.GenericAPIView):
             return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
 
 
-    def get(self, request, id):
-        try:
-            new_tree = NewTreeManagement.objects.get(id=id)
-            data = NewTreeManagmentviewserializer(new_tree).data
-            data['properties']['id'] = id
-            return Response({'status': 'success',
-                             'data': data}, status=200)
-        except NewTreeManagement.DoesNotExist:
-            return Response({'status': 'error',
-                             'Message': 'New tree data not found'}, status=404)
-
-
 # New Tree Update
-class NewTreeManagementUpdateView(generics.UpdateAPIView):
+class NewTreeManagementGetUpdateDeleteView(generics.UpdateAPIView):
     serializer_class = NewTreeManagmentUpdateSerializer
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
     queryset = NewTreeManagement.objects.all()
@@ -797,6 +785,29 @@ class NewTreeManagementUpdateView(generics.UpdateAPIView):
             'data': data
         }, status=status.HTTP_200_OK)
 
+    def get(self, request, id):
+        try:
+            new_tree = NewTreeManagement.objects.get(id=id)
+            data = NewTreeManagmentviewserializer(new_tree).data
+            data['properties']['id'] = id
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except NewTreeManagement.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'New tree data not found'}, status=404)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the Rehab instance.
+        """
+        new_tree_instance = self.get_object()
+        if not new_tree_instance:
+            return Response({'status': 'error', 'Message': 'New tree data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        new_tree_instance.delete()
+        return Response({'status': 'success', 'Message': 'New tree deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+            
 class WasteTreatmentsView(generics.GenericAPIView):
     serializer_class = WasteTreatmentsSerializer
     # renderer_classes = [ErrorRenderer]
@@ -887,17 +898,6 @@ class WasteTreatmentsView(generics.GenericAPIView):
             else:
                 return  Response({'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
 
-    def get(self, request, id):
-        try:
-            waste_treatment = WasteTreatments.objects.get(id=id)
-            data = wastetreatmentsViewserializer(waste_treatment).data
-            data['properties']['id'] = id
-            return Response({'status': 'success',
-                             'data': data}, status=200)
-        except WasteTreatments.DoesNotExist:
-            return Response({'status': 'error',
-                             'Message': 'Waste treatment data not found'}, status=404)
-
 
 class WasteTreatmentsUpdateView(generics.UpdateAPIView):
     serializer_class = WasteTreatmentsUpdateSerializer
@@ -943,6 +943,18 @@ class WasteTreatmentsUpdateView(generics.UpdateAPIView):
         data = WasteTreatmentsUpdateSerializer(updated_instance).data
 
         return Response({'status': 'success', 'message': 'Data updated successfully', 'data': data}, status=status.HTTP_200_OK)
+
+
+    def get(self, request, id):
+        try:
+            waste_treatment = WasteTreatments.objects.get(id=id)
+            data = wastetreatmentsViewserializer(waste_treatment).data
+            data['properties']['id'] = id
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except WasteTreatments.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Waste treatment data not found'}, status=404)
 
 
 class MaterialSourcingView(generics.GenericAPIView):

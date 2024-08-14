@@ -34,12 +34,13 @@ urlpatterns = [
     path('GetExistingTreeIDView/<str:treeID>' , GetExistingTreeIDView.as_view() , name = "Tree Management list"),
 
     path('NewTree' , NewTereeManagementView.as_view() , name = "Tree Management"),
-    path('new-tree/<int:id>' , NewTereeManagementView.as_view() , name = "get-new-tree"),
-    path('NewTree/<int:id>' , NewTreeManagementUpdateView.as_view() , name = "New Tree Management"),
+    path('new-tree/<int:id>' , NewTreeManagementGetUpdateDeleteView.as_view() , name = "get-new-tree"),
+    path('new-tree/<int:id>' , NewTreeManagementGetUpdateDeleteView.as_view() , name = "update-new-tree"),
+    path('new-tree/<int:id>' , NewTreeManagementGetUpdateDeleteView.as_view() , name = "delete-new-tree"),
 
     path('waste' , WasteTreatmentsView.as_view() , name = "Waste Management"),
-    path('waste-management/<int:id>' , WasteTreatmentsView.as_view() , name = "get-waste-management"),
-    path('Waste/<int:id>' , WasteTreatmentsUpdateView.as_view() , name = "Waste Management Update"),
+    path('waste-management/<int:id>' , WasteTreatmentsUpdateView.as_view() , name = "get-waste-management"),
+    path('waste-management/<int:id>' , WasteTreatmentsUpdateView.as_view() , name = "update-waste-management"),
     
     path('materialmanagement' , MaterialSourcingView.as_view() , name = "MaterialSourcingCreate"),
     path('material-management/<int:id>' , MaterialSourcingView.as_view() , name = "get-material-management"),
