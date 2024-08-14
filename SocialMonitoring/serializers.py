@@ -202,18 +202,17 @@ class RehabilitationSerializer(serializers.ModelSerializer):
                    'financialSupportAmount','isCommunityEngagement','isEngagementType',
                    'photographs' , 'documents','remarks')
 
-    def validate(self,data):
+    def validate(self, data):
         """
         The function validates the longitude and latitude values in a given data dictionary, ensuring
         that they have at most 6 digits after the decimal point.
-        
         """
-        long = data['longitude'].split('.')[-1]
-        if len(long) > 6:
-            raise ValidationError("longitude must have at most 6 digits after the decimal point.")
-        lat =  data['latitude'].split('.')[-1]
-        if len(lat) > 6:
-            raise ValidationError("latitude must have at most 6 digits after the decimal point.")
+        long = data.get('longitude', '').split('.')[-1]
+        if long and len(long) > 6:
+            raise serializers.ValidationError("longitude must have at most 6 digits after the decimal point.")
+        lat = data.get('latitude', '').split('.')[-1]
+        if lat and len(lat) > 6:
+            raise serializers.ValidationError("latitude must have at most 6 digits after the decimal point.")
         return data
 
     def create(self, data):
@@ -230,7 +229,7 @@ class RehabilitationSerializer(serializers.ModelSerializer):
 
 
 # Rehab update (PATCH) check for PUT
-class RehabilitationUpdateSerializer(serializers.ModelSerializer):
+class RehabilitationGetUpdateDeleteSerializer(serializers.ModelSerializer):
     longitude = serializers.CharField(max_length=50, required=False)
     latitude = serializers.CharField(max_length=50, required=False)
     documents = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
@@ -238,7 +237,7 @@ class RehabilitationUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Rehabilitation
-        fields = ('quarter', 'longitude', 'latitude', 'packages', 'dateOfRehabilitation', 'PAPID',
+        fields = ('id', 'quarter', 'longitude', 'latitude', 'packages', 'dateOfRehabilitation', 'PAPID',
                   'firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
                   'cashCompensationAmount', 'typeOfCompensation', 'otherCompensationType',
                   'addressLine1', 'streetName', 'pincode', 'rehabLocation', 'allowance', 'area',

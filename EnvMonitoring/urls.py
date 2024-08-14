@@ -27,8 +27,9 @@ urlpatterns = [
 
     # path('envview' , envMonitoringView.as_view() , name = 'EnvQualityMonitoring'),
     path('IdentifiedTree' , ExistingTreeManagementView.as_view() , name = "Tree Management"),
-    path('identified-tree/<int:id>' , ExistingTreeManagementView.as_view() , name = "get-existing-tree"),
-    path('ExistingTree/<int:id>' , ExistingTreeManagementUpdateView.as_view() , name =" Existing Tree Management"),
+    path('existing-tree/<int:id>' , ExistingTreeManagementGetUpdateDeleteView.as_view() , name = "get-existing-tree"),
+    path('existing-tree/<int:id>' , ExistingTreeManagementGetUpdateDeleteView.as_view() , name =" update-existing-tree"),
+    path('existing-tree/<int:id>' , ExistingTreeManagementGetUpdateDeleteView.as_view() , name =" delete-existing-tree"),
     path('treeView' , ExistingTereeManagementView.as_view() , name = "Tree Management list"),
     path('GetExistingTreeIDView/<str:treeID>' , GetExistingTreeIDView.as_view() , name = "Tree Management list"),
 

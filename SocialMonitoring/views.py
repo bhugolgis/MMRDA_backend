@@ -414,7 +414,7 @@ class RehabilitationView(generics.GenericAPIView):
 # Rehab Edit
 # Not showing all fields updated, check the return response
 class RehabilitationGetUpdateDeleteView(generics.UpdateAPIView):
-    serializer_class = RehabilitationUpdateSerializer
+    serializer_class = RehabilitationGetUpdateDeleteSerializer
     permission_classes = [IsAuthenticated, IsConsultantOrRNR]
 
     def get_object(self):
@@ -473,7 +473,7 @@ class RehabilitationGetUpdateDeleteView(generics.UpdateAPIView):
     def get(self, request, id):
         try:
             rehab = Rehabilitation.objects.get(id=id)
-            data = RehabilitationSerializer(rehab).data
+            data = RehabilitationViewSerializer(rehab).data
             data['properties']['id'] = id
             return Response({'status': 'success',
                              'data': data}, status=200)
