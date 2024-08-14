@@ -856,10 +856,13 @@ class NoiseReportpackageView(ListAPIView):
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
-            Noise_data = NoiseReportSerializer(data, many=True).data
+            noise_data = NoiseReportSerializer(data, many=True).data
+            for feature in noise_data['features']:
+                feature['properties']['id'] = feature['id']
+                
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                            "Noise_data": Noise_data},
+                            "Noise_data": noise_data},
                             status=status.HTTP_200_OK)
         except:
             return Response({'Message': 'There is no data available for the Package',
