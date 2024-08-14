@@ -179,16 +179,16 @@ class PapView(generics.GenericAPIView):
         else:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
 
-    def get(self, request, id):
-        try:
-            pap = PAP.objects.get(id=id)
-            data = papviewserialzer(pap).data
-            data['properties']['id'] = id
-            return Response({'status': 'success',
-                             'data': data}, status=200)
-        except PAP.DoesNotExist:
-            return Response({'status': 'error',
-                             'Message': 'PAP not found'}, status=404)
+    # def get(self, request, id):
+    #     try:
+    #         pap = PAP.objects.get(id=id)
+    #         data = papviewserialzer(pap).data
+    #         data['properties']['id'] = id
+    #         return Response({'status': 'success',
+    #                          'data': data}, status=200)
+    #     except PAP.DoesNotExist:
+    #         return Response({'status': 'error',
+    #                          'Message': 'PAP not found'}, status=404)
         
 # PATCH
 class PapUpdateView(generics.UpdateAPIView):
@@ -253,6 +253,24 @@ class PapUpdateView(generics.UpdateAPIView):
             'data': data
         }, status=status.HTTP_200_OK)
 
+    def get(self, request, id):
+        try:
+            pap = PAP.objects.get(id=id)
+            data = papviewserialzer(pap).data
+            data['properties']['id'] = id
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except PAP.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'PAP not found'}, status=404)
+
+
+
+class PapRetrieveDestroyView(generics.RetrieveDestroyAPIView):
+    queryset = PAP.objects.all()
+    serializer_class = papviewserialzer
+    permission_classes = [IsAuthenticated, IsConsultantOrRNR]
+    lookup_field = 'id'
 
 class PapListView(generics.ListAPIView):
     serializer_class = papviewserialzer
@@ -572,16 +590,7 @@ class LabourCampView(generics.GenericAPIView):
         # except Exception:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
 
-    def get(self, request, id):
-        try:
-            labour_camp = LabourCamp.objects.get(id=id)
-            data = LabourCampDetailViewSerializer(labour_camp).data
-            return Response({'status': 'success',
-                             'data': data}, status=200)
-        except LabourCamp.DoesNotExist:
-            return Response({'status': 'error',
-                             'Message': 'Labour camp data not found'}, status=404)
-
+    
 
 # PATCH API 
 class LabourCampUpdateView(generics.UpdateAPIView):
@@ -650,6 +659,17 @@ class LabourCampUpdateView(generics.UpdateAPIView):
             'status': 'success',
             'data': data
         }, status=status.HTTP_200_OK)
+
+    def get(self, request, id):
+        try:
+            labour_camp = LabourCamp.objects.get(id=id)
+            data = LabourCampDetailViewSerializer(labour_camp).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except LabourCamp.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Labour camp data not found'}, status=404)
+
 
 # ------------------------------------ Construction site View -----------------------------------------------------
 
