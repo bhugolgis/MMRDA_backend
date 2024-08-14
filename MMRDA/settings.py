@@ -107,8 +107,8 @@ DATABASES={
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME':'mmrda',
         'USER':'postgres',
-        'PASSWORD':'60Db!e$$',
-        'HOST':'localhost',
+        'PASSWORD':'admin',
+        'HOST':'172.16.0.40',
         'PORT':'5432',
     }
 }
@@ -229,7 +229,7 @@ SIMPLE_JWT = {
 
 TIME_ZONE =  'Asia/Kolkata'
 
-# GDAL_LIBRARY_PATH = r"C:\OSGeo4W\bin\gdal308.dll"
+
 # GDAL_LIBRARY_PATH = r"C:\OSGeo4W64\bin\gdal301.dll"
 # GDAL_LIBRARY_PATH = r"C:\OSGeo4W\bin\gdal307.dll"
 
