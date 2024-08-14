@@ -191,7 +191,7 @@ class PapView(generics.GenericAPIView):
     #                          'Message': 'PAP not found'}, status=404)
         
 # PATCH
-class PapUpdateView(generics.UpdateAPIView):
+class PapGetUpdateDeleteView(generics.UpdateAPIView):
     serializer_class = PapUpdateSerailzer
     permission_classes = [IsAuthenticated, IsConsultantOrRNR]
     # parser_classes = [MultiPartParser]
@@ -264,13 +264,17 @@ class PapUpdateView(generics.UpdateAPIView):
             return Response({'status': 'error',
                              'Message': 'PAP not found'}, status=404)
 
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the LabourCamp instance.
+        """
+        pap_instance = self.get_object()
+        if not pap_instance:
+            return Response({'status': 'error', 'Message': 'PAP data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        pap_instance.delete()
+        return Response({'status': 'success', 'Message': 'PAP deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
-
-class PapRetrieveDestroyView(generics.RetrieveDestroyAPIView):
-    queryset = PAP.objects.all()
-    serializer_class = papviewserialzer
-    permission_classes = [IsAuthenticated, IsConsultantOrRNR]
-    lookup_field = 'id'
 
 class PapListView(generics.ListAPIView):
     serializer_class = papviewserialzer
@@ -406,21 +410,10 @@ class RehabilitationView(generics.GenericAPIView):
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
 
 
-    def get(self, request, id):
-        try:
-            rehab = Rehabilitation.objects.get(id=id)
-            data = RehabilitationSerializer(rehab).data
-            data['properties']['id'] = id
-            return Response({'status': 'success',
-                             'data': data}, status=200)
-        except Rehabilitation.DoesNotExist:
-            return Response({'status': 'error',
-                             'Message': 'Rehab data not found'}, status=404)
-
 
 # Rehab Edit
 # Not showing all fields updated, check the return response
-class RehabilitationUpdateView(generics.UpdateAPIView):
+class RehabilitationGetUpdateDeleteView(generics.UpdateAPIView):
     serializer_class = RehabilitationUpdateSerializer
     permission_classes = [IsAuthenticated, IsConsultantOrRNR]
 
@@ -475,6 +468,30 @@ class RehabilitationUpdateView(generics.UpdateAPIView):
             'status': 'success',
             'data': data
         }, status=status.HTTP_200_OK)
+
+
+    def get(self, request, id):
+        try:
+            rehab = Rehabilitation.objects.get(id=id)
+            data = RehabilitationSerializer(rehab).data
+            data['properties']['id'] = id
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except Rehabilitation.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Rehab data not found'}, status=404)
+
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the Rehab instance.
+        """
+        rehab_instance = self.get_object()
+        if not rehab_instance:
+            return Response({'status': 'error', 'Message': 'Rehab data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        rehab_instance.delete()
+        return Response({'status': 'success', 'Message': 'Rehab deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
 # ----------------------------- Labour Camp View --------------------------------
@@ -593,7 +610,7 @@ class LabourCampView(generics.GenericAPIView):
     
 
 # PATCH API 
-class LabourCampUpdateView(generics.UpdateAPIView):
+class LabourCampUpdateGetDeleteView(generics.UpdateAPIView):
     serializer_class = LabourCampUpdateSerializer
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
 
@@ -660,6 +677,7 @@ class LabourCampUpdateView(generics.UpdateAPIView):
             'data': data
         }, status=status.HTTP_200_OK)
 
+
     def get(self, request, id):
         try:
             labour_camp = LabourCamp.objects.get(id=id)
@@ -669,6 +687,18 @@ class LabourCampUpdateView(generics.UpdateAPIView):
         except LabourCamp.DoesNotExist:
             return Response({'status': 'error',
                              'Message': 'Labour camp data not found'}, status=404)
+
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the LabourCamp instance.
+        """
+        labour_camp_instance = self.get_object()
+        if not labour_camp_instance:
+            return Response({'status': 'error', 'Message': 'Labour camp data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        labour_camp_instance.delete()
+        return Response({'status': 'success', 'Message': 'Labour camp deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
 # ------------------------------------ Construction site View -----------------------------------------------------
@@ -770,19 +800,8 @@ class constructionSiteView(generics.GenericAPIView):
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
 
 
-    def get(self, request, id):
-        try:
-            construction_site = ConstructionSiteDetails.objects.get(id=id)
-            data = ConstructionSiteDetailsserializer(construction_site).data
-            return Response({'status': 'success',
-                             'data': data}, status=200)
-        except ConstructionSiteDetails.DoesNotExist:
-            return Response({'status': 'error',
-                             'Message': 'Construction camp data not found'}, status=404)
-
-
 # The ConstructionSiteUpdateView class is a view in a Python Django application that handles updating construction site data.
-class ConstructionSiteUpdateView(generics.UpdateAPIView):
+class ConstructionSiteGetUpdateDeleteView(generics.UpdateAPIView):
     serializer_class = ConstructionSiteUpdateSerializer
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
 
@@ -844,6 +863,29 @@ class ConstructionSiteUpdateView(generics.UpdateAPIView):
             'status': 'success',
             'data': data
         }, status=status.HTTP_200_OK)
+
+
+    def get(self, request, id):
+        try:
+            construction_site = ConstructionSiteDetails.objects.get(id=id)
+            data = ConstructionSiteDetailsserializer(construction_site).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except ConstructionSiteDetails.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Construction camp data not found'}, status=404)
+
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the LabourCamp instance.
+        """
+        construction_site_instance = self.get_object()
+        if not construction_site_instance:
+            return Response({'status': 'error', 'Message': 'Construction camp data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        construction_site_instance.delete()
+        return Response({'status': 'success', 'Message': 'Construction camp deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
 # The ConstructionSiteListView class is a generic ListAPIView that uses the constructionSiteSerializer
