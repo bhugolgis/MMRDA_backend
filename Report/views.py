@@ -702,10 +702,14 @@ class AirReportPackageView(ListAPIView):
             if not data.exists():
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
-            airdata = AirReportSerializer(data, many=True).data
+            air_data = AirReportSerializer(data, many=True).data
+
+            for feature in air_data['features']:
+                feature['properties']['id'] = feature['id']   
+                
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                            "Air_data": airdata},
+                            "Air_data": air_data},
                             status=status.HTTP_200_OK)
         except:
             return Response({'Message': 'There is no data available for the Quarter',
