@@ -147,20 +147,9 @@ class AirView(generics.GenericAPIView):
             else:
                  return  Response({'status' : 'failed',
                             'message' : "Only consultant and Contractor can fill this form"}, status=status.HTTP_401_UNAUTHORIZED)
-
-    def get(self, request, id):
-        try:
-            air = Air.objects.get(id=id)
-            data = AirViewSerializer(air).data
-            data['properties']['id'] = id
-            return Response({'status': 'success',
-                             'data': data}, status=200)
-        except Air.DoesNotExist:
-            return Response({'status': 'error',
-                             'Message': 'Air data not found'}, status=404)
             
 
-class AirUpdateView(generics.UpdateAPIView):
+class AirGetUpdateDeleteView(generics.UpdateAPIView):
     serializer_class = AirUpdateSerializer
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
     queryset = Air.objects.all()
@@ -206,6 +195,28 @@ class AirUpdateView(generics.UpdateAPIView):
             'message': 'Data updated successfully',
             'data': data
         }, status=status.HTTP_200_OK)
+
+    def get(self, request, id):
+        try:
+            air = Air.objects.get(id=id)
+            data = AirViewSerializer(air).data
+            data['properties']['id'] = id
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except Air.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Air data not found'}, status=404)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the Rehab instance.
+        """
+        air_instance = self.get_object()
+        if not air_instance:
+            return Response({'status': 'error', 'Message': 'Air data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        air_instance.delete()
+        return Response({'status': 'success', 'Message': 'Air deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
         
 
 class AirListView(generics.ListAPIView):
