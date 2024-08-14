@@ -9,8 +9,9 @@ urlpatterns = [
     path('labourCampdetailsViewSearch' , labourCampdetailsViewSearch.as_view() , name = "labourCampdetailsView"),
  
     path ('pap' , PapView.as_view() , name = "project affected Person "),
-    path ('pap/<int:id>' , PapView.as_view() , name = "get-pap "),
+    path ('pap/<int:id>' , PapUpdateView.as_view() , name = "get-pap "),
     path ('pap/<int:id>' , PapUpdateView.as_view() , name = "update-pap"),
+    path ('pap/<int:id>/rud' , PapRetrieveDestroyView.as_view() , name = "retrieve-destroy-pap"),
     path ('paplist' , PapListView.as_view() , name = "project affected Person List "),
 
     # Rehab spelling is inconsistent (rehabilitation)
@@ -25,6 +26,6 @@ urlpatterns = [
     path ('constructionsiteList' , ConstructionSiteListView.as_view() , name = "ConstructionSiteListView"),
 
     path ('labourcamp' , LabourCampView.as_view() , name = "LabourCampDetailsView"),
-    path('labour-camp/<int:id>', LabourCampView.as_view() , name =  "get-labour-camp"),
+    path('labour-camp/<int:id>', LabourCampUpdateView.as_view() , name =  "get-labour-camp"),
     path('labour-camp/<int:id>', LabourCampUpdateView.as_view() , name =  "update-labour-camp"),
 ]
