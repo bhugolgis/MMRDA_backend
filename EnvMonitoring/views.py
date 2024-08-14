@@ -418,19 +418,8 @@ class NoiseView(generics.GenericAPIView):
             return  Response({'status': 'failed',
                             'Message' : "Only consultant and Contractor can fill this form"} , status= status.HTTP_401_UNAUTHORIZED)
 
-    def get(self, request, id):
-        try:
-            noise = Noise.objects.get(id=id)
-            data = Noiseviewserializer(noise).data
-            data['properties']['id'] = id
-            return Response({'status': 'success',
-                             'data': data}, status=200)
-        except Noise.DoesNotExist:
-            return Response({'status': 'error',
-                             'Message': 'Noise data not found'}, status=404)
 
-
-class NoiseUpdateView(generics.UpdateAPIView):
+class NoiseGetUpdateDeleteView(generics.UpdateAPIView):
     serializer_class = NoiseUpdateSerializer
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
     queryset = Noise.objects.all()
@@ -476,6 +465,28 @@ class NoiseUpdateView(generics.UpdateAPIView):
             'message': 'Data updated successfully',
             'data': data
         }, status=status.HTTP_200_OK)
+
+    def get(self, request, id):
+        try:
+            noise = Noise.objects.get(id=id)
+            data = Noiseviewserializer(noise).data
+            data['properties']['id'] = id
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except Noise.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Noise data not found'}, status=404)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the Rehab instance.
+        """
+        noise_instance = self.get_object()
+        if not noise_instance:
+            return Response({'status': 'error', 'Message': 'Noise data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        noise_instance.delete()
+        return Response({'status': 'success', 'Message': 'Noise deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class NoiseListView(generics.ListAPIView):

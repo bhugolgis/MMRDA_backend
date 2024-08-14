@@ -18,8 +18,7 @@ urlpatterns = [
     path('waterList' , waterListView.as_view() , name = 'water Details'),
 
     path('noise' , NoiseView.as_view() , name = "Noise Details"),
-    path('noise/<int:id>' , NoiseView.as_view() , name = "get-noise-details"),
-    path('noise/<int:id>' , NoiseUpdateView.as_view() , name = "Noise Details"),
+    path('noise/<int:id>' , NoiseGetUpdateDeleteView.as_view() , name = "get-update-delete-noise-details"),
     path('noiseList' ,NoiseListView.as_view() , name = "Noise"),
     path('noiseWhithinLimit' ,NoiseWhithinLimitAPI.as_view() , name = "noiseWhithinLimit"),
 
