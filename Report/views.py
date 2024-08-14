@@ -49,17 +49,18 @@ class LabourcampReportPackageView(ListAPIView):
                 return JsonResponse({'status':'error','message':'Data Not Found'}, status=400 )           
             # latest_serializer = LabourcampReportSerializer(latest).data
            
-            previousData = self.serializer_class(previous, many=True).data
-            latestData = self.serializer_class(latest).data
+            previous_data = self.serializer_class(previous, many=True).data
+            print(type(previous_data))
+            latest_data = self.serializer_class(latest).data
 
-            latestData['properties']['id'] = latestData['id'] 
-            for feature in previousData['features']:
+            latest_data['properties']['id'] = latest_data['id'] 
+            for feature in previous_data['features']:
                 feature['properties']['id'] = feature['id']           
 
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                            'Previous': previousData,
-                             'latest': latestData}, status=status.HTTP_200_OK)
+                            'Previous': previous_data,
+                             'latest': latest_data}, status=status.HTTP_200_OK)
 
         except Exception as e:
             return Response({'Message': 'There is no data available for this Package or Quarter',
@@ -232,13 +233,19 @@ class ConstructionCampReportPackageView(ListAPIView):
                 packages=packages, constructionSiteName=constructionSiteName  ).order_by('-id')[1:]
             latest = ConstructionSiteDetails.objects.filter(
                 packages=packages, constructionSiteName=constructionSiteName).latest('id')
-            previousData = ConstructionCampReportSerializer(previous, many=True)
-            latestData = ConstructionCampReportSerializer(latest)
+            previous_data = ConstructionCampReportSerializer(previous, many=True).data
+            latest_data = ConstructionCampReportSerializer(latest).data
+
+            latest_data['properties']['id'] = latest_data['id'] 
+            for feature in previous_data['features']:
+                feature['properties']['id'] = feature['id'] 
+
+            
 
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                            'Previous': previousData.data,
-                            'latest': latestData.data},
+                            'Previous': previous_data,
+                            'latest': latest_data},
                             status=status.HTTP_200_OK)
 
         except Exception:
@@ -391,10 +398,13 @@ class PAPReportPackageView(ListAPIView):
             if not data.exists():
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
-            papdata = PAPReportSerializer(data, many=True).data
+            pap_data = PAPReportSerializer(data, many=True).data
+
+            for feature in pap_data['features']:
+                feature['properties']['id'] = feature['id']
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                            "PAP": papdata},
+                            "PAP": pap_data},
                             status=status.HTTP_200_OK)
         except Exception:
             return Response({'Message': 'There is no data available for the Package or Quarter',
@@ -525,17 +535,16 @@ class RehabilitationReportPackageView(ListAPIView):
 
     def get(self, request, packages, *args, **kwargs):
         try:
-            data = Rehabilitation.objects.filter(
-                packages=packages).order_by('-id')
+            data = Rehabilitation.objects.filter(packages=packages).order_by('-id')
             if not data.exists():
-                return Response({'Message': 'No data found',
-                                 },  status=status.HTTP_400_BAD_REQUEST)
-            Rehabilitationdata = RehabilitationReportSerializer(
-                data, many=True).data
-
+                return Response({'Message': 'No data found',},  status=status.HTTP_400_BAD_REQUEST)
+            rehabilitation_data = RehabilitationReportSerializer(data, many=True).data
+            for feature in rehabilitation_data['features']:
+                feature['properties']['id'] = feature['id']
+    
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                            "Rehabilated_PAP_Package": Rehabilitationdata},
+                            "Rehabilated_PAP_Package": rehabilitation_data},
                             status=status.HTTP_200_OK)
         except Exception:
             return Response({'Message': 'There is no data available for the Package or Quarter',
