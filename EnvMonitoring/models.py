@@ -101,7 +101,7 @@ class Noise(Baseclass):
     isWithinLimit_night = models.CharField( max_length = 255, null=True, blank=True)
 
 
-# Also known as Identified Tree
+# Also known as Identified Tree (in portal only existing tree existing)
 class ExistingTreeManagment(Baseclass):
     user = models.ForeignKey( User ,  related_name="Tree_user" , on_delete= models.CASCADE , blank = True)
     treeID = models.CharField(max_length=255,null = True ,blank = True , unique=True)

@@ -539,21 +539,9 @@ class ExistingTreeManagementView(generics.GenericAPIView):
                             'Message' : "Only consultant and Contractor can fill this form"} , status= status.HTTP_401_UNAUTHORIZED)
 
 
-    def get(self, request, id):
-        try:
-            existing_tree = ExistingTreeManagment.objects.get(id=id)
-            data = TreeManagmentviewserializer(existing_tree).data
-            data['properties']['id'] = id
-            return Response({'status': 'success',
-                             'data': data}, status=200)
-        except ExistingTreeManagment.DoesNotExist:
-            return Response({'status': 'error',
-                             'Message': 'Identified tree data not found'}, status=404)
+# Get Update Delete Existing Tree
 
-
-# Update Existing Tree
-
-class ExistingTreeManagementUpdateView(generics.UpdateAPIView):
+class ExistingTreeManagementGetUpdateDeleteView(generics.UpdateAPIView):
     serializer_class = TreeManagementUpdateSerializer
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
     queryset = ExistingTreeManagment.objects.all()
@@ -612,6 +600,28 @@ class ExistingTreeManagementUpdateView(generics.UpdateAPIView):
             'message': 'Data updated successfully',
             'data': data
         }, status=status.HTTP_200_OK)
+
+    def get(self, request, id):
+        try:
+            existing_tree = ExistingTreeManagment.objects.get(id=id)
+            data = TreeManagmentviewserializer(existing_tree).data
+            data['properties']['id'] = id
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except ExistingTreeManagment.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Identified tree data not found'}, status=404)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the Rehab instance.
+        """
+        existing_tree_instance = self.get_object()
+        if not existing_tree_instance:
+            return Response({'status': 'error', 'Message': 'Identified tree data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        existing_tree_instance.delete()
+        return Response({'status': 'success', 'Message': 'Identified tree deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class ExistingTereeManagementView(generics.ListAPIView):
