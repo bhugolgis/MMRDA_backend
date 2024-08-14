@@ -1002,6 +1002,9 @@ class waterReportPackageView(ListAPIView):
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
             water_data = waterReportSerializer(data, many=True).data
+            for feature in water_data['features']:
+                feature['properties']['id'] = feature['id']   
+                
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
                             "water_data": water_data}, status=status.HTTP_200_OK)

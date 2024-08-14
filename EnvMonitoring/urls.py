@@ -14,8 +14,7 @@ urlpatterns = [
     path('airList', AirListView.as_view() , name = 'ListAirView'),
 
     path('water' , WaterView.as_view() , name = 'water Details'),
-    path('water/<int:id>' , WaterView.as_view() , name = 'get-water-details'),
-    path('water/<int:id>' , WaterUpdateView.as_view() , name = 'water Details'),
+    path('water/<int:id>' , WaterGetUpdateDeleteView.as_view() , name = 'get-update-delete-water-details'),
     path('waterList' , waterListView.as_view() , name = 'water Details'),
 
     path('noise' , NoiseView.as_view() , name = "Noise Details"),

@@ -282,20 +282,9 @@ class WaterView(generics.GenericAPIView):
         else:
             return  Response({'status': 'failed',
                             'Message' : "Only consultant and Contractor can fill this form"}, status= status.HTTP_401_UNAUTHORIZED)
+        
 
-    def get(self, request, id):
-        try:
-            water_instance = water.objects.get(id=id)
-            data = waterviewserializer(water_instance).data
-            data['properties']['id'] = id
-            return Response({'status': 'success',
-                             'data': data}, status=200)
-        except water.DoesNotExist:
-            return Response({'status': 'error',
-                             'Message': 'Water data not found'}, status=404)
-            
-
-class WaterUpdateView(generics.UpdateAPIView):
+class WaterGetUpdateDeleteView(generics.UpdateAPIView):
     serializer_class = WaterUpdateSerializer
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
     queryset = water.objects.all()
@@ -340,6 +329,29 @@ class WaterUpdateView(generics.UpdateAPIView):
             'message': 'Data updated successfully',
             'data': data
         }, status=status.HTTP_200_OK)
+
+    def get(self, request, id):
+        try:
+            water_instance = water.objects.get(id=id)
+            data = waterviewserializer(water_instance).data
+            data['properties']['id'] = id
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except water.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Water data not found'}, status=404)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the Rehab instance.
+        """
+        water_instance = self.get_object()
+        if not water_instance:
+            return Response({'status': 'error', 'Message': 'Rehab data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        water_instance.delete()
+        return Response({'status': 'success', 'Message': 'Rehab deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
 
 class waterListView(generics.ListAPIView):
     serializer_class = waterviewserializer
