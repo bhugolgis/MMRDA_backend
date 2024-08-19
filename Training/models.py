@@ -36,6 +36,7 @@ class Baseclass(models.Model):
 # attributes such as user, category, training title, number of attendees, number of times training
 # conducted, male and female participants, incharge person, training initiator, conduct date, training
 # date, photographs, and documents.
+# Training spelling is wrong
 class traning(Baseclass):
     user = models.ForeignKey(User, related_name='training_User', on_delete=models.CASCADE)
     category = models.CharField(max_length=255, null=True, blank=True)
