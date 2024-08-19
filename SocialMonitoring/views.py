@@ -752,10 +752,10 @@ class constructionSiteView(generics.GenericAPIView):
                         save_multiple_files(files, file_mapping, file_path , field)
 
                     construction = serialzier.save(location=location , user = request.user , **file_mapping)
-                    data = ConstructionSiteDetailsViewSerializer(
-                        construction).data
+                    data = ConstructionSiteDetailsViewSerializer(construction).data
                     return  Response({'Message': 'data saved successfully',
-                                'status' : 'success'}, status=200)
+                                'status' : 'success',
+                                'data': data}, status=200)
             else:
                 key, value =list(serialzier.errors.items())[0]
                 error_message = key+" ,"+value[0]
@@ -787,10 +787,10 @@ class constructionSiteView(generics.GenericAPIView):
                     save_multiple_files(files, file_mapping, file_path , field)
 
                 construction = serialzier.save(location=location , user = request.user , **file_mapping )
-                data = ConstructionSiteDetailsViewSerializer(
-                    construction).data
+                data = ConstructionSiteDetailsViewSerializer(construction).data
                 return  Response({'Message': 'data saved successfully',
-                                    'status' : 'success'}, status=200)
+                                    'status' : 'success',
+                                    'data': data}, status=200)
             else:
                 key, value =list(serialzier.errors.items())[0]
                 error_message = key+" ,"+value[0]
