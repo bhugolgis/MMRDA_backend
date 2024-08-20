@@ -116,7 +116,7 @@ class PasswordResetEmailSerializer(serializers.Serializer):
             link = 'http://localhost:3000/api/auth/reset/'+ uid+'/'+token
             print("password Rest link" , link)
             
-            body = 'click following link to reset your Password : ' + link  
+            body = 'Use below UID and token to change password : \nuid: ' + uid + '\ntoken: ' + token   
             data = {
                 'subject' : 'Reset Your Password ',
                 'body' : body,
