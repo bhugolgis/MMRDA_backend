@@ -95,8 +95,8 @@ PASSWORD_RESET_TIMEOUT = 900  # 900 SEC = 15 min
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "Enter your email address"
-EMAIL_HOST_PASSWORD = "Enter Your Passwords"
+EMAIL_HOST_USER = "pranavkolambkar23@gmail.com"
+EMAIL_HOST_PASSWORD = "asmiajay"
 EMAIL_USE_TLS = True
 
 # Database
