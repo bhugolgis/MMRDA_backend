@@ -200,7 +200,8 @@ class occupationalHealthSafetyView(generics.GenericAPIView):
             data = serializer.save(location=location, user = request.user , **file_mapping)
             data = occupationalHealthSafetyViewSerializer(data).data
             return Response({'status' : 'success',
-                             'Message' : 'Data Saved Successfully'}, status=200)
+                             'Message' : 'Data Saved Successfully',
+                             'data': data}, status=200)
         else:
             key, value =list(serializer.errors.items())[0]
             # error_message = key+" ,"+ value[0]
