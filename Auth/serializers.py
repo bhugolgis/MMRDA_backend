@@ -110,11 +110,11 @@ class PasswordResetEmailSerializer(serializers.Serializer):
         if User.objects.filter(email=email ).exists():
             user = User.objects.get(email=email)
             uid = urlsafe_base64_encode(force_bytes(user.id))
-            print("Encoded ID" , uid)
+            # print("Encoded ID" , uid)
             token = PasswordResetTokenGenerator().make_token(user)
-            print("Password reset Token" , token)
-            link = 'http://localhost:3000/api/auth/reset/'+ uid+'/'+token
-            print("password Rest link" , link)
+            # print("Password reset Token" , token)
+            # link = 'http://localhost:3000/api/auth/reset/'+ uid+'/'+token
+            # print("password Rest link" , link)
             
             body = 'Use below UID and token to change password : \nuid: ' + uid + '\ntoken: ' + token   
             data = {

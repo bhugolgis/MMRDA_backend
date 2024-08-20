@@ -225,7 +225,7 @@ class PasswordRestEmail(generics.GenericAPIView):
         serializer = PasswordResetEmailSerializer(data = request.data)
        
         serializer.is_valid(raise_exception=True)
-        print(serializer.data)
+        # print(serializer.data)
         return Response({'message':'Password Rest Email sent Successfully' } , status= status.HTTP_200_OK)
 
 
