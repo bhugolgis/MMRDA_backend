@@ -215,7 +215,7 @@ class occupationalHealthSafetyView(generics.GenericAPIView):
             data = occupationalHealthSafetyViewSerializer(ohs).data
             return Response({'status': 'success',
                              'data': data}, status=200)
-        except traning.DoesNotExist:
+        except occupationalHealthSafety.DoesNotExist:
             return Response({'status': 'error',
                              'Message': 'Occupation Health and Safety data not found'}, status=404)
 
@@ -257,8 +257,8 @@ class OccupationalHealthSafetyUpdateView(generics.UpdateAPIView):
 
         # Handle file fields
         file_fields = {
-            'documents': 'OccupationalHealth&Safety',
-            'photographs': 'OccupationalHealth&Safety',
+            'documents': 'OHS/Occupational_Wellness/Documents',
+            'photographs': 'OHS/Occupational_Wellness/Photographs',
         }
 
         file_mapping = {}

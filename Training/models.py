@@ -80,57 +80,21 @@ class occupationalHealthSafety(Baseclass):
     # Occupational Facilities
     
     joiningMedicalCheckup = models.BooleanField(null=True, blank=True)
-    joiningMedicalCheckupCondition = models.CharField(max_length=50 , choices=choices)
-    joiningMedicalCheckupConditionRemarks = models.CharField(max_length=255 ,blank = True , null = True ) 
-
     ppeKit = models.BooleanField(blank=True)
-    ppeKitCondition = models.CharField(max_length=50 , choices=choices)
-    ppeKitRemarks = models.CharField(max_length=255 , blank = True , null = True )
-
     trainingToWorkers = models.BooleanField(blank=True)
-    trainingToWorkersCondition = models.CharField(max_length=50 , choices=choices)
-    trainingToWorkersRemarks = models.CharField(max_length=255 , blank = True , null = True )
-
     houseKeeping = models.BooleanField(blank=True)
-    houseKeepingCondition = models.CharField(max_length=50 , choices=choices)
-    houseKeepingRemarks = models.CharField(max_length=255 , blank = True , null = True )
-
+    
     powerSupplySystem = models.BooleanField(blank=True)
-    powerSupplySystemCondition = models.CharField(max_length=50 , choices=choices)
-    powerSupplySystemRemarks = models.CharField(max_length=255 , blank = True , null = True)
-
     assemblyArea = models.BooleanField(blank=True)
-    assemblyAreaCondition = models.CharField(max_length=50 , choices=choices)
-    assemblyAreaRemarks = models.CharField(max_length=255 , blank = True , null = True)
-
     ambulanceArrangement = models.BooleanField(blank=True)
-    ambulanceArrangementCondition =  models.CharField(max_length=50 , choices=choices)
-    ambulanceArrangementRemarks = models.CharField(max_length=255 , blank = True , null = True)
-
     toiletFacility = models.BooleanField(blank=True)
-    toiletFacilityCondition = models.CharField(max_length=50 , choices=choices)
-    toiletFacilityRemarks = models.CharField(max_length=255 , blank = True , null = True)
-
+    
     safeMomentPassage = models.BooleanField(blank=True)
-    safeMomentPassageCondition = models.CharField(max_length=50 , choices=choices)
-    safeMomentPassageRemarks =  models.CharField(max_length=255 , blank = True , null = True)
-
     materialKeepingPractice = models.CharField(max_length=255, blank=True, null=True)
-    materialKeepingPracticeCondition = models.CharField(max_length=50 , choices=choices)
-    materialKeepingPracticeRemarks =  models.CharField(max_length=255 , blank = True , null = True)
-
     accidentalCheck = models.BooleanField(blank=True)
-    accidentalCheckCondition = models.CharField(max_length=50 , choices=choices)
-    accidentalCheckRemarks = models.CharField(max_length=255 , blank = True , null = True)
-
     safetyGearStatus = models.BooleanField(blank=True)
-    safetyGearStatusCondition = models.CharField(max_length=50 , choices=choices)
-    safetyGearStatusRemarks = models.CharField(max_length=255 , blank = True , null = True)
-
+    
     barricading = models.BooleanField(blank=True)
-    barricadingCondition = models.CharField(max_length=50 , choices=choices)
-    barricadingRemarks = models.CharField(max_length=255 , blank = True , null = True)
-
 
     # Incident Details
     typeOfIncident = models.CharField(max_length=255,  blank=True, null=True)
@@ -145,8 +109,9 @@ class occupationalHealthSafety(Baseclass):
     manDaysLostReason = models.TextField(max_length=255, blank=True, null=True)
 
     # Document and Remarks
-    photographs = models.CharField( max_length=255, null=True, blank=True)
-    documents = models.CharField( max_length=255 , blank=True, null=True)
+
+    documents = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
+    photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     remarks = models.TextField(max_length=255, blank=True, null=True)
 
 
