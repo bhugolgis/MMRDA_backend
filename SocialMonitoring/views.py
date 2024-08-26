@@ -868,7 +868,7 @@ class ConstructionSiteGetUpdateDeleteView(generics.UpdateAPIView):
     def get(self, request, id):
         try:
             construction_site = ConstructionSiteDetails.objects.get(id=id)
-            data = ConstructionSiteDetailsserializer(construction_site).data
+            data = ConstructionSiteDetailsViewSerializer(construction_site).data
             return Response({'status': 'success',
                              'data': data}, status=200)
         except ConstructionSiteDetails.DoesNotExist:
