@@ -188,8 +188,8 @@ class occupationalHealthSafetyView(generics.GenericAPIView):
               
                     
             file_fields = {
-                        'documents': 'OccupationalHealth&Safety',
-                        'photographs': 'OccupationalHealth&Safety' ,}
+                        'documents': 'OHS/Occupational_Wellness/Documents',
+                        'photographs': 'OHS/Occupational_Wellness/Photographs' ,}
 
             file_mapping = {}
             for field, file_path in file_fields.items():
