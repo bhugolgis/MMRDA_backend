@@ -220,13 +220,18 @@ class ChangePasswordView(generics.GenericAPIView):
 # The above class is a view for handling password reset email requests in a Django REST framework API.
 class PasswordRestEmail(generics.GenericAPIView):
     serializer_class = PasswordResetEmailSerializer
-    parser_classes = [MultiPartParser]
-    def post (self , request):
-        serializer = PasswordResetEmailSerializer(data = request.data)
-       
-        serializer.is_valid(raise_exception=True)
-        # print(serializer.data)
-        return Response({'message':'Password Rest Email sent Successfully' } , status= status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = PasswordResetEmailSerializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+            return Response({'message': 'Password reset email sent successfully'}, status=status.HTTP_200_OK)
+
+        except ValidationError as e:
+            return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Exception as e:
+            return Response({'message': 'An unexpected error occurred. Please try again later.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 # The `restpasswordView` class is a generic API view in Python that handles password reset requests
