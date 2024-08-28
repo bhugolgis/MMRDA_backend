@@ -529,161 +529,119 @@ class SocialMonitoringCountDashboardView(APIView):
         }, status=200)
     
 
-
+# In query params if packages is or one is missing it will use only one filter which can result in wrong data
 class AirAQIChartDashboardView(APIView):
     serializer_class = DashboardAQISerializer
     
-    def get(self, request,quarter, packages, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        # Get quarter and packages from query parameters
+        quarter = request.query_params.get('quarter')
+        packages = request.query_params.get('packages')
 
-        air = Air.objects.all().filter(packages=packages, quarter=quarter)
+        # Filter based on quarter and packages if they are provided, otherwise get all data
+        filters = {}
+        if quarter:
+            filters['quarter'] = quarter
+        if packages:
+            filters['packages'] = packages
 
-        if not air:
+         # Ensure either both filters are provided or none
+        if (quarter and not packages) or (packages and not quarter):
             return Response({
-                        'Message': 'No data found for specified package and quarter',
-                        }, status=status.HTTP_400_BAD_REQUEST)
-        
+                'message': 'Either both quarter and packages query parameters must be provided, or none.',
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        air = Air.objects.filter(**filters)
+
+        if not air.exists():
+            return Response({
+                'Message': 'No data found for the specified package and quarter',
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = DashboardAQISerializer(air, many=True)
         serializer_data = serializer.data
      
-        aqi_list = []
-        for object in serializer_data:
-            aqi_list.append(object['AQI'])
-            
-        avg_aqi = sum(aqi_list) / len(aqi_list)
+        aqi_list = [obj['AQI'] for obj in serializer_data]
+        
+        avg_aqi = sum(aqi_list) / len(aqi_list) if aqi_list else 0
         
         return Response({
-            "message":"AQI generated successfully",
-            "status":"success",
-            "data":avg_aqi,
-            # "quality": quality
-        })
+            "message": "AQI generated successfully",
+            "status": "success",
+            "data": avg_aqi,
+        }, status=status.HTTP_200_OK)
     
-
-
-
-class ManDaysLostCountchart(APIView):
-# how to improve it more    
-    def get(self, request, packages, quarter):
-        # count = occupationalHealthSafety.objects.filter(packages=packages, quarter=quarter, typeOfIncident="Man Days Lost").count()
-        data = occupationalHealthSafety.objects.filter(packages=packages, quarter=quarter)
-        man_days_lost_counts = data.values_list('manDaysLostCount', flat=True).exclude(manDaysLostCount__isnull=True)
-
-        total_count = 0
-        for count in man_days_lost_counts:
-            total_count = total_count + count
-            
-
-        print(total_count)
-        if total_count == 0:
-            return Response({
-                        'Message': 'Data not found',
-                        }, status=status.HTTP_400_BAD_REQUEST)
-
-        return Response({'status': 'success',
-                        'Message': 'Data was successfully fetched',
-                        'count': total_count,
-                        })
     
-
-
-
 class WaterWQIChartDashboardView(APIView):
     serializer_class = DashboardWQISerializer
     
-    def get(self, request,quarter, packages, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        # Get quarter and packages from query parameters
+        quarter = request.query_params.get('quarter')
+        packages = request.query_params.get('packages')
 
-        water = Water.objects.all().filter(packages=packages, quarter=quarter)
 
-        if not water:
+        
+        # Filter based on quarter and packages if they are provided, otherwise get all data
+        filters = {}
+        if quarter:
+            filters['quarter'] = quarter
+        if packages:
+            filters['packages'] = packages
+
+         # Ensure either both filters are provided or none
+        if (quarter and not packages) or (packages and not quarter):
             return Response({
-            "message":"No data found for specified package/quarter",
-        }, status=status.HTTP_404_NOT_FOUND)
+                'message': 'Either both quarter and packages query parameters must be provided, or none.',
+            }, status=status.HTTP_400_BAD_REQUEST)
 
+        water = Water.objects.filter(**filters)
+
+        if not water.exists():
+            return Response({
+                "message": "No data found for the specified package and quarter",
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = DashboardWQISerializer(water, many=True)
         serializer_data = serializer.data
      
-        wqi_list = []
-        for object in serializer_data:
-            wqi_list.append(object['WQI'])
-            
-        avg_wqi = sum(wqi_list) / len(wqi_list)
+        wqi_list = [obj['WQI'] for obj in serializer_data]
+        
+        avg_wqi = sum(wqi_list) / len(wqi_list) if wqi_list else 0
         
         return Response({
-            "message":"AQI generated successfully",
-            "status":"success",
-            "data":avg_wqi,
-            # "quality": quality
-        })
-    
-# Api for Env Monitoring Dashboard GIS Map
-class DashboardEnvMonitoringGISMap(APIView):
-    def get(self, request, quarter, packages, *args, **kwargs):
-        water = Water.objects.all().filter(packages=packages, quarter=quarter)
-        air = Air.objects.all().filter(packages=packages, quarter=quarter)
-        noise = Noise.objects.all().filter(packages=packages, quarter=quarter)
-
-        if not water:
-            return Response({"message":"No data found for specified package/quarter",}
-                            , status=status.HTTP_404_NOT_FOUND)
-        
-        serializer = DashboardEnvMonitoringGISMapWaterSerializer(water, many=True)
-        serializer_data_water = serializer.data
-
-        if not air:
-            return Response({"message":"No data found for specified package/quarter",}
-                            , status=status.HTTP_404_NOT_FOUND)
-        
-        serializer = DashboardEnvMonitoringGISMapAirSerializer(air, many=True)
-        serializer_data_air = serializer.data
-
-        if not noise:
-            return Response({"message":"No data found for specified package/quarter",}
-                            , status=status.HTTP_404_NOT_FOUND)
-        
-        serializer = DashboardEnvMonitoringGISMapNoiseSerializer(noise, many=True)
-        serializer_data_noise = serializer.data
-
-        return Response({"message": "Data Fetched successfully",
-                         "data_water": serializer_data_water,
-                         "data_air": serializer_data_air,
-                         "data_noise": serializer_data_noise,}
-                        , status=status.HTTP_200_OK)
-    
-
-class DashboardEnvMonReportsSubmitted(APIView):
-    def get(self, request,month, year, *args, **kwargs):
-        air = Air.objects.all().filter(month=month, dateOfMonitoring__year=year).count()
-        print(air)
-        if not air:
-            return Response({"message":"No data found for specified package/quarter",}
-                            , status=status.HTTP_400_BAD_REQUEST)
-        
-
-        if air >= 2:
-            return Response({"message": "Data Fetched successfully",
-                            "reports_submitted": "yes",}
-                            , status=status.HTTP_200_OK)
-        else:
-            return Response({"message": "Data Fetched successfully",
-                            "reports_submitted": "no",}
-                            , status=status.HTTP_200_OK)
-        
+            "message": "WQI generated successfully",
+            "status": "success",
+            "data": avg_wqi,
+        }, status=status.HTTP_200_OK)
 
 
 class NoiseChartDashboardView(APIView):
     serializer_class = DashboardNoiseSerializer
     
-    def get(self, request,quarter, packages, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        # Get quarter and packages from query parameters
+        quarter = request.query_params.get('quarter')
+        packages = request.query_params.get('packages')
 
-        noise = Noise.objects.all().filter(packages=packages, quarter=quarter)
-
-        if not noise:
+        # Ensure either both filters are provided or none
+        if (quarter and not packages) or (packages and not quarter):
             return Response({
-                        'Message': 'No data found for specified package and quarter',
-                        }, status=status.HTTP_400_BAD_REQUEST)
-        
+                'message': 'Either both quarter and packages query parameters must be provided, or none.',
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # Filter based on quarter and packages
+        filters = {}
+        if quarter and packages:
+            filters['quarter'] = quarter
+            filters['packages'] = packages
+
+        noise = Noise.objects.filter(**filters)
+
+        if not noise.exists():
+            return Response({
+                'Message': 'No data found for the specified package and quarter',
+            }, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = DashboardNoiseSerializer(noise, many=True)
         serializer_data = serializer.data
@@ -708,36 +666,132 @@ class NoiseChartDashboardView(APIView):
             elif item['isWithinLimit_night'] == 'Out of Limit':
                 night_out_of_limit_count += 1
 
-
+        # Determine the final status for day and night limits
         if day_within_limit_count > day_out_of_limit_count:
-            day_within_limit_value = day_within_limit_count
             isWithinLimit_day = "Within Limit"
         else:
-            day_within_limit_value = day_out_of_limit_count
             isWithinLimit_day = "Out of Limit"
 
         if night_within_limit_count > night_out_of_limit_count:
-            night_out_of_limit_value = night_within_limit_count
             isWithinLimit_night = "Within Limit"
         else:
-            night_out_of_limit_value = night_out_of_limit_count
             isWithinLimit_night = "Out of Limit"
 
-        # Display the counts
-        print("isWithinLimit_day:")
-        print("Within Limit:", day_within_limit_count)
-        print("Out of Limit:", day_out_of_limit_count)
-
-        print("\nisWithinLimit_night:")
-        print("Within Limit:", night_within_limit_count)
-        print("Out of Limit:", night_out_of_limit_count)
-
-        
         return Response({
-            "message":"Noise chart generated successfully",
-            "status":"success",
-            "data":{"isWithinLimit_day": isWithinLimit_day,
+            "message": "Noise chart generated successfully",
+            "status": "success",
+            "data": {
+                "isWithinLimit_day": isWithinLimit_day,
                 "isWithinLimit_night": isWithinLimit_night,
             },
-            # "quality": quality
-        })
+            # "quality": quality  # Uncomment if you want to include the quality rating
+        }, status=status.HTTP_200_OK)
+
+
+# Api for Env Monitoring Dashboard GIS Map
+class DashboardEnvMonitoringGISMap(APIView):
+    def get(self, request, *args, **kwargs):
+        # Get quarter and packages from query parameters
+        quarter = request.query_params.get('quarter')
+        packages = request.query_params.get('packages')
+
+        # Ensure either both filters are provided or none
+        if (quarter and not packages) or (packages and not quarter):
+            return Response({
+                'message': 'Either both quarter and packages query parameters must be provided, or none.',
+            }, status=status.HTTP_400_BAD_REQUEST)
+
+        # Filter based on quarter and packages
+        filters = {}
+        if quarter and packages:
+            filters['quarter'] = quarter
+            filters['packages'] = packages
+
+        # Retrieve data for water, air, and noise
+        water = Water.objects.filter(**filters)
+        air = Air.objects.filter(**filters)
+        noise = Noise.objects.filter(**filters)
+
+        # Check if data exists for water
+        if not water.exists():
+            return Response({
+                "message": "No data found for the specified package/quarter in water monitoring.",
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        serializer_water = DashboardEnvMonitoringGISMapWaterSerializer(water, many=True)
+        serializer_data_water = serializer_water.data
+
+        # Check if data exists for air
+        if not air.exists():
+            return Response({
+                "message": "No data found for the specified package/quarter in air monitoring.",
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        serializer_air = DashboardEnvMonitoringGISMapAirSerializer(air, many=True)
+        serializer_data_air = serializer_air.data
+
+        # Check if data exists for noise
+        if not noise.exists():
+            return Response({
+                "message": "No data found for the specified package/quarter in noise monitoring.",
+            }, status=status.HTTP_404_NOT_FOUND)
+
+        serializer_noise = DashboardEnvMonitoringGISMapNoiseSerializer(noise, many=True)
+        serializer_data_noise = serializer_noise.data
+
+        return Response({
+            "message": "Data fetched successfully",
+            "data_water": serializer_data_water,
+            "data_air": serializer_data_air,
+            "data_noise": serializer_data_noise,
+        }, status=status.HTTP_200_OK)
+
+    
+
+class DashboardEnvMonReportsSubmitted(APIView):
+    def get(self, request,month, year, *args, **kwargs):
+        air = Air.objects.all().filter(month=month, dateOfMonitoring__year=year).count()
+        print(air)
+        if not air:
+            return Response({"message":"No data found for specified package/quarter",}
+                            , status=status.HTTP_400_BAD_REQUEST)
+        
+
+        if air >= 2:
+            return Response({"message": "Data Fetched successfully",
+                            "reports_submitted": "yes",}
+                            , status=status.HTTP_200_OK)
+        else:
+            return Response({"message": "Data Fetched successfully",
+                            "reports_submitted": "no",}
+                            , status=status.HTTP_200_OK)
+        
+
+
+
+
+
+# OHS Monitoring
+
+class ManDaysLostCountchart(APIView):
+# how to improve it more    
+    def get(self, request, packages, quarter):
+        # count = occupationalHealthSafety.objects.filter(packages=packages, quarter=quarter, typeOfIncident="Man Days Lost").count()
+        data = occupationalHealthSafety.objects.filter(packages=packages, quarter=quarter)
+        man_days_lost_counts = data.values_list('manDaysLostCount', flat=True).exclude(manDaysLostCount__isnull=True)
+
+        total_count = 0
+        for count in man_days_lost_counts:
+            total_count = total_count + count
+            
+
+        print(total_count)
+        if total_count == 0:
+            return Response({
+                        'Message': 'Data not found',
+                        }, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({'status': 'success',
+                        'Message': 'Data was successfully fetched',
+                        'count': total_count,
+                        })
