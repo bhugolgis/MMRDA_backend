@@ -574,46 +574,65 @@ class AirAQIChartDashboardView(APIView):
     
 class WaterWQIChartDashboardView(APIView):
     serializer_class = DashboardWQISerializer
-    
+
     def get(self, request, *args, **kwargs):
-        # Get quarter and packages from query parameters
-        quarter = request.query_params.get('quarter')
-        packages = request.query_params.get('packages')
+        try:
+            # Get quarter and packages from query parameters
+            quarter = request.query_params.get('quarter')
+            packages = request.query_params.get('packages')
 
+            # Filter based on quarter and packages if they are provided, otherwise get all data
+            filters = {}
+            if quarter:
+                filters['quarter'] = quarter
+            if packages:
+                filters['packages'] = packages
 
-        
-        # Filter based on quarter and packages if they are provided, otherwise get all data
-        filters = {}
-        if quarter:
-            filters['quarter'] = quarter
-        if packages:
-            filters['packages'] = packages
+            # Ensure either both filters are provided or none
+            if (quarter and not packages) or (packages and not quarter):
+                return Response({
+                    'message': 'Either both quarter and packages query parameters must be provided, or none.',
+                }, status=status.HTTP_400_BAD_REQUEST)
 
-         # Ensure either both filters are provided or none
-        if (quarter and not packages) or (packages and not quarter):
+            # Query the Water model with the applied filters
+            water = Water.objects.filter(**filters)
+
+            if not water.exists():
+                return Response({
+                    "message": "No data found for the specified package and quarter",
+                }, status=status.HTTP_404_NOT_FOUND)
+
+            # Serialize the data
+            serializer = DashboardWQISerializer(water, many=True)
+            serializer_data = serializer.data
+
+            # Extract WQI values, filtering out None values
+            wqi_list = [obj['WQI'] for obj in serializer_data if obj.get('WQI') is not None]
+
+            if not wqi_list:
+                avg_wqi = 0
+            else:
+                # Ensure all WQI values are numeric
+                try:
+                    numeric_wqi_list = [float(wqi) for wqi in wqi_list]
+                    avg_wqi = sum(numeric_wqi_list) / len(numeric_wqi_list)
+                except ValueError:
+                    return Response({
+                        "message": "Invalid WQI values found. Unable to calculate average.",
+                    }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
             return Response({
-                'message': 'Either both quarter and packages query parameters must be provided, or none.',
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-        water = Water.objects.filter(**filters)
-
-        if not water.exists():
+                "message": "WQI generated successfully",
+                "status": "success",
+                "data": avg_wqi,
+            }, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            # Log the exception as needed
             return Response({
-                "message": "No data found for the specified package and quarter",
-            }, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = DashboardWQISerializer(water, many=True)
-        serializer_data = serializer.data
-     
-        wqi_list = [obj['WQI'] for obj in serializer_data]
-        
-        avg_wqi = sum(wqi_list) / len(wqi_list) if wqi_list else 0
-        
-        return Response({
-            "message": "WQI generated successfully",
-            "status": "success",
-            "data": avg_wqi,
-        }, status=status.HTTP_200_OK)
+                "message": "An error occurred while processing the request.",
+                "error": str(e),
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class NoiseChartDashboardView(APIView):
