@@ -18,7 +18,6 @@ urlpatterns = [
      
      path('AirChartView/<str:month>/<int:year>',AirChartView.as_view() , name = 'AIr chart'),
      path('WaterCondition',WaterConditionChart.as_view() , name = 'Water condition char'),
-     path('ManDaysLost/<str:quarter>/<str:packages>',ManDaysLostCountchart.as_view() , name = 'Man Days Lost Count'),
      path('DashboardEnvMonReportsSubmitted/<str:month>/<str:year>',DashboardEnvMonReportsSubmitted.as_view() , name = 'Env Mon Reports Submitted'),
      path('ExistingTreeCount', ExistingTreeCount.as_view() , name = 'Exiting tree count'),
      path('typeofwastecount', WasteTypeCount.as_view() , name = 'Wastecount'),
@@ -28,6 +27,8 @@ urlpatterns = [
 
 
      # For OHS
+     path('ManDaysLost/',ManDaysLostCountchart.as_view() , name = 'man-days-lost-count'),
+     
      path('LabourcampFaciliteis<str:labourCampName>/<str:quarter>',LabourCampFacilitiesDashboardView.as_view(), name='labour Dashboard View'),
      path('campFaciliteisOverAll',LabourCampFacilitiesOverallDashboardView.as_view(), name='labour Dashboard View'),
      path('ConstructionSiteFaciliteis<str:constructionSiteName>/<str:quarter>',ConstructionChartView.as_view(), name='labour Dashboard View'),

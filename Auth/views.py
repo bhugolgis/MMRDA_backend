@@ -231,13 +231,35 @@ class PasswordRestEmail(generics.GenericAPIView):
 
 # The `restpasswordView` class is a generic API view in Python that handles password reset requests
 # and returns a response indicating whether the password reset was successful or not.
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser
+from rest_framework import generics
+from rest_framework.exceptions import ValidationError
+
 class restpasswordView(generics.GenericAPIView):
     serializer_class = PasswordRestSerializer
     parser_classes = [MultiPartParser]
-    def post(self , request ,uid, token ):
-        serializer = PasswordRestSerializer(data = request.data , context = {'uid' :uid ,'token' :token })
-        serializer.is_valid(raise_exception=True)
-        return Response({"message" : "Password reset Successfully"} , status=status.HTTP_200_OK)
+
+    def post(self, request, uid, token):
+        try:
+            # Initialize the serializer with the provided data, uid, and token
+            serializer = PasswordRestSerializer(data=request.data, context={'uid': uid, 'token': token})
+
+            # Validate the serializer
+            serializer.is_valid(raise_exception=True)
+
+            # If validation is successful, return a success response
+            return Response({"message": "Password reset successfully"}, status=status.HTTP_200_OK)
+
+        except ValidationError as e:
+            # Handle validation errors (e.g., invalid or expired token)
+            return Response({"message": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            # Handle other unexpected errors
+            return Response({"message": "An unexpected error occurred. Please try again later."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 
 # The `LogoutAPIView` class is a view that handles user logout by validating the request data, saving
 # the serializer, and returning a response indicating successful logout.
