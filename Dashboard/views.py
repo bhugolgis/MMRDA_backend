@@ -794,9 +794,17 @@ class DashboardEnvMonReportsSubmitted(APIView):
 
 class ManDaysLostCountchart(APIView):
 # how to improve it more    
-    def get(self, request, packages, quarter):
+    def get(self, request):
+
+        quarter = request.query_params.get('quarter')
+        packages = request.query_params.get('packages')
+        
         # count = occupationalHealthSafety.objects.filter(packages=packages, quarter=quarter, typeOfIncident="Man Days Lost").count()
         data = occupationalHealthSafety.objects.filter(packages=packages, quarter=quarter)
+
+        if not quarter or not packages:
+            data = occupationalHealthSafety.objects.all()
+        
         man_days_lost_counts = data.values_list('manDaysLostCount', flat=True).exclude(manDaysLostCount__isnull=True)
 
         total_count = 0
