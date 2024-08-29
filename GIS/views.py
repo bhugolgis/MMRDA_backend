@@ -111,20 +111,7 @@ class projectAffectedPersonsView(generics.GenericAPIView):
                             'message' : 'data was successfully fetched',
                             'data': serializer},
                              status= 200)
-    
-
-class RehabilitatedPapView(generics.GenericAPIView):
-    serializer_class = RehabilitatedPapSerializer  
-    #permission_classes = [IsAuthenticated]
-    def get(self , request):
         
-            rehab_data = RehabilitatedPap.objects.all()
-            serializer = self.get_serializer(rehab_data , many = True).data
-            return Response({'status': 'success',
-                            'message' : 'data was successfully fetched',
-                            'data': serializer},
-                             status= 200)
-    
 
 class MetroStationView(generics.GenericAPIView):
     serializer_class = MetroStationSerializer   
