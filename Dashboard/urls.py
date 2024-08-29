@@ -22,12 +22,13 @@ urlpatterns = [
      path('ExistingTreeCount', ExistingTreeCount.as_view() , name = 'Exiting tree count'),
      path('typeofwastecount', WasteTypeCount.as_view() , name = 'Wastecount'),
      path('wastehandelingtype', WasteHandelingChart.as_view() , name = 'Wastecount'),
-     path('Sourceofmaterial',MaterialSourceTypeCountChart.as_view() , name = 'Material'),
+     path('Sourceofmaterial',MaterialSourceTypeCountChart.as_view() , name = 'source-material'),
      path('Materilcondition',MaterialConditionChart.as_view() , name = 'Material'),
 
 
      # For OHS
      path('ManDaysLost/',ManDaysLostCountchart.as_view() , name = 'man-days-lost-count'),
+     path('Incidenttype',IncidenttypeCountchart.as_view() , name = 'incident-type-char'),
      
      path('LabourcampFaciliteis<str:labourCampName>/<str:quarter>',LabourCampFacilitiesDashboardView.as_view(), name='labour Dashboard View'),
      path('campFaciliteisOverAll',LabourCampFacilitiesOverallDashboardView.as_view(), name='labour Dashboard View'),
@@ -36,7 +37,6 @@ urlpatterns = [
      path('RehabilitatedPAP', RehabilitatedPAPDashboardView.as_view(),  name='Rehabilated Dashboard View'),
           
      path('CashCompensationTypeChar', CashCompensationTypeCharView.as_view(), name='Cash Compensation Dashboard View'),
-     path('Incidenttype',IncidenttypeCountchart.as_view() , name = 'Incident Type char'),
      
     
 ]
