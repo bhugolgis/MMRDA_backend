@@ -11,8 +11,9 @@ urlpatterns = [
      path('package09Aligment' , package09AlignmentView.as_view() , name = 'package09Aligment'),
      path('package08Aligment' , package08AlignmentView.as_view() , name = 'package08Aligment'),
      path('MetroStation' , MetroStationView.as_view() , name = 'MetroStationView '),
+
+     
      path('projectAffectedPersons' , projectAffectedPersonsView.as_view() , name = 'projectAffectedPersons '),
-     path('RehabilitatedPap' , RehabilitatedPapView.as_view() , name = 'RehabilitatedPap'),
      path('ProjectAffectedTrees' , ProjectAffectedTreesView.as_view() , name = 'MetroStationView '),
      re_path(r'PAP-Type-Of-Structure/(?P<categoryOfPap>.+)$' , PAPTypeOfStructureView.as_view() , name = 'MetroStationView '),
      re_path(r'Rehabilitation-compensation-status/(?P<compensationStatus>.+)$' , RehabilitationTypeOfStructureView.as_view() , name = 'MetroStationView '),

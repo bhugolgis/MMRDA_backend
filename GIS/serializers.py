@@ -78,16 +78,7 @@ class projectAffectedPersonsSerializer(GeoFeatureModelSerializer):
         fields = ('gid' , 'pap_id','name' , 'category' , 'date')
         geo_field= ('geom')
 
-
-
-class RehabilitatedPapSerializer(GeoFeatureModelSerializer):
-    class Meta:
-        model = RehabilitatedPap
-        fields = ('gid' , 'pap_id','name' , 'category' , 'date_ident')
-        geo_field= ('geom')
-
         
-
 class PAPGISSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = PAP
@@ -96,7 +87,6 @@ class PAPGISSerializer(GeoFeatureModelSerializer):
                   'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
                    'actionTaken', 'notAgreedReason','remarks' )
         geo_field= ('location')
-
 
 
 class RehabilitationGISSerializer(GeoFeatureModelSerializer):
