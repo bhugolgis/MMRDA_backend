@@ -65,6 +65,14 @@ class MetroStationSerializer(GeoFeatureModelSerializer):
         geo_field= ('geom')
 
 
+class GISPortalExistingTreeManagmentSerailizer(GeoFeatureModelSerializer):
+    class Meta:
+        model = ExistingTreeManagment
+        fields = ('quarter', 'month', 'dateOfMonitoring', 'packages', 'treeID','commanName' ,'botanicalName',
+                    'condition', 'actionTaken', 'remarks',)
+        geo_field= ('location')
+
+
 class ProjectAffectedTreesSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = ProjectAffectedTrees

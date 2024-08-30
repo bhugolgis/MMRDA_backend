@@ -11,6 +11,7 @@ from rest_framework.views import APIView
 from django.db.models import Count
 from Training.models import *
 from .models import *
+from EnvMonitoring.models import ExistingTreeManagment
 import math
 from Report.serializers import LabourcampReportSerializer
 # Create your views here.
@@ -99,6 +100,31 @@ class package08AlignmentView(generics.GenericAPIView):
                             'message' : 'data was successfully fetched',
                             'data': serializer.data},
                              status= 200)
+
+
+
+class GISPortalExistingTreeManagmentView(generics.GenericAPIView):
+    serializer_class = GISPortalExistingTreeManagmentSerailizer
+    # permission_classes = [IsAuthenticated]
+    
+    def get(self, request, *args, **kwargs):
+        try:
+            existing_tree_management = ExistingTreeManagment.objects.all()
+            if not existing_tree_management.exists():
+                return Response({'status': 'error',
+                                 'message': 'No data found'},
+                                 status=404)
+            
+            serializer = self.get_serializer(existing_tree_management, many=True)
+            return Response({'status': 'success',
+                             'message': 'Data was successfully fetched',
+                             'data': serializer.data},
+                             status=200)
+        except Exception as e:
+            return Response({'status': 'error',
+                             'message': f'An error occurred: {str(e)}'},
+                             status=500)
+
 
 class projectAffectedPersonsView(generics.GenericAPIView):
     serializer_class = projectAffectedPersonsSerializer  
