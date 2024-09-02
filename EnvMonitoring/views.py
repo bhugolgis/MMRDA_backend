@@ -1318,8 +1318,11 @@ class GenerateWQI(generics.GenericAPIView):
             iron_WiQi = get_iron_WiQI((serializer.validated_data['iron']))
 
 
-            WQI = pH_WiQi + totalHardnessAsCaCO3_WiQi + calcium_WiQi + totalAlkalinityAsCaCO3_WiQi + chlorides_WiQi + magnesium_WiQi + totalDissolvedSolids_WiQi + sulphate_WiQi + nitrate_WiQi + fluoride_WiQi + iron_WiQi
-
+            WQI = round(
+                pH_WiQi + totalHardnessAsCaCO3_WiQi + calcium_WiQi + totalAlkalinityAsCaCO3_WiQi + 
+                chlorides_WiQi + magnesium_WiQi + totalDissolvedSolids_WiQi + sulphate_WiQi + 
+                nitrate_WiQi + fluoride_WiQi + iron_WiQi, 3
+            )
             print(pH_WiQi)
             print(totalHardnessAsCaCO3_WiQi)
             print(calcium_WiQi)

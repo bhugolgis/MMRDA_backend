@@ -606,7 +606,7 @@ class WaterWQIChartDashboardView(APIView):
                 # Ensure all WQI values are numeric
                 try:
                     numeric_wqi_list = [float(wqi) for wqi in wqi_list]
-                    avg_wqi = sum(numeric_wqi_list) / len(numeric_wqi_list)
+                    avg_wqi = round(sum(numeric_wqi_list) / len(numeric_wqi_list), 3) # rounding upto 3 digits after the decimal
                 except ValueError:
                     return Response({
                         "message": "Invalid WQI values found. Unable to calculate average.",
