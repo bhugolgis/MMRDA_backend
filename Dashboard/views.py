@@ -76,7 +76,6 @@ class PAPCategoryDashboardView(ListAPIView):
 
 
 class CategoryWiseCompensationChart(APIView):
-    # not working when not passing parameters
     def get(self, request):
         packages = request.query_params.get("packages")
         quarter = request.query_params.get("quarter")
@@ -86,11 +85,8 @@ class CategoryWiseCompensationChart(APIView):
         else:
             Compensation_Status = Rehabilitation.objects.values('compensationStatus').annotate(count=Count('compensationStatus'))
 
-        if not Compensation_Status:
-            return Response({'message': 'no data found'}, status=status.HTTP_400_BAD_REQUEST)
-
-        label_Compensation_Status = [item['compensationStatus'] for item in Compensation_Status]
-        dataset_Compensation_Status = [item['count'] for item in Compensation_Status]
+        if not Compensation_Status.exists():
+            return Response({'message': 'No data found'}, status=status.HTTP_400_BAD_REQUEST)
 
         desired_order = [
             "Cash Compensation",
@@ -99,28 +95,23 @@ class CategoryWiseCompensationChart(APIView):
             "Commercial Unit"
         ]
 
+        # Create a dictionary with compensationStatus as keys and counts as values
+        compensation_dict = {item['compensationStatus']: item['count'] for item in Compensation_Status}
+
+        # Ensure the labels and counts match the desired order, filling missing categories with 0
         sorted_label_Compensation_Status = []
         sorted_dataset_Compensation_Status = []
         for category in desired_order:
-            for item in Compensation_Status:
-                if item['compensationStatus'] == category:
-                    sorted_label_Compensation_Status.append(category)
-                    sorted_dataset_Compensation_Status.append(item['count'])
-                    break  # Stop iterating through Compensation_Status once a match is found
-
-        # Handle missing categories
-        missing_categories = set(desired_order) - set(sorted_label_Compensation_Status)
-        for category in missing_categories:
             sorted_label_Compensation_Status.append(category)
-            sorted_dataset_Compensation_Status.append(0)  # Add 0 count for missing categories
-
+            sorted_dataset_Compensation_Status.append(compensation_dict.get(category, 0))
 
         return Response({
             'status': 'success',
-            'Message': 'Data Fetched successfully',
+            'message': 'Data fetched successfully',
             'label_Compensation_Status': sorted_label_Compensation_Status,
             'dataset_Compensation_Status': sorted_dataset_Compensation_Status
         }, status=status.HTTP_200_OK)
+
 
 
 class IdentifiedPAPDashboardView(APIView):
