@@ -554,7 +554,7 @@ class AirAQIChartDashboardView(APIView):
      
         aqi_list = [obj['AQI'] for obj in serializer_data]
         
-        avg_aqi = sum(aqi_list) / len(aqi_list) if aqi_list else 0
+        avg_aqi = round(sum(aqi_list) / len(aqi_list) if aqi_list else 0 ,3)
         
         return Response({
             "message": "AQI generated successfully",
