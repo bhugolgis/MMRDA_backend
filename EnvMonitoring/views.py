@@ -74,7 +74,7 @@ class GenerateAQI(generics.GenericAPIView):
             # AQI = max(measures)
             sub_indices = [PM10, PM2_5, NOx, SO2, CO]
             print(sub_indices)
-            AQI = max(PM10, PM2_5, NOx, SO2, CO)
+            AQI = round(max(PM10, PM2_5, NOx, SO2, CO), 3)
 
             quality = sub_indices_calculator.check_air_quality(AQI)
 
