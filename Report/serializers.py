@@ -242,6 +242,7 @@ class materialManagementExcelSerializer(serializers.ModelSerializer):
         # geo_field= ('location')
 # The `treeManagementSerializer` class is a serializer for the `ExistingTreeManagment` model with
 # specific fields and a geo field.
+
 class treeManagementSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = ExistingTreeManagment
@@ -259,7 +260,13 @@ class treeManagementExcelSerializer(serializers.ModelSerializer):
 
         # geo_field= ('location')
 
-
+# New Tree
+class NewTreeManagementSerializer(GeoFeatureModelSerializer):
+    class Meta:
+        model = NewTreeManagement
+        fields = ('tree', 'quarter', 'month', 'dateOfMonitoring', 'packages',
+                  'commanName', 'botanicalName', 'condition', 'photographs', 'documents', 'remarks')
+        geo_field= ('location')
 
 # The class MetroLine4AlignmentSerializer is a serializer for the MmrdaNew model with fields gid and
 # name, and a geo_field geom.
@@ -336,7 +343,7 @@ class ProjectAffectedTreesSerializer(GeoFeatureModelSerializer):
 class TrainnigReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model= traning
-        fields = ('quarter' , 'packages' , 'dateOfMonitoring',
+        fields = ('id', 'quarter' , 'packages' , 'dateOfMonitoring',
                   'category' , 'traningTitle' , 'noOfAttends' , 'noOfTimesTrainingConducted',
                   'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
                   'traningDate' , 'photographs' , 'documents')

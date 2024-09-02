@@ -1437,7 +1437,7 @@ class materialManagementQuarterExcelDownload(generics.ListAPIView):
             return response
 
 
-
+# Existing Tree
 class TreeMangementReportPackage(ListAPIView):
     serializer_class = treeManagementSerializer
     parser_classes = [MultiPartParser]
@@ -1449,13 +1449,13 @@ class TreeMangementReportPackage(ListAPIView):
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
-            material_data = treeManagementSerializer(data, many=True).data 
-            for feature in material_data['features']:
-                feature['properties']['id'] = feature['id']   
+            existing_tree_data = treeManagementSerializer(data, many=True).data 
+            for feature in existing_tree_data['features']:
+                feature['properties']['id'] = feature['id']
             
-            return Response({'Message': 'data Fetched Successfully',
+            return Response({'message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                            "Tree Management data": material_data},
+                            'existing_tree_data': existing_tree_data},
                             status=status.HTTP_200_OK)
         except:
             return Response({'Message': 'There is no data available for the Package',
@@ -1509,16 +1509,18 @@ class TreeManagementReportQuarterView(ListAPIView):
 
     def get(self, request, quarter, year, *args, **kwargs):
         try:
-            data = ExistingTreeManagment.objects.filter(
-                quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
+            data = ExistingTreeManagment.objects.filter(quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
-            Material_data = treeManagementSerializer(data, many=True).data
-            return Response({'Message': 'data Fetched Successfully',
-                            'status' : 'success' , 
-                             "Tree Management data": Material_data},
+            existing_tree_data = treeManagementSerializer(data, many=True).data
+            for feature in existing_tree_data['features']:
+                feature['properties']['id'] = feature['id']
+                
+            return Response({'message': 'data Fetched Successfully',
+                             'status' : 'success' , 
+                             'existing_tree_data': existing_tree_data},
                             status=200)
         except:
             return Response({'Message': 'There is no data available for the Quarter',
@@ -1585,9 +1587,60 @@ class TreeManagementQuarterExcelDownload(generics.ListAPIView):
             return response
 
 
+# New Tree
+class NewTreeReportPackage(ListAPIView):
+    serializer_class = NewTreeManagementSerializer
+    parser_classes = [MultiPartParser]
+
+    def get(self, request, packages, *args, **kwargs):
+        try:
+            data = NewTreeManagement.objects.filter(packages=packages).order_by('-id')
+            if not data.exists():
+                return Response({'Message': 'No data found',
+                                 },  status=status.HTTP_400_BAD_REQUEST)
+
+            new_tree_data = treeManagementSerializer(data, many=True).data 
+            for feature in new_tree_data['features']:
+                feature['properties']['id'] = feature['id']
+            
+            return Response({'message': 'data Fetched Successfully',
+                            'status' : 'success' , 
+                            'new_tree_data': new_tree_data},
+                            status=status.HTTP_200_OK)
+        except:
+            return Response({'Message': 'There is no data available for the Package',
+                            'status' : 'Failed'},
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
+# New Tree
+class NewTreeReportQuarterView(ListAPIView):
+    serializer_class = NewTreeManagementSerializer
+    parser_classes = [MultiPartParser]
 
+    def get(self, request, quarter, year, *args, **kwargs):
+        try:
+            print("inside get fn")
+            data = NewTreeManagement.objects.filter(quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
+            if not data.exists():
+                return Response({'Message': 'No data found',
+                                 },  status=status.HTTP_400_BAD_REQUEST)
+
+            print("after getting object")
+            new_tree_data = self.get_serializer(data, many=True).data
+            for feature in new_tree_data['features']:
+                feature['properties']['id'] = feature['id']
+                
+            return Response({'message': 'Data Fetched Successfully',
+                             'status' : 'Success' , 
+                             'new_tree_data': new_tree_data},
+                            status=200)
+        except:
+            return Response({'Message': 'There is no data available for the Quarter',
+                            'status' : 'Failed'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+            
 class MetroLine4View(generics.GenericAPIView):
     serializer_class = MetroLine4AlignmentSerializer
 
@@ -1761,16 +1814,19 @@ class ProjectAffectedTreesView(generics.GenericAPIView):
             return Response({'status' : 'failed',
                             'message' : 'Something went wrong !! Please try again'}, status = 400)
 
+
 class TrainnigReportQuarterView(APIView):
     def get(self , request , quarter , year):
    
-        data = traning.objects.filter(
-            quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
+        data = traning.objects.filter(quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
         if not data.exists():
             return Response({'Message': 'No data found',
                                 },  status=status.HTTP_400_BAD_REQUEST)
         
         training_data = TrainnigReportSerializer(data, many=True).data
+        for feature in training_data['features']:
+                feature['properties']['id'] = feature['id']
+                 
         return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
                              "training_data": training_data},
@@ -1840,13 +1896,14 @@ class TrainningManagementQuarterExcelDownload(generics.ListAPIView):
 class TrainnigReportPackageView(APIView):
     def get(self , request , packages):
    
-        data = traning.objects.filter(
-            packages=packages ).order_by('-id')
+        data = traning.objects.filter(packages=packages ).order_by('-id')
         if not data.exists():
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
         
         training_data = TrainnigReportSerializer(data, many=True).data
+        for feature in training_data['features']:
+                feature['properties']['id'] = feature['id']   
         return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
                              "training_data": training_data},
@@ -1905,10 +1962,13 @@ class OccupationalHealthQuarterView(generics.GenericAPIView):
             return Response({'Message': 'No data found',
                                 },  status=status.HTTP_400_BAD_REQUEST)
         
-        training_data = OccupationalHealthQuarterSeialzier(data, many=True).data
+        occupational_health_data = OccupationalHealthQuarterSeialzier(data, many=True).data
+        for feature in occupational_health_data['features']:
+                feature['properties']['id'] = feature['id']
+                  
         return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                             "training_data": training_data},
+                             "training_data": occupational_health_data},
                             status=200)
 
 
@@ -1959,10 +2019,12 @@ class OccupationalHealthPackageView(generics.GenericAPIView):
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
         
-        training_data = OccupationalHealthQuarterSeialzier(data, many=True).data
+        occupational_health_data = OccupationalHealthQuarterSeialzier(data, many=True).data
+        for feature in occupational_health_data['features']:
+                feature['properties']['id'] = feature['id']   
         return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                             "training_data": training_data},
+                             "training_data": occupational_health_data},
                             status=200)
 
 
