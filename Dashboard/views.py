@@ -33,6 +33,7 @@ class PAPCategoryDashboardView(ListAPIView):
         if not category_of_pap:
             return Response({'message': 'No data found'}, status=status.HTTP_400_BAD_REQUEST)
 
+        print(category_of_pap)
         # Desired order of categories
         desired_order = [
             "Residential Land",
@@ -373,9 +374,7 @@ class MaterialConditionChart(APIView):
 
 
 class IncidenttypeCountchart(APIView):
-# need proper response for no data available like only CA-08 and July September data is available
     def get(self, request):
-
         packages = request.query_params.get("packages")
         quarter = request.query_params.get("quarter")
 
@@ -386,7 +385,7 @@ class IncidenttypeCountchart(APIView):
 
         if not Incident_Type:
             return Response({'message': 'no data found'}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         desired_order = [
             "Palm tree has broken",
             "Major (Road accident)",
@@ -401,26 +400,22 @@ class IncidenttypeCountchart(APIView):
             "Reportable Accident"
         ]
 
+        # Create a dictionary from the Incident_Type queryset for faster lookup
+        incident_dict = {item['typeOfIncident']: item['count'] for item in Incident_Type}
+
         sorted_label_Compensation_Status = []
         sorted_dataset_Compensation_Status = []
+
         for category in desired_order:
-            for item in Incident_Type:
-                if item['typeOfIncident'] == category:
-                    sorted_label_Compensation_Status.append(category)
-                    sorted_dataset_Compensation_Status.append(item['count'])
-                    break  # Stop iterating through Compensation_Status once a match is found
-
-        # Handle missing categories
-        missing_categories = set(desired_order) - set(sorted_label_Compensation_Status)
-        for category in missing_categories:
             sorted_label_Compensation_Status.append(category)
-            sorted_dataset_Compensation_Status.append(0)  # Add 0 count for missing categories
+            sorted_dataset_Compensation_Status.append(incident_dict.get(category, 0))  # Get the count or 0 if not found
 
-        return Response({'status': 'success',
-                        'Message': 'Data was successfully fetched',
-                        'dataset': sorted_dataset_Compensation_Status,
-                        'label' : sorted_label_Compensation_Status , 
-                         })
+        return Response({
+            'status': 'success',
+            'Message': 'Data was successfully fetched',
+            'label': sorted_label_Compensation_Status,
+            'dataset': sorted_dataset_Compensation_Status,
+        })
         
 
 
