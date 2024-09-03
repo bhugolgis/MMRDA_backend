@@ -375,7 +375,7 @@ class LabourCampUpdateSerializer(serializers.ModelSerializer):
             'isRegularHealthCheckup', 'regularHealthCheckupCondition', 'regularHealthCheckupPhotographs', 'regularHealthCheckupRemarks',
             'isAvailabilityOfDoctor', 'availabilityOfDoctorCondition', 'availabilityOfDoctorPhotographs', 'availabilityOfDoctorRemarks',
             'isFirstAidKit', 'firstAidKitCondition', 'firstAidKitPhotographs', 'firstAidKitRemarks',
-            'transportationFacility', 'transportationFacilityCondition', 'modeOfTransportation', 'distanceFromSite',
+            'transportationFacility', 'modeOfTransportation',
             'photographs', 'documents', 'remarks'
         )
 
