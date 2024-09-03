@@ -228,15 +228,13 @@ class LabourCamp(Baseclass):
     firstAidKitPhotographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), blank=True, null=True)
     firstAidKitRemarks = models.TextField(max_length=255,  blank=True, null=True)
 
-    #Transportation Facilities
+    # Transportation Facilities
     transportationFacility = models.BooleanField(blank=True, null=True)
-    transportationFacilityCondition = models.CharField(max_length=255,  blank=True, null=True) # not in frontend
     modeOfTransportation = models.CharField(max_length=255, blank=True, null=True)
-    distanceFromSite = models.PositiveIntegerField(blank=True, null=True) # not in frontend
 
     # Documents and Remarks
     photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True))
-    documents =ArrayField(models.CharField( max_length=255, blank=True, null=True))
+    documents = ArrayField(models.CharField( max_length=255, blank=True, null=True))
     remarks = models.TextField(max_length=255,  null=True)
 
 

@@ -74,9 +74,13 @@ class photographs(models.Model):
 # ---------------------Occupational Health & safety Model --------------------
 # The `occupationalHealthSafety` class represents a model for tracking occupational health and safety
 # information, including various conditions, remarks, and incident details.
+# Occupational Wellness
 class occupationalHealthSafety(Baseclass):
     choices = [('Complied' , 'Complied'),('Not-Complied' ,'Not-Complied')]
     user = models.ForeignKey(User, related_name='occupational_health_safety_User', on_delete=models.CASCADE, blank=True)
+
+    labourCampId = models.CharField(max_length=255  , blank = True , null = True)
+    labourCampName = models.CharField(max_length=255 , blank = True , null = True)
     # Occupational Facilities
     
     joiningMedicalCheckup = models.BooleanField(null=True, blank=True)
