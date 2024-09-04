@@ -112,8 +112,6 @@ class ExistingTreeManagment(Baseclass):
     noOfTreeCut = models.IntegerField(null=True, blank=True)
     documents =ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
-    # photographs = models.ImageField(upload_to="Existingtree_photos/", null=True, blank=True)
-    # documents = models.FileField(upload_to='existingTree_documents/', null = True , blank=True)
     remarks = models.TextField(blank=True, null=True )
 
 
@@ -126,8 +124,6 @@ class NewTreeManagement(Baseclass):
     condition = models.CharField(max_length=255, null=True, blank=True)
     documents =ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
-    # photographs = models.ImageField(upload_to="newTree_photographs/", null=True, blank=True)
-    # documents = models.FileField(upload_to="newTree_documents/", null  = True, blank=True  )
     remarks = models.TextField(max_length= 255 , null = True , blank = True)
 
 
