@@ -54,10 +54,10 @@ urlpatterns = [
     
     # OHS
 
-    path('OccupationalHealthPackage/<str:packages>' , OccupationalHealthPackageView.as_view() , name = ' get-occupational-health-package'),
-    path('OccupationalHealthQuarter/<str:quarter>/<int:year>' , OccupationalHealthQuarterView.as_view() , name = ' get-occupational-health-quarter'),
-    path('OccupationalHealthPackageExcelDownload/', OccupationalHealthQuarterExcelDownload.as_view(), name='occupational-health-package-excel-download'),
-    path('OccupationalHealthQuarterExcelDownload/', ExcelOccupationalHealthQuarterExcelDownload.as_view(), name='occupational-health-quarter-excel-download'),
+    path('OccupationalHealthPackage/<str:packages>' , OccupationalHealthPackageView.as_view() , name = ' get-occupational-wellness-package'),
+    path('OccupationalHealthQuarter/<str:quarter>/<int:year>' , OccupationalHealthQuarterView.as_view() , name = ' get-occupational-wellness-quarter'),
+    path('OccupationalHealthPackageExcelDownload/', OccupationalWellnessPackageExcelDownload.as_view(), name='occupational-wellness-package-excel-download'),
+    path('OccupationalHealthQuarterExcelDownload/', OccupationalWellnessQuarterExcelDownload.as_view(), name='occupational-wellness-quarter-excel-download'),
 
     path('labourcampreportpackageExcelDownloadView/', labourcampreportpackageExcelDownloadView.as_view(), name='labourcampreportpackageExcel'),
     path('labourcampreportpackage/<str:packages>/<str:labourCampName>',LabourcampReportPackageView.as_view(), name='Labourcamp Report View package'),
