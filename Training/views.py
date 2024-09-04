@@ -169,7 +169,7 @@ class photographsListView(generics.GenericAPIView):
 # No authorization or contractor or consultant?
 class occupationalHealthSafetyView(generics.GenericAPIView):
     serializer_class = occupationalHealthSafetySerialziers
-    # parser_classes = [MultiPartParser]
+    parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated]
     
     def post(self, request):
@@ -220,8 +220,8 @@ class occupationalHealthSafetyView(generics.GenericAPIView):
                              'Message': 'Occupation Health and Safety data not found'}, status=404)
 
 
-# Update PATCH API
-class OccupationalHealthSafetyUpdateView(generics.UpdateAPIView):
+# GET PATCH DELTE API
+class OccupationalWellnessGetUpdateDeleteView(generics.UpdateAPIView):
     serializer_class = OccupationalHealthSafetyUpdateSerializer
     permission_classes = [IsAuthenticated, IsConsultant | IsContractor]
 
@@ -276,6 +276,29 @@ class OccupationalHealthSafetyUpdateView(generics.UpdateAPIView):
             'status': 'success',
             'data': data
         }, status=status.HTTP_200_OK)
+
+
+    def get(self, request, id):
+        try:
+            occupational_wellness = occupationalHealthSafety.objects.get(id=id)
+            data = occupationalHealthSafetyViewSerializer(occupational_wellness).data
+            data['properties']['id'] = id
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except occupationalHealthSafety.DoesNotExist:
+            return Response({'status': 'error',
+                             'message': 'Occupational Wellness data not found'}, status=404)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the Rehab instance.
+        """
+        occupational_wellness_instance = self.get_object()
+        if not occupational_wellness_instance:
+            return Response({'status': 'error', 'Message': 'Occupational Wellness data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        occupational_wellness_instance.delete()
+        return Response({'status': 'success', 'Message': 'Air deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 
 class ContactUsView(generics.GenericAPIView):

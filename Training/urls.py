@@ -12,8 +12,7 @@ urlpatterns = [
     # path('PhotographsViewupdate/<int:pk>' , updatephotographview.as_view() , name = 'photograph update'),
 
     path('occupational' , occupationalHealthSafetyView.as_view() , name = 'occupational Health & Safety') ,
-    path('occupational/<int:id>' , occupationalHealthSafetyView.as_view() , name = 'get-occupational-health-and-safety') ,
-    path('occupational/<int:id>' , OccupationalHealthSafetyUpdateView.as_view() , name = 'ohs-update') ,
+    path('occupational/<int:id>' , OccupationalWellnessGetUpdateDeleteView.as_view() , name = 'get-update-delete-occupational-wellness') ,
     path('contactus' , ContactUsView.as_view() , name = 'occupational update'),
     path('contactussearch' , ContactusListView.as_view() , name = 'occupational update'),
     
