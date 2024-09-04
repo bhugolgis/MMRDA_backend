@@ -1982,7 +1982,7 @@ class OccupationalHealthQuarterView(generics.GenericAPIView):
 
 
 
-class OccupationalHealthQuarterExcelDownload(generics.ListAPIView):
+class OccupationalWellnessPackageExcelDownload(generics.ListAPIView):
     serializer_class = ExcelOccupationalHealthQuarterSeialzier
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['packages']
@@ -2006,10 +2006,14 @@ class OccupationalHealthQuarterExcelDownload(generics.ListAPIView):
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
 
-            # Create a response with the appropriate content type
-            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = 'attachment; filename=OccupationalHealthQuarter.xlsx'
+            # Get the package filter from the request
+            package = request.GET.get('packages', 'all_packages')
 
+            # Create a response with the appropriate content type
+            filename = f'Occupational_Wellness_{package}.xlsx'
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = f'attachment; filename={filename}'
+            
             # Write the DataFrame to the Excel response
             df.to_excel(response, index=False, sheet_name='Sheet1')
 
@@ -2036,9 +2040,8 @@ class OccupationalHealthPackageView(generics.GenericAPIView):
 
 
 
-class ExcelOccupationalHealthQuarterFilter(django_filters.FilterSet):
+class OccupationalWellnessQuarterFilter(django_filters.FilterSet):
     year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
-    # month = django_filters.NumberFilter(field_name='dateOfMonitoring__month', label='month')
 
     class Meta:
         model = occupationalHealthSafety
@@ -2046,11 +2049,11 @@ class ExcelOccupationalHealthQuarterFilter(django_filters.FilterSet):
 
 
 
-class ExcelOccupationalHealthQuarterExcelDownload(generics.ListAPIView):
+class OccupationalWellnessQuarterExcelDownload(generics.ListAPIView):
     serializer_class = ExcelOccupationalHealthQuarterSeialzier
     filter_backends = [DjangoFilterBackend]
     # filterset_fields = ['packages', 'constructionSiteName']
-    filterset_class = ExcelOccupationalHealthQuarterFilter
+    filterset_class = OccupationalWellnessQuarterFilter
 
     def get_queryset(self):
         queryset = occupationalHealthSafety.objects.all()
@@ -2069,9 +2072,14 @@ class ExcelOccupationalHealthQuarterExcelDownload(generics.ListAPIView):
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
 
+            # Get the quarter and year filter from the request
+            quarter = request.GET.get('quarter', 'all_quarters')
+            year = request.GET.get('year', 'all_years')
+
             # Create a response with the appropriate content type
+            filename = f'Occupational_Wellness_{year}_{quarter}.xlsx'
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = 'attachment; filename=OccupationalHealthQuarter.xlsx'
+            response['Content-Disposition'] = f'attachment; filename={filename}'
 
             # Write the DataFrame to the Excel response
             df.to_excel(response, index=False, sheet_name='Sheet1')
