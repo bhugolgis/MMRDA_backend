@@ -41,6 +41,8 @@ urlpatterns = [
 
     path('new-tree-report-package/<str:packages>',NewTreeReportPackage.as_view(), name='get-new-tree-report-package'),
     path('new-tree-report-quarter/<str:quarter>/<int:year>',NewTreeReportQuarterView.as_view(), name='get-new-tree-report-package'),
+    path('new-tree-report-package-excel-download/', NewTreePackageExcelDownload.as_view(), name='get-new-tree-report-package-excel-download'),
+    path('new-tree-report-quarter-excel-download/', NewTreeQuarterExcelDownload.as_view(), name='get-new-tree-report-quarter-excel-download'),
     
     path('wastetreatmentpackage/<str:packages>',WasteTreatmentsPackageView.as_view(), name='Water Report Package View'),
     path('wastetreatmentquarter/<str:quarter>/<int:year>',WasteTreatmentsQuarterView.as_view(), name='Water Report Quarter View'),

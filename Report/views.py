@@ -1599,8 +1599,7 @@ class NewTreeReportPackage(ListAPIView):
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
-            new_tree_data = treeManagementSerializer(data, many=True).data 
-            print(new_tree_data)
+            new_tree_data = treeManagementSerializer(data, many=True).data
             for feature in new_tree_data['features']:
                 feature['properties']['id'] = feature['id']
             
@@ -1627,15 +1626,11 @@ class NewTreeReportQuarterView(ListAPIView):
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
-            print("after getting object")
             # new_tree_data = self.get_serializer(data, many=True).data
-            new_tree_data = treeManagementSerializer(data, many=True).data 
-            print("after serializing")
-            print(new_tree_data)
+            new_tree_data = treeManagementSerializer(data, many=True).data
+            
             for feature in new_tree_data['features']:
                 feature['properties']['id'] = feature['id']
-
-            print("after looping")   
                 
             return Response({'message': 'Data Fetched Successfully',
                              'status' : 'Success' , 
@@ -1645,6 +1640,92 @@ class NewTreeReportQuarterView(ListAPIView):
             return Response({'Message': 'There is no data available for the Quarter',
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+class NewTreePackageExcelDownload(generics.ListAPIView):
+    serializer_class = ExcelNewTreeQuarterSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['packages']
+    
+
+    def get_queryset(self):
+        queryset = NewTreeManagement.objects.all()
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('tree', 'quarter', 'month', 'dateOfMonitoring', 'packages',
+                  'commanName', 'botanicalName', 'condition', 'photographs', 'documents', 'remarks')
+
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
+        else:
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
+
+            # Get the package filter from the request
+            package = request.GET.get('packages', 'all_packages')
+
+            # Create a response with the appropriate content type
+            filename = f'New_Tree_{package}.xlsx'
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = f'attachment; filename={filename}'
+            
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
+
+            return response
+
+
+class NewTreeQuarterFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+
+    class Meta:
+        model = NewTreeManagement
+        fields = ['quarter', 'year']
+
+
+
+class NewTreeQuarterExcelDownload(generics.ListAPIView):
+    serializer_class = ExcelOccupationalHealthQuarterSeialzier
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'constructionSiteName']
+    filterset_class = NewTreeQuarterFilter
+
+    def get_queryset(self):
+        queryset = NewTreeManagement.objects.all()
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('tree', 'quarter', 'month', 'dateOfMonitoring', 'packages',
+                  'commanName', 'botanicalName', 'condition', 'photographs', 'documents', 'remarks')
+        
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
+
+            # Get the quarter and year filter from the request
+            quarter = request.GET.get('quarter', 'all_quarters')
+            year = request.GET.get('year', 'all_years')
+
+            # Create a response with the appropriate content type
+            filename = f'New_Tree_{year}_{quarter}.xlsx'
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = f'attachment; filename={filename}'
+
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
+
+            return response
 
             
 class MetroLine4View(generics.GenericAPIView):
