@@ -1446,7 +1446,7 @@ class TreeMangementReportPackage(ListAPIView):
         try:
             data = ExistingTreeManagment.objects.filter(packages=packages).order_by('-id')
             if not data.exists():
-                return Response({'Message': 'No data found',
+                return Response({'message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
             existing_tree_data = treeManagementSerializer(data, many=True).data 
@@ -1458,7 +1458,7 @@ class TreeMangementReportPackage(ListAPIView):
                             'existing_tree_data': existing_tree_data},
                             status=status.HTTP_200_OK)
         except:
-            return Response({'Message': 'There is no data available for the Package',
+            return Response({'message': 'There is no data available for the Package',
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
 
@@ -1511,7 +1511,7 @@ class TreeManagementReportQuarterView(ListAPIView):
         try:
             data = ExistingTreeManagment.objects.filter(quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
             if not data.exists():
-                return Response({'Message': 'No data found',
+                return Response({'message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
             existing_tree_data = treeManagementSerializer(data, many=True).data
@@ -1523,7 +1523,7 @@ class TreeManagementReportQuarterView(ListAPIView):
                              'existing_tree_data': existing_tree_data},
                             status=200)
         except:
-            return Response({'Message': 'There is no data available for the Quarter',
+            return Response({'message': 'There is no data available for the Quarter',
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
 
@@ -1600,6 +1600,7 @@ class NewTreeReportPackage(ListAPIView):
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
             new_tree_data = treeManagementSerializer(data, many=True).data 
+            print(new_tree_data)
             for feature in new_tree_data['features']:
                 feature['properties']['id'] = feature['id']
             
@@ -1627,9 +1628,14 @@ class NewTreeReportQuarterView(ListAPIView):
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
             print("after getting object")
-            new_tree_data = self.get_serializer(data, many=True).data
+            # new_tree_data = self.get_serializer(data, many=True).data
+            new_tree_data = treeManagementSerializer(data, many=True).data 
+            print("after serializing")
+            print(new_tree_data)
             for feature in new_tree_data['features']:
                 feature['properties']['id'] = feature['id']
+
+            print("after looping")   
                 
             return Response({'message': 'Data Fetched Successfully',
                              'status' : 'Success' , 

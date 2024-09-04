@@ -95,7 +95,7 @@ class occupationalHealthSafetySerialziers(serializers.ModelSerializer):
 
     class Meta:
         model = occupationalHealthSafety
-        fields = ['dateOfMonitoring' ,'packages', 'quarter','longitude', 'latitude' ,
+        fields = ['dateOfMonitoring' ,'packages', 'quarter','longitude', 'latitude' , 'labourCampName', 'labourCampId',
         'joiningMedicalCheckup' , 'ppeKit' ,'trainingToWorkers','houseKeeping' ,
         'powerSupplySystem' ,'assemblyArea' ,'ambulanceArrangement' ,'toiletFacility',
         'safeMomentPassage' ,'materialKeepingPractice','accidentalCheck','safetyGearStatus',
@@ -117,7 +117,7 @@ class OccupationalHealthSafetyUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = occupationalHealthSafety
-        fields = ['dateOfMonitoring', 'packages', 'quarter', 'longitude', 'latitude',
+        fields = ['dateOfMonitoring', 'packages', 'quarter', 'longitude', 'latitude', 'labourCampName', 'labourCampId',
                   'joiningMedicalCheckup', 'ppeKit', 'trainingToWorkers', 'houseKeeping',
                   'powerSupplySystem', 'assemblyArea', 'ambulanceArrangement', 'toiletFacility',
                   'safeMomentPassage', 'materialKeepingPractice', 'accidentalCheck', 'safetyGearStatus',
