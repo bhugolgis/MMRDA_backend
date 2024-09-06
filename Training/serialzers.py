@@ -204,6 +204,18 @@ class PreConstructionStageComplianceSerializer(serializers.ModelSerializer):
             'ForestClearance', 'ResponsibilityOfForestClearance', 'CurrentStatusOfForestClearance', 'ForestClearanceDocuments'
         )
 
+
+class PreConstructionStageComplianceViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PreConstructionStage
+        fields = (
+            'ShiftingofUtilities', 'ResponsibilityOfShiftingofUtilities', 'CurrentStatusOfShiftingofUtilities', 'ShiftingofUtilitiesDocuments',
+            'PermissionForFellingOfTrees', 'ResponsibilityOfPermissionForFellingOfTrees', 'CurrentStatusPermissionForFellingOfTrees', 'PermissionForFellingOfTreesDocuments',
+            'CRZClearance', 'ResponsibilityOfCRZClearance', 'CurrentStatusCRZClearance', 'CRZClearanceDocuments',
+            'ForestClearance', 'ResponsibilityOfForestClearance', 'CurrentStatusOfForestClearance', 'ForestClearanceDocuments'
+        )
+        
+
 # The class ConstructionStageComplainceSerializer is a serializer for the ConstructionStage model,
 # excluding certain fields.
 class ConstructionStageComplianceSerializer(serializers.ModelSerializer):

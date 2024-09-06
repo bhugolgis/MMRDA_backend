@@ -3,9 +3,9 @@ from .views import *
 
 urlpatterns = [
     path('traning' , TraningView.as_view() , name = 'traning'),
-    path('traning<int:id>' , TraningView.as_view() , name = 'get-traning'),
-    path('traningList' , TrainingListView.as_view() , name = 'traning list'),
-    path('traning/<int:id>' , TrainingUpdateView.as_view() , name = 'traningUpdate'),
+    path('traning/<int:id>' , TrainingGetUpdateDeleteView.as_view() , name = 'get-update-delete-traning'),
+    
+    path('traningList' , TrainingListView.as_view() , name = 'traning-list'),
     
     path('photographs' , PhotographsView.as_view() , name = 'photographs') ,
     path('photographsList' , photographsListView.as_view() , name = 'photographs list '),
@@ -17,8 +17,7 @@ urlpatterns = [
     path('contactussearch' , ContactusListView.as_view() , name = 'occupational update'),
     
     path('PreConstructionStageCompliance' , PreConstructionStageComplianceView.as_view() , name = ' PreConstructionStageCompliance'),
-    path('pre-construction-stage-compliance/<int:id>' , PreConstructionStageComplianceView.as_view() , name = 'get-pre-construction-stage-compliance'),
-    path('PreConstructionStageCompliance/<int:id>' , PreConstructionStageComplianceUpdateView.as_view() , name = ' PreConstructionStageUpdateCompliance'),
+    path('pre-construction-stage-compliance/<int:id>' , PreConstructionStageComplianceGetUpdateDeleteView.as_view() , name = 'get-update-delete-pre-construction-stage'),
     path('ConstructionStageComplaince' , ConstructionStageComplainceView.as_view() , name = ' ConstructionStageCompliance'),
     path('ConstructionStageComplaince/<int:id>' , ConstructionStageComplianceUpdateView.as_view() , name = ' ConstructionStageCompliance'),
    
