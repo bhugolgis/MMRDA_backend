@@ -609,7 +609,7 @@ class LabourCampView(generics.GenericAPIView):
 
     
 
-# PATCH API 
+# GET PATCH DELETE API 
 class LabourCampUpdateGetDeleteView(generics.UpdateAPIView):
     serializer_class = LabourCampUpdateSerializer
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]

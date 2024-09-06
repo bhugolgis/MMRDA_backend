@@ -57,19 +57,9 @@ class TraningView(generics.GenericAPIView):
             return Response({'status': 'error',
                             'Message' : error_message} , status = status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request, id):
-        try:
-            training_instance = traning.objects.get(id=id)
-            data = TrainingViewSerializer(training_instance).data
-            return Response({'status': 'success',
-                             'data': data}, status=200)
-        except traning.DoesNotExist:
-            return Response({'status': 'error',
-                             'Message': 'Training data not found'}, status=404)
 
-
-# Update (PATCH)
-class TrainingUpdateView(generics.UpdateAPIView):
+# GET UPDATE DELETE (PATCH) API
+class TrainingGetUpdateDeleteView(generics.UpdateAPIView):
     serializer_class = TrainingUpdateSerializer
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
     parser_classes = [MultiPartParser]
@@ -79,6 +69,16 @@ class TrainingUpdateView(generics.UpdateAPIView):
             return traning.objects.get(id=self.kwargs['id'])
         except traning.DoesNotExist:
             return None
+
+    def get(self, request, id):
+        try:
+            training_instance = traning.objects.get(id=id)
+            data = TrainingViewSerializer(training_instance).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except traning.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Training data not found'}, status=404)
 
     def patch(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -110,6 +110,18 @@ class TrainingUpdateView(generics.UpdateAPIView):
         data = TrainingUpdateSerializer(updated_instance).data
 
         return Response({'status': 'success', 'message': 'Data updated successfully', 'data': data}, status=status.HTTP_200_OK)
+
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the Rehab instance.
+        """
+        training_instance = self.get_object()
+        if not training_instance:
+            return Response({'status': 'error', 'Message': 'training data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        training_instance.delete()
+        return Response({'status': 'success', 'Message': 'Air deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
 # The below code is gives all of the object in a list from Traning table
 class TrainingListView(generics.ListAPIView):
@@ -411,19 +423,9 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
         else:
             return Response({"msg": "Only consultant and contractor can fill this form"}, status=401)
 
-    def get(self, request, id):
-        try:
-            pre_construction_stage = PreConstructionStage.objects.get(id=id)
-            data = PreConstructionStageComplianceSerializer(pre_construction_stage).data
-            return Response({'status': 'success',
-                             'data': data}, status=200)
-        except PreConstructionStage.DoesNotExist:
-            return Response({'status': 'error',
-                             'Message': 'Pre construction stage data not found'}, status=404)
 
-
-# Update (PATCH)
-class PreConstructionStageComplianceUpdateView(generics.GenericAPIView):
+# Get Update Delete(PATCH)
+class PreConstructionStageComplianceGetUpdateDeleteView(generics.GenericAPIView):
     serializer_class = PreConstructionStageComplianceSerializer
     parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
@@ -436,6 +438,18 @@ class PreConstructionStageComplianceUpdateView(generics.GenericAPIView):
             return PreConstructionStage.objects.get(id=self.kwargs['id'])
         except PreConstructionStage.DoesNotExist:
             return None
+
+
+    def get(self, request, id):
+        try:
+            pre_construction_stage = PreConstructionStage.objects.get(id=id)
+            data = PreConstructionStageComplianceViewSerializer(pre_construction_stage).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except PreConstructionStage.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Pre construction stage data not found'}, status=404)
+
 
     def patch(self, request, *args, **kwargs):
         pre_construction_stage = self.get_object()
@@ -469,6 +483,18 @@ class PreConstructionStageComplianceUpdateView(generics.GenericAPIView):
                              'Message': error_message,
                              'data': data}
                             , status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the LabourCamp instance.
+        """
+        pre_construction_stage= self.get_object()
+        if not pre_construction_stage:
+             return Response({'status': 'error', 'Message': 'training  data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        pre_construction_stage.delete()
+        return Response({'status': 'success', 'Message': 'Training data deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+
     
 
 # The serializer_class attribute of the ConstructionStageComplainceView class is set to the ConstructionStageComplainceSerializer class. This class is used to serialize and deserialize the data submitted by the user.
