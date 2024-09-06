@@ -53,6 +53,12 @@ urlpatterns = [
     path('MaterialManegmanetReportPackageExcelDownload/', MaterialManegmanetReportPackageExcelDownload.as_view(), name='MaterialManegmanetReportPackageExcelDownload'),
     path('materialmanagementquarter/<str:quarter>/<int:year>',MaterialManagementReporetQuarterView.as_view(), name='Material Management Quarter'),
     path('materialManagementQuarterExcelDownload/', materialManagementQuarterExcelDownload.as_view(), name='materialManagementQuarterExcelDownload'),
+
+    path('pre-construction-stage-compliance-report/',PreConstructionStageComplianceReportView.as_view(), name='get-pre-construction-stage-report'),
+    path('pre-construction-stage-compliance-report-excel/',PreConstructionStageComplianceExcel.as_view(), name='get-pre-construction-stage-report-excel'),
+
+    path('construction-stage-compliance-report/',ConstructionStageComplianceReportView.as_view(), name='get-construction-stage-report'),
+    path('construction-stage-compliance-report-excel/',ConstructionStageComplianceExcel.as_view(), name='get-construction-stage-report-excel'),
     
     # OHS
 
@@ -73,7 +79,7 @@ urlpatterns = [
 
     # Training
 
-    path('TrainnigReporpackage/<str:packages>' , TrainnigReportPackageView.as_view() , name = ' get-training-report-package'),
+    path('TrainnigReporpackage/<str:packages>' , TrainnigReportPackageView.as_view() , name = 'get-training-report-package'),
     path('TrainnigReporQuarter/<str:quarter>/<int:year>' , TrainnigReportQuarterView.as_view() , name = ' get-training-report-quarter'),
     path('TrainnigReportPackageExcelDownload/', TrainnigReportPackageExcelDownload.as_view(), name='get-trainig-report-package-excel-download'),
     path('TrainningManagementQuarterExcelDownload/', TrainningManagementQuarterExcelDownload.as_view(), name='get-trainig-report-quarter-excel-download'),
