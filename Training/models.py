@@ -171,6 +171,7 @@ class ConstructionStage(models.Model):
     #guideline is rules
     user = models.ForeignKey(User,  on_delete=models.CASCADE,
                              related_name='user_ConstructionStage', null=True)  # User profile
+    
     ConsenttToEstablishOoperate = models.BooleanField(default=False)
     RulesOfConsenttToEstablishOoperate = models.CharField(
         max_length=255, default='Air (Prevention and Control of Pollution) Act')

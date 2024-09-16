@@ -206,7 +206,38 @@ class waterExcelReportSerializer(serializers.ModelSerializer):
         fields =('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' , 'trueColor', 'turbidity', 'odour', 'waterDisposal', 'WQI', 'pH', 'totalHardnessAsCaCO3', 'calcium', 'totalAlkalinityAsCaCO3', 'chlorides', 'magnesium', 'totalDissolvedSolids', 'sulphate', 'nitrate', 'fluoride', 'iron', 'zinc', 'copper', 'aluminum', 'nickel', 'manganese', 'phenolicCompounds', 'sulphide', 'cadmium', 'cyanide', 'lead', 'mercury', 'totalArsenic', 'totalChromium' )
         # geo_field= ('location')
 
+# Existing Tree
+class treeManagementSerializer(GeoFeatureModelSerializer):
+    class Meta:
+        model = ExistingTreeManagment
+        fields = ('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
+                    'condition', 'actionTaken', 'photographs', 'documents','remarks')
 
+        geo_field= ('location')
+
+# Existing Tree 
+class treeManagementExcelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExistingTreeManagment
+        fields = ('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
+                    'condition', 'actionTaken', 'photographs', 'documents','remarks')
+
+        # geo_field= ('location')
+
+# New Tree
+class NewTreeManagementSerializer(GeoFeatureModelSerializer):
+    class Meta:
+        model = NewTreeManagement
+        fields = ('tree', 'quarter', 'month', 'dateOfMonitoring', 'packages',
+                  'commanName', 'botanicalName', 'condition', 'photographs', 'documents', 'remarks')
+        geo_field= ('location')
+
+
+class ExcelNewTreeQuarterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewTreeManagement
+        fields = ('tree', 'quarter', 'month', 'dateOfMonitoring', 'packages',
+                  'commanName', 'botanicalName', 'condition', 'photographs', 'documents', 'remarks')
 
 # The class `wasteTreatmentsSerializer` is a serializer for the `WasteTreatments` model that includes
 # specific fields and a geo field.
@@ -243,40 +274,26 @@ class materialManagementExcelSerializer(serializers.ModelSerializer):
 # The `treeManagementSerializer` class is a serializer for the `ExistingTreeManagment` model with
 # specific fields and a geo field.
 
-
-# Existing Tree
-class treeManagementSerializer(GeoFeatureModelSerializer):
+class PreConstructionStageComplianceReportSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ExistingTreeManagment
-        fields = ('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
-                    'condition', 'actionTaken', 'photographs', 'documents','remarks')
+        model = PreConstructionStage
+        fields = ('id',
+            'ShiftingofUtilities', 'ResponsibilityOfShiftingofUtilities', 'CurrentStatusOfShiftingofUtilities', 'ShiftingofUtilitiesDocuments',
+            'PermissionForFellingOfTrees', 'ResponsibilityOfPermissionForFellingOfTrees', 'CurrentStatusPermissionForFellingOfTrees', 'PermissionForFellingOfTreesDocuments',
+            'CRZClearance', 'ResponsibilityOfCRZClearance', 'CurrentStatusCRZClearance', 'CRZClearanceDocuments',
+            'ForestClearance', 'ResponsibilityOfForestClearance', 'CurrentStatusOfForestClearance', 'ForestClearanceDocuments'
+        )
 
-        geo_field= ('location')
 
-# Existing Tree 
-class treeManagementExcelSerializer(serializers.ModelSerializer):
+class ConstructionStageComplianceReportSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ExistingTreeManagment
-        fields = ('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
-                    'condition', 'actionTaken', 'photographs', 'documents','remarks')
+        model = ConstructionStage
+        exclude = ('user',
+            'RulesOfConsenttToEstablishOoperate', 'RulesOfSandMiningFromRiverbed', 'RulesForGroundWaterWithdrawal', 'RulesForCollectionDisposalManagement',
+            'RulesForSolidWaste', 'RulesForDisposalOfBituminousAndOtherWaste', 'RulesForDisposalOfsewagefromLabourCamps', 'RulesForPollutionUnderControl',
+            'RulesForRoofTopRainWaterHarvesting',
+        )
 
-        # geo_field= ('location')
-
-# New Tree
-class NewTreeManagementSerializer(GeoFeatureModelSerializer):
-    class Meta:
-        model = NewTreeManagement
-        fields = ('tree', 'quarter', 'month', 'dateOfMonitoring', 'packages',
-                  'commanName', 'botanicalName', 'condition', 'photographs', 'documents', 'remarks')
-        geo_field= ('location')
-
-
-class ExcelNewTreeQuarterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = NewTreeManagement
-        fields = ('tree', 'quarter', 'month', 'dateOfMonitoring', 'packages',
-                  'commanName', 'botanicalName', 'condition', 'photographs', 'documents', 'remarks')
-    
 
 # The class MetroLine4AlignmentSerializer is a serializer for the MmrdaNew model with fields gid and
 # name, and a geo_field geom.

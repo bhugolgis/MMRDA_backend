@@ -1902,6 +1902,133 @@ class ProjectAffectedTreesView(generics.GenericAPIView):
                             'message' : 'Something went wrong !! Please try again'}, status = 400)
 
 
+# geopackage serializer is not used as no location data is used, so no need to specifically add id
+class PreConstructionStageComplianceReportView(ListAPIView):
+    serializer_class = PreConstructionStageComplianceReportSerializer
+    parser_classes = [MultiPartParser]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            data = PreConstructionStage.objects.all().order_by('-id')
+            if not data.exists():
+                return Response({'message': 'Pre Construction Stage Compliance data not found','status' : '400'},  status=status.HTTP_400_BAD_REQUEST)
+
+            pre_construction_stage_compliance_data = PreConstructionStageComplianceReportSerializer(data, many=True).data
+                 
+            return Response({'message': 'data Fetched Successfully',
+                            'status' : 'success' , 
+                            "pre_construction_stage_compliance_data": pre_construction_stage_compliance_data},
+                            status=status.HTTP_200_OK)
+        except:
+            return Response({'message': 'There is no data available for Pre Construction Stage Compliance',
+                            'status' : 'Failed'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+class PreConstructionStageComplianceExcel(generics.ListAPIView):
+    # filter_backends = [DjangoFilterBackend] # discuss if we want filters of package and quarter or not
+
+    def get_queryset(self):
+        queryset = PreConstructionStage.objects.all()
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id',
+            'ShiftingofUtilities', 'ResponsibilityOfShiftingofUtilities', 'CurrentStatusOfShiftingofUtilities', 'ShiftingofUtilitiesDocuments',
+            'PermissionForFellingOfTrees', 'ResponsibilityOfPermissionForFellingOfTrees', 'CurrentStatusPermissionForFellingOfTrees', 'PermissionForFellingOfTreesDocuments',
+            'CRZClearance', 'ResponsibilityOfCRZClearance', 'CurrentStatusCRZClearance', 'CRZClearanceDocuments',
+            'ForestClearance', 'ResponsibilityOfForestClearance', 'CurrentStatusOfForestClearance', 'ForestClearanceDocuments'
+        )
+
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
+
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=Pre_Construction_Stage_Compliance.xlsx'
+
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
+
+            return response         
+
+
+# geopackage serializer is not used as no location data is used, so no need to specifically add id
+class ConstructionStageComplianceReportView(ListAPIView):
+    serializer_class = ConstructionStageComplianceReportSerializer
+    parser_classes = [MultiPartParser]
+
+    def get(self, request, *args, **kwargs):
+        try:
+            data = ConstructionStage.objects.all().order_by('-id')
+            if not data.exists():
+                return Response({'message': 'Construction Stage Compliance data not found','status' : '400'},  status=status.HTTP_400_BAD_REQUEST)
+
+            construction_stage_compliance_data = ConstructionStageComplianceReportSerializer(data, many=True).data
+                 
+            return Response({'message': 'data Fetched Successfully',
+                            'status' : 'success' , 
+                            "construction_stage_compliance_data": construction_stage_compliance_data},
+                            status=status.HTTP_200_OK)
+        except:
+            return Response({'message': 'There is no data available for Construction Stage Compliance',
+                            'status' : 'Failed'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+class ConstructionStageComplianceExcel(generics.ListAPIView):
+    # filter_backends = [DjangoFilterBackend] # discuss if we want filters of package and quarter or not
+
+    def get_queryset(self):
+        queryset = ConstructionStage.objects.all()
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id',
+            'ConsenttToEstablishOoperate', 'RulesOfConsenttToEstablishOoperate', 'ResponsibilityOfConsenttToEstablishOoperate', 'CurrentStatusOfConsenttToEstablishOoperate', 'ConsenttToEstablishOoperateDocuments',
+            'PermissionForSandMiningFromRiverbed', 'RulesOfSandMiningFromRiverbed', 'ResponsibilityOfSandMiningFromRiverbed', 'CurrentStatusOfSandMiningFromRiverbed', 'PermissionForSandMiningFromRiverbedDocuments',
+            'PermissionForGroundWaterWithdrawal', 'RulesForGroundWaterWithdrawal', 'ResponsibilityForGroundWaterWithdrawal', 'CurrentStatusOfGroundWaterWithdrawal', 'PermissionForGroundWaterWithdrawalDocuments',
+            'AuthorizationForCollectionDisposalManagement', 'RulesForCollectionDisposalManagement', 'ResponsibilityForCollectionDisposalManagement', 'CurrentStatusOfCollectionDisposalManagement', 'AuthorizationForCollectionDisposalManagementDocuments',
+            'AuthorizationForSolidWaste', 'RulesForSolidWaste', 'ResponsibilityOfSolidWaste', 'CurrentStatusOfSolidWaste', 'AuthorizationForSolidWasteDocuments',
+            'DisposalOfBituminousAndOtherWaste', 'RulesForDisposalOfBituminousAndOtherWaste', 'ResponsibilityOfDisposalOfBituminousAndOtherWaste', 'CurrentStatusOfDisposalOfBituminousAndOtherWaste', 'DisposalOfBituminousAndOtherWasteDocuments',
+            'ConsentToDisposalOfsewagefromLabourCamps', 'RulesForDisposalOfsewagefromLabourCamps', 'ResponsibilityOfDisposalOfsewagefromLabourCamps', 'CurrentStatusOfDisposalOfsewagefromLabourCamps', 'ConsentToDisposalOfsewagefromLabourCampsDocuments',
+            'PollutionUnderControlCertificate', 'RulesForPollutionUnderControl', 'ResponsibilityOfPollutionUnderControl', 'CurrentStatusPollutionUnderControl', 'PollutionUnderControlCertificateDocuments',
+            'RoofTopRainWaterHarvesting', 'RulesForRoofTopRainWaterHarvesting', 'ResponsibilityOfRoofTopRainWaterHarvesting', 'CurrentStatusRoofTopRainWaterHarvesting', 'RoofTopRainWaterHarvestingDocuments'
+        )
+
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
+        else:
+            
+            # Create a Pandas DataFrame
+            df = pd.DataFrame(data)
+
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=Construction_Stage_Compliance.xlsx'
+
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
+
+            return response         
+
+            
+# OHS
+
+# Training
+
 class TrainnigReportQuarterView(APIView):
     def get(self , request , quarter , year):
    

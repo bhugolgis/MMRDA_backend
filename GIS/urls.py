@@ -2,8 +2,8 @@ from django.urls import path , re_path
 from .views import *
 
 urlpatterns = [
-     
-     path('MetroLine4Aligment' , MetroLine4View.as_view() , name = 'MetroLine4'),
+     path('MetroLine4Aligment' , MetroLine4View.as_view() , name = 'metro-line-4-and-4a'),
+     path('MetroLine4And4AAligment' , MetroLine4And4AView.as_view() , name = 'MetroLine4'),
      path('MetroStation' , MetroStationView.as_view() , name = 'MetroStationView '),
      path('gis-portal-existing-tree' , GISPortalExistingTreeManagmentView.as_view() , name = 'get-existing-tree'),
      path('package54Aligment' , Package54AlignmentView.as_view() , name = 'Package54AlignmentView'),
