@@ -9,6 +9,12 @@ from .models import *
 from rest_framework.serializers import ModelSerializer
 
 
+class MetroLine4And4AAlignmentSerializer(GeoFeatureModelSerializer):
+    class Meta:
+        model = MmrdaAlignment4326
+        fields = ('gid' ,'name' )
+        geo_field= ('geom')
+        
 
 class MetroLine4AlignmentSerializer(GeoFeatureModelSerializer):
     class Meta:

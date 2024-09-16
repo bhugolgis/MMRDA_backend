@@ -28,7 +28,22 @@ class MetroLine4View(generics.GenericAPIView):
                                 'message' : 'data was successfully fetched',
                                 'data': serializers},
                                 status= 200)
+
+
+class MetroLine4And4AView(generics.GenericAPIView):
+    serializer_class = MetroLine4AlignmentSerializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
        
+            MetroLine = MmrdaAlignment4326.objects.all()
+            serializers = self.get_serializer(MetroLine , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+
+            
 class Package54AlignmentView(generics.GenericAPIView):
     serializer_class = Package54AlignmentSerializer
     #permission_classes = [IsAuthenticated]
