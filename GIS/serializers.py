@@ -98,7 +98,7 @@ class PAPGISSerializer(GeoFeatureModelSerializer):
         model = PAP
         fields = ('id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID', 
                   'addressLine1','streetName','pincode','eligibility', 'categoryOfPap', 
-                  'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
+                  'areaOfAsset','legalStatus','legalDocuments',
                    'actionTaken', 'notAgreedReason','remarks' )
         geo_field= ('location')
 

@@ -100,7 +100,7 @@ class PAPReportSerializer(GeoFeatureModelSerializer):
         model = PAP
         fields = ('id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','firstName','middleName','lastName', 'cadastralMapID', 'cadastralMapDocuments', 
                   'addressLine1','streetName','pincode','eligibility', 'categoryOfPap','dateOfIdentification',
-                  'areaOfAsset','typeOfStructure','legalStatus','legalDocuments', 
+                  'areaOfAsset','legalStatus','legalDocuments', 
                    'actionTaken', 'notAgreedReason','remarks', 'presentPhotograph', 'documents' )
         geo_field= ('location')
 
@@ -108,13 +108,9 @@ class PAPReportSerializer(GeoFeatureModelSerializer):
 class PAPReportExcelSerializer(serializers.ModelSerializer):
     class Meta:
         model = PAP
-        # fields = ('id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','nameOfPAP',
-        #           'addressLine1','streetName','pincode','eligibility', 'categoryOfPap',
-        #           'areaOfAsset','typeOfStructure','legalStatus','legalDocuments',
-        #            'actionTaken', 'notAgreedReason','remarks' )
         fields = ('id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','firstName','middleName','lastName', 'cadastralMapID', 'cadastralMapDocuments', 
                   'addressLine1','streetName','pincode','eligibility', 'categoryOfPap','dateOfIdentification',
-                  'areaOfAsset','typeOfStructure','legalStatus','legalDocuments', 
+                  'areaOfAsset','legalStatus','legalDocuments', 
                    'actionTaken', 'notAgreedReason','remarks', 'presentPhotograph', 'documents' )
         # geo_field= ('location')
 
