@@ -88,7 +88,7 @@ class PapSerailzer(serializers.ModelSerializer):
         model = PAP
         fields = ('quarter', 'packages', 'longitude', 'latitude','dateOfMonitoring', 'user','dateOfIdentification','PAPID', 'cadastralMapID', 'cadastralMapDocuments', 'firstName', 'middleName', 'lastName',  
                   'addressLine1','streetName','pincode','eligibility', 'categoryOfPap', 
-                    'areaOfAsset','typeOfStructure','legalStatus', 'legalDocuments', 'presentPhotograph',
+                    'areaOfAsset','legalStatus', 'legalDocuments', 'presentPhotograph',
                    'actionTaken', 'notAgreedReason','documents','remarks' )
 
     def validate(self,data):
@@ -138,7 +138,7 @@ class PapUpdateSerailzer(serializers.ModelSerializer):
         model = PAP
         fields = ('quarter', 'packages', 'longitude', 'latitude', 'dateOfMonitoring', 'user', 'dateOfIdentification', 'PAPID', 'cadastralMapID', 'cadastralMapDocuments', 'firstName', 'middleName', 'lastName',
                   'addressLine1', 'streetName', 'pincode', 'eligibility', 'categoryOfPap',
-                  'areaOfAsset', 'typeOfStructure', 'legalStatus', 'legalDocuments', 'presentPhotograph',
+                  'areaOfAsset', 'legalStatus', 'legalDocuments', 'presentPhotograph',
                   'actionTaken', 'notAgreedReason', 'documents', 'remarks')
 
     def validate(self, data):

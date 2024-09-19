@@ -433,7 +433,7 @@ class PAPReportPackageExcelDownload(generics.ListAPIView):
         data = queryset.values(
             'id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','firstName','middleName','lastName', 'cadastralMapID', 'cadastralMapDocuments', 
                   'addressLine1','streetName','pincode','eligibility', 'categoryOfPap','dateOfIdentification',
-                  'areaOfAsset','typeOfStructure','legalStatus','legalDocuments', 
+                  'areaOfAsset','legalStatus','legalDocuments', 
                    'actionTaken', 'notAgreedReason','remarks', 'presentPhotograph', 'documents'
             # Add more fields as needed
         )
@@ -505,7 +505,7 @@ class PAPReportExcelQuaterExcelDownload(generics.ListAPIView):
         data = queryset.values(
             'id','quarter', 'packages','dateOfMonitoring','dateOfIdentification','PAPID','firstName','middleName','lastName', 'cadastralMapID', 'cadastralMapDocuments', 
                   'addressLine1','streetName','pincode','eligibility', 'categoryOfPap','dateOfIdentification',
-                  'areaOfAsset','typeOfStructure','legalStatus','legalDocuments', 
+                  'areaOfAsset','legalStatus','legalDocuments', 
                    'actionTaken', 'notAgreedReason','remarks', 'presentPhotograph', 'documents'
             # Add more fields as needed
         )
