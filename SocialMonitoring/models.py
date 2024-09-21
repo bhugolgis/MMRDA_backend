@@ -96,7 +96,7 @@ class PAP(Baseclass):
 # financial support, community engagement, documents, remarks, and various photographs.
 class Rehabilitation(Baseclass):
     user = models.ForeignKey(User, related_name='rehabilitationUser', on_delete=models.CASCADE, blank=True)
-    location = models.PointField(null=True, blank=True)
+    location = models.PointField(null=True, blank=True) # two location fields in code
     ID = models.ForeignKey( PAP, related_name='rehabilitation', on_delete=models.CASCADE, blank=True, null=True)
     dateOfRehabilitation = models.DateField(blank=True, null=True) # what is date of rehab
     PAPID = models.CharField(max_length=255, blank=True, null=True)

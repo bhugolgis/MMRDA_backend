@@ -572,13 +572,12 @@ class RehabilitationReportPackageExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',
+        data = queryset.values('quarter','packages','dateOfRehabilitation' ,'PAPID',
                    'firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
                    'cashCompensationAmount',
                    'typeOfCompensation', 'otherCompensationType' ,
                    'addressLine1','streetName','pincode',
                    'rehabLocation', 'allowance', 'area',
-                   'landProvidedArea', 'alternateAccomodationArea', 'commercialUnitArea',
                    'isShiftingAllowance','shiftingAllowanceAmount',
                    'isLivelihoodSupport', 'livelihoodSupportAmount',
                    'isTraining','trainingRemarks', 'typeOfStructure',
@@ -739,6 +738,7 @@ class AirReportReportPackageExcelDownload(generics.ListAPIView):
         data = queryset.values('id','quarter','packages','month','dateOfMonitoring','PM10','PM2_5',
                  'SO2','NOx','CO','AQI','place_location')
 
+        print(data)
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
@@ -749,6 +749,22 @@ class AirReportReportPackageExcelDownload(generics.ListAPIView):
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
 
+            # Rename the columns as needed
+            df = df.rename(columns={
+                'id': 'ID',
+                'dateOfMonitoring': 'Monitoring Date',
+                'quarter': 'Quarter',
+                'packages': 'Packages',
+                'month': 'Month',
+                'PM10': 'PM10 Level',
+                'PM2_5': 'PM2.5 Level',
+                'SO2': 'SO2 Level',
+                'NOx': 'NOx Level',
+                'CO': 'CO Level',
+                'AQI': 'Air Quality Index',
+                'place_location': 'Location'
+            })
+            
             # Create a response with the appropriate content type
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             response['Content-Disposition'] = 'attachment; filename=AirReport.xlsx'
@@ -835,6 +851,22 @@ class AirReportQuarterExcelDownload(generics.ListAPIView):
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
 
+            # Rename the columns as needed
+            df = df.rename(columns={
+                'id': 'ID',
+                'dateOfMonitoring': 'Monitoring Date',
+                'quarter': 'Quarter',
+                'packages': 'Packages',
+                'month': 'Month',
+                'PM10': 'PM10 Level',
+                'PM2_5': 'PM2.5 Level',
+                'SO2': 'SO2 Level',
+                'NOx': 'NOx Level',
+                'CO': 'CO Level',
+                'AQI': 'Air Quality Index',
+                'place_location': 'Location'
+            })
+
             # Create a response with the appropriate content type
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             response['Content-Disposition'] = 'attachment; filename=AirReportQuater.xlsx'
@@ -897,6 +929,22 @@ class NoiseReportReportPackageExcelDownload(generics.ListAPIView):
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
 
+            # Rename the columns with more appropriate names
+            df = df.rename(columns={
+                'id': 'ID',
+                'dateOfMonitoringThree': 'Monitoring Date',
+                'quarter': 'Quarter',
+                'month': 'Month',
+                'packages': 'Packages',
+                'noiseLevel_day': 'Day Noise Level (dB)',
+                'noiseLevel_night': 'Night Noise Level (dB)',
+                'monitoringPeriod_day': 'Day Monitoring Period',
+                'monitoringPeriod_night': 'Night Monitoring Period',
+                'typeOfArea': 'Area Type',
+                'isWithinLimit_day': 'Within Limit (Day)',
+                'isWithinLimit_night': 'Within Limit (Night)'
+            })
+
             # Create a response with the appropriate content type
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             response['Content-Disposition'] = 'attachment; filename=NoiseReport.xlsx'
@@ -905,92 +953,6 @@ class NoiseReportReportPackageExcelDownload(generics.ListAPIView):
             df.to_excel(response, index=False, sheet_name='Sheet1')
 
             return response
-
-
-
-
-
-
-class NoiseReportQuarterView(ListAPIView):
-    serializer_class = NoiseReportSerializer
-    parser_classes = [MultiPartParser]
-
-    def get(self, request, month, year, *args, **kwargs):
-        try:
-            data = Noise.objects.filter(
-                month=month, dateOfMonitoringThree__year=year).order_by('-id')
-            if not data.exists():
-                return Response({'Message': 'No data found',
-                                 },  status=status.HTTP_400_BAD_REQUEST)
-
-            Noise_data = NoiseReportSerializer(data, many=True).data
-            return Response({'Message': 'data Fetched Successfully',
-                            'status' : 'success' , 
-                            "Noise_data": Noise_data},
-                            status=status.HTTP_200_OK)
-        except:
-            return Response({'Message': 'There is no data available for the Quarter',
-                            'status' : 'Failed'},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-
-
-
-
-class NoiseReportQuarterFilter(django_filters.FilterSet):
-    year = django_filters.NumberFilter(field_name='dateOfMonitoringThree__year', label='Year')
-    month = django_filters.CharFilter(method='filter_by_month', label='Month')
-
-    def filter_by_month(self, queryset, name, value):
-        # if value.isdigit():
-        #     # If the value is a digit, return the queryset as is
-        #     return queryset
-
-        try:
-            month_number = list(calendar.month_name).index(value.capitalize())
-            return queryset.filter(dateOfMonitoringThree__month=month_number)
-        except ValueError:
-            # If the value is not a valid month name, return an empty queryset
-            return queryset.none()
-    class Meta:
-        model = Noise
-        fields = ['month', 'year']
-
-
-
-class NoiseReportQuarterExcelDownload(generics.ListAPIView):
-    serializer_class = NoiseReportExcelSerializer
-    filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['packages', 'constructionSiteName']
-    filterset_class = NoiseReportQuarterFilter
-
-    def get_queryset(self):
-        queryset = Noise.objects.all()
-        # Customize the queryset based on your specific requirements
-        return queryset
-
-    def get(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-
-        # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('id', 'quarter','month','packages','dateOfMonitoringThree' , 'noiseLevel_day', 'noiseLevel_night', 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night' )
-
-        if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
-        # Create a Pandas DataFrame
-        else:
-            
-            df = pd.DataFrame(data)
-
-            # Create a response with the appropriate content type
-            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = 'attachment; filename=NoiseReportQuater.xlsx'
-
-            # Write the DataFrame to the Excel response
-            df.to_excel(response, index=False, sheet_name='Sheet1')
-
-            return response
-
 
 
 class waterReportPackageView(ListAPIView):
@@ -1046,6 +1008,46 @@ class waterReportReportPackageExcelDownload(generics.ListAPIView):
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
 
+            # Rename the columns to more appropriate names
+            df = df.rename(columns={
+                'id': 'ID',
+                'quarter': 'Quarter',
+                'packages': 'Packages',
+                'month': 'Month',
+                'dateOfMonitoringTwo': 'Monitoring Date',
+                'qualityOfWater': 'Water Quality',
+                'sourceOfWater': 'Water Source',
+                'trueColor': 'True Color (CU)',
+                'turbidity': 'Turbidity (NTU)',
+                'odour': 'Odour',
+                'waterDisposal': 'Water Disposal Method',
+                'WQI': 'Water Quality Index (WQI)',
+                'pH': 'pH Level',
+                'totalHardnessAsCaCO3': 'Total Hardness (as CaCO3)',
+                'calcium': 'Calcium (mg/L)',
+                'totalAlkalinityAsCaCO3': 'Total Alkalinity (as CaCO3)',
+                'chlorides': 'Chlorides (mg/L)',
+                'magnesium': 'Magnesium (mg/L)',
+                'totalDissolvedSolids': 'Total Dissolved Solids (TDS)',
+                'sulphate': 'Sulphate (mg/L)',
+                'nitrate': 'Nitrate (mg/L)',
+                'fluoride': 'Fluoride (mg/L)',
+                'iron': 'Iron (mg/L)',
+                'zinc': 'Zinc (mg/L)',
+                'copper': 'Copper (mg/L)',
+                'aluminum': 'Aluminum (mg/L)',
+                'nickel': 'Nickel (mg/L)',
+                'manganese': 'Manganese (mg/L)',
+                'phenolicCompounds': 'Phenolic Compounds (mg/L)',
+                'sulphide': 'Sulphide (mg/L)',
+                'cadmium': 'Cadmium (mg/L)',
+                'cyanide': 'Cyanide (mg/L)',
+                'lead': 'Lead (mg/L)',
+                'mercury': 'Mercury (mg/L)',
+                'totalArsenic': 'Total Arsenic (mg/L)',
+                'totalChromium': 'Total Chromium (mg/L)'
+            })
+            
             # Create a response with the appropriate content type
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             response['Content-Disposition'] = 'attachment; filename=WaterReport.xlsx'
@@ -1054,13 +1056,6 @@ class waterReportReportPackageExcelDownload(generics.ListAPIView):
             df.to_excel(response, index=False, sheet_name='Sheet1')
 
             return response
-
-
-
-
-
-
-
 
 
 class waterReportQuarterView(ListAPIView):
@@ -1131,6 +1126,46 @@ class WaterReportQuarterExcelDownload(generics.ListAPIView):
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
 
+            # Rename the columns to more appropriate names
+            df = df.rename(columns={
+                'id': 'ID',
+                'quarter': 'Quarter',
+                'packages': 'Packages',
+                'month': 'Month',
+                'dateOfMonitoringTwo': 'Monitoring Date',
+                'qualityOfWater': 'Water Quality',
+                'sourceOfWater': 'Water Source',
+                'trueColor': 'True Color (CU)',
+                'turbidity': 'Turbidity (NTU)',
+                'odour': 'Odour',
+                'waterDisposal': 'Water Disposal Method',
+                'WQI': 'Water Quality Index (WQI)',
+                'pH': 'pH Level',
+                'totalHardnessAsCaCO3': 'Total Hardness (as CaCO3)',
+                'calcium': 'Calcium (mg/L)',
+                'totalAlkalinityAsCaCO3': 'Total Alkalinity (as CaCO3)',
+                'chlorides': 'Chlorides (mg/L)',
+                'magnesium': 'Magnesium (mg/L)',
+                'totalDissolvedSolids': 'Total Dissolved Solids (TDS)',
+                'sulphate': 'Sulphate (mg/L)',
+                'nitrate': 'Nitrate (mg/L)',
+                'fluoride': 'Fluoride (mg/L)',
+                'iron': 'Iron (mg/L)',
+                'zinc': 'Zinc (mg/L)',
+                'copper': 'Copper (mg/L)',
+                'aluminum': 'Aluminum (mg/L)',
+                'nickel': 'Nickel (mg/L)',
+                'manganese': 'Manganese (mg/L)',
+                'phenolicCompounds': 'Phenolic Compounds (mg/L)',
+                'sulphide': 'Sulphide (mg/L)',
+                'cadmium': 'Cadmium (mg/L)',
+                'cyanide': 'Cyanide (mg/L)',
+                'lead': 'Lead (mg/L)',
+                'mercury': 'Mercury (mg/L)',
+                'totalArsenic': 'Total Arsenic (mg/L)',
+                'totalChromium': 'Total Chromium (mg/L)'
+            })
+
             # Create a response with the appropriate content type
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             response['Content-Disposition'] = 'attachment; filename=WaterReportQuater.xlsx'
@@ -1141,6 +1176,97 @@ class WaterReportQuarterExcelDownload(generics.ListAPIView):
             return response
 
 
+class NoiseReportQuarterView(ListAPIView):
+    serializer_class = NoiseReportSerializer
+    parser_classes = [MultiPartParser]
+
+    def get(self, request, month, year, *args, **kwargs):
+        try:
+            data = Noise.objects.filter(
+                month=month, dateOfMonitoringThree__year=year).order_by('-id')
+            if not data.exists():
+                return Response({'Message': 'No data found',
+                                 },  status=status.HTTP_400_BAD_REQUEST)
+
+            Noise_data = NoiseReportSerializer(data, many=True).data
+            return Response({'Message': 'data Fetched Successfully',
+                            'status' : 'success' , 
+                            "Noise_data": Noise_data},
+                            status=status.HTTP_200_OK)
+        except:
+            return Response({'Message': 'There is no data available for the Quarter',
+                            'status' : 'Failed'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+
+class NoiseReportQuarterFilter(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name='dateOfMonitoringThree__year', label='Year')
+    month = django_filters.CharFilter(method='filter_by_month', label='Month')
+
+    def filter_by_month(self, queryset, name, value):
+        # if value.isdigit():
+        #     # If the value is a digit, return the queryset as is
+        #     return queryset
+
+        try:
+            month_number = list(calendar.month_name).index(value.capitalize())
+            return queryset.filter(dateOfMonitoringThree__month=month_number)
+        except ValueError:
+            # If the value is not a valid month name, return an empty queryset
+            return queryset.none()
+    class Meta:
+        model = Noise
+        fields = ['month', 'year']
+
+
+class NoiseReportQuarterExcelDownload(generics.ListAPIView):
+    serializer_class = NoiseReportExcelSerializer
+    filter_backends = [DjangoFilterBackend]
+    # filterset_fields = ['packages', 'constructionSiteName']
+    filterset_class = NoiseReportQuarterFilter
+
+    def get_queryset(self):
+        queryset = Noise.objects.all()
+        # Customize the queryset based on your specific requirements
+        return queryset
+
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # Use values to convert the queryset to a list of dictionaries
+        data = queryset.values('id', 'quarter','month','packages','dateOfMonitoringThree' , 'noiseLevel_day', 'noiseLevel_night', 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night' )
+
+        if not data:
+            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
+        # Create a Pandas DataFrame
+        else:
+            
+            df = pd.DataFrame(data)
+
+            # Rename the columns with more appropriate names
+            df = df.rename(columns={
+                'id': 'ID',
+                'dateOfMonitoringThree': 'Monitoring Date',
+                'quarter': 'Quarter',
+                'month': 'Month',
+                'packages': 'Packages',
+                'noiseLevel_day': 'Day Noise Level (dB)',
+                'noiseLevel_night': 'Night Noise Level (dB)',
+                'monitoringPeriod_day': 'Day Monitoring Period',
+                'monitoringPeriod_night': 'Night Monitoring Period',
+                'typeOfArea': 'Area Type',
+                'isWithinLimit_day': 'Within Limit (Day)',
+                'isWithinLimit_night': 'Within Limit (Night)'
+            })
+            
+            # Create a response with the appropriate content type
+            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+            response['Content-Disposition'] = 'attachment; filename=NoiseReportQuater.xlsx'
+
+            # Write the DataFrame to the Excel response
+            df.to_excel(response, index=False, sheet_name='Sheet1')
+
+            return response
 
 
 class WasteTreatmentsPackageView(ListAPIView):
@@ -1595,13 +1721,15 @@ class NewTreeReportPackage(ListAPIView):
     def get(self, request, packages, *args, **kwargs):
         try:
             data = NewTreeManagement.objects.filter(packages=packages).order_by('-id')
+            print(data)
             if not data.exists():
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
-            new_tree_data = treeManagementSerializer(data, many=True).data
-            for feature in new_tree_data['features']:
-                feature['properties']['id'] = feature['id']
+            # new_tree_data = NewTreeManagementSerializer(data, many=True).data
+            new_tree_data = self.get_serializer(data, many=True).data
+            # for feature in new_tree_data['features']:
+            #     feature['properties']['id'] = feature['id']
             
             return Response({'message': 'data Fetched Successfully',
                             'status' : 'success' , 
@@ -1620,7 +1748,6 @@ class NewTreeReportQuarterView(ListAPIView):
 
     def get(self, request, quarter, year, *args, **kwargs):
         try:
-            print("inside get fn")
             data = NewTreeManagement.objects.filter(quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
