@@ -67,9 +67,9 @@ urlpatterns = [
     path('OccupationalHealthPackageExcelDownload/', OccupationalWellnessPackageExcelDownload.as_view(), name='occupational-wellness-package-excel-download'),
     path('OccupationalHealthQuarterExcelDownload/', OccupationalWellnessQuarterExcelDownload.as_view(), name='occupational-wellness-quarter-excel-download'),
 
-    path('labourcampreportpackageExcelDownloadView/', labourcampreportpackageExcelDownloadView.as_view(), name='labourcampreportpackageExcel'),
     path('labourcampreportpackage/<str:packages>/<str:labourCampName>',LabourcampReportPackageView.as_view(), name='Labourcamp Report View package'),
     path('labourcampreportquarter/<str:quarter>/<int:year>/<str:labourCampName>',LabourCampReportQuarterView.as_view(), name='Labourcamp Report View quarter'),
+    path('labourcampreportpackageExcelDownloadView/', labourcampreportpackageExcelDownloadView.as_view(), name='labourcampreportpackageExcel'),
     path('labourQuarterExcelDownload/', labourQuarterExcelDownload.as_view(), name='labourQuarterExcelDownload'),
 
     path('constructioncampreportPackage/<str:packages>/<str:constructionSiteName>',ConstructionCampReportPackageView.as_view(), name='ConstructionSite Report'),
