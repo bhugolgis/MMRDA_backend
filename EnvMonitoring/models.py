@@ -145,6 +145,7 @@ class WasteTreatments(Baseclass):
     TransportationVechicalHasPermissionDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     waste_collecting_location = models.CharField(max_length=255, null=True, blank=True)
     
+
     # Hazardous Waste
     iswasteOilQnt = models.BooleanField(blank=True, null=True)
     wasteOilQnt = models.FloatField(null=True, blank=True) # liter

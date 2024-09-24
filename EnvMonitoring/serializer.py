@@ -359,6 +359,7 @@ class WasteTreatmentsSerializer(serializers.ModelSerializer):
         fields = ('quarter','month','packages','longitude','latitude'  ,'dateOfMonitoring' ,'waste_collecting_location', 'wasteOilQnt', 'waste_handlingLocation','CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'iswasteOilQnt', 'isCCPCPaintSludgeQnt', 'isfilterQnt', 'isairFiltersQnt', 'isusedCartridgesQnt', 'isplasticQnt', 'ispaperQnt', 'iswoodQnt', 'isbottlesQnt', 'isrubberQnt', 'isbioDegradableQuantity', 'isbioMedicalQuantity', 'ismetalScrapeQuantity', 'iseWasteQuantity', 'isconstructionWasteQuantity', 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments',
         'waste_disposing_location', 'waste_longitude' ,'waste_latitude', 'photographs' , 'documents','remarks')#'wastetype' ,
 
+
     def validate(self,data):
         long = data['longitude'].split('.')[-1]
         if len(long) > 6:
