@@ -105,7 +105,7 @@ EMAIL_USE_TLS = True
 DATABASES={
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.postgis',
-        'NAME':'MMRDA',
+        'NAME':'mmrda',
         'USER':'postgres',
         'PASSWORD':'admin',
         'HOST':'172.16.0.40',

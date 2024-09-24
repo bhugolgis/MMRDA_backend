@@ -177,7 +177,9 @@ class AirReportExcelSerializer(serializers.ModelSerializer):
 class NoiseReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = Noise
-        fields = ('id', 'quarter','month','packages','dateOfMonitoringThree', 'noiseLevel_day', 'noiseLevel_night', 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night')
+        fields = ('id', 'quarter','month','packages','dateOfMonitoringThree', 'noiseLevel_day', 
+                  'noiseLevel_night', 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea', 
+                  'isWithinLimit_day', 'isWithinLimit_night','place_location')
         geo_field= ('location')
 
 
@@ -185,21 +187,29 @@ class NoiseReportSerializer(GeoFeatureModelSerializer):
 class NoiseReportExcelSerializer(serializers.ModelSerializer):
     class Meta:
         model = Noise
-        fields = ('id', 'quarter','month','packages','dateOfMonitoringThree' , 'noiseLevel_day', 'noiseLevel_night', 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night' )
+        fields = ('id', 'quarter','month','packages','dateOfMonitoringThree' , 'noiseLevel_day', 'noiseLevel_night', 'monitoringPeriod_day',
+                   'monitoringPeriod_night', 'typeOfArea', 'isWithinLimit_day', 'isWithinLimit_night','place_location' )
         # geo_field= ('location')
 # The waterReportSerializer class is a serializer for the water model that includes specific fields
 # and a geo_field for location.
 class waterReportSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = water
-        fields =('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' , 'trueColor', 'turbidity', 'odour', 'waterDisposal', 'WQI', 'pH', 'totalHardnessAsCaCO3', 'calcium', 'totalAlkalinityAsCaCO3', 'chlorides', 'magnesium', 'totalDissolvedSolids', 'sulphate', 'nitrate', 'fluoride', 'iron', 'zinc', 'copper', 'aluminum', 'nickel', 'manganese', 'phenolicCompounds', 'sulphide', 'cadmium', 'cyanide', 'lead', 'mercury', 'totalArsenic', 'totalChromium' )
+        fields =('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' , 'trueColor', 'turbidity',
+                  'odour', 'waterDisposal', 'WQI', 'pH', 'totalHardnessAsCaCO3', 'calcium', 'totalAlkalinityAsCaCO3', 'chlorides',
+                    'magnesium', 'totalDissolvedSolids', 'sulphate', 'nitrate', 'fluoride', 'iron', 'zinc', 'copper', 'aluminum', 
+                    'nickel', 'manganese', 'phenolicCompounds', 'sulphide', 'cadmium', 'cyanide', 'lead', 'mercury', 'totalArsenic',
+                      'totalChromium','place_location' )
         geo_field= ('location')
 
 
 class waterExcelReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = water
-        fields =('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' , 'trueColor', 'turbidity', 'odour', 'waterDisposal', 'WQI', 'pH', 'totalHardnessAsCaCO3', 'calcium', 'totalAlkalinityAsCaCO3', 'chlorides', 'magnesium', 'totalDissolvedSolids', 'sulphate', 'nitrate', 'fluoride', 'iron', 'zinc', 'copper', 'aluminum', 'nickel', 'manganese', 'phenolicCompounds', 'sulphide', 'cadmium', 'cyanide', 'lead', 'mercury', 'totalArsenic', 'totalChromium' )
+        fields =('id','quarter','packages','month', 'dateOfMonitoringTwo','qualityOfWater' , 'sourceOfWater' , 'trueColor', 'turbidity', 
+                 'odour', 'waterDisposal', 'WQI', 'pH', 'totalHardnessAsCaCO3', 'calcium', 'totalAlkalinityAsCaCO3', 'chlorides', 'magnesium',
+                   'totalDissolvedSolids', 'sulphate', 'nitrate', 'fluoride', 'iron', 'zinc', 'copper', 'aluminum', 'nickel', 'manganese', 
+                   'phenolicCompounds', 'sulphide', 'cadmium', 'cyanide', 'lead', 'mercury', 'totalArsenic', 'totalChromium','place_location' )
         # geo_field= ('location')
 
 # Existing Tree
@@ -207,7 +217,7 @@ class treeManagementSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = ExistingTreeManagment
         fields = ('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
-                    'condition', 'actionTaken', 'photographs', 'documents','remarks')
+                    'condition', 'actionTaken', 'photographs', 'documents','remarks','place_location')
 
         geo_field= ('location')
 
@@ -216,7 +226,7 @@ class treeManagementExcelSerializer(serializers.ModelSerializer):
     class Meta:
         model = ExistingTreeManagment
         fields = ('id','quarter','month','dateOfMonitoring','packages','treeID','commanName' ,'botanicalName',
-                    'condition', 'actionTaken', 'photographs', 'documents','remarks')
+                    'condition', 'actionTaken', 'photographs', 'documents','remarks','place_location')
 
         # geo_field= ('location')
 
@@ -225,7 +235,7 @@ class NewTreeManagementSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = NewTreeManagement
         fields = ('tree', 'quarter', 'month', 'dateOfMonitoring', 'packages',
-                  'commanName', 'botanicalName', 'condition', 'photographs', 'documents', 'remarks')
+                  'commanName', 'botanicalName', 'condition', 'photographs', 'documents', 'remarks','place_location')
         geo_field= ('location')
 
 
@@ -233,20 +243,20 @@ class ExcelNewTreeQuarterSerializer(serializers.ModelSerializer):
     class Meta:
         model = NewTreeManagement
         fields = ('tree', 'quarter', 'month', 'dateOfMonitoring', 'packages',
-                  'commanName', 'botanicalName', 'condition', 'photographs', 'documents', 'remarks')
+                  'commanName', 'botanicalName', 'condition', 'photographs', 'documents', 'remarks','place_location')
 
 # The class `wasteTreatmentsSerializer` is a serializer for the `WasteTreatments` model that includes
 # specific fields and a geo field.
 class wasteTreatmentsSerializer(GeoFeatureModelSerializer):
     class Meta:
         model = WasteTreatments
-        fields = ('id','quarter','month','packages','dateOfMonitoring', 'GISPermitsTransportationDocuments', 'TransportationVechicalHasPermissionDocuments', 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
+        fields = ('id','quarter','month','packages','dateOfMonitoring',  'waste_handlingLocation','GISPermitsTransportationDocuments', 'TransportationVechicalHasPermissionDocuments', 'waste_collecting_location','wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'photographs' , 'documents','remarks','waste_disposing_location')
         geo_field= ('location')
 
 class wasteTreatmentsExcelSerializer(serializers.ModelSerializer):
     class Meta:
         model = WasteTreatments
-        fields = ('id','quarter','month','packages','dateOfMonitoring', 'GISPermitsTransportationDocuments', 'TransportationVechicalHasPermissionDocuments', 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
+        fields = ('id','quarter','month','packages','dateOfMonitoring', 'GISPermitsTransportationDocuments', 'TransportationVechicalHasPermissionDocuments', 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'waste_collecting_location','filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'waste_handlingLocation','photographs' , 'documents','remarks','waste_disposing_location')
         # geo_field= ('location')
 # The class `materialManagementSerializer` is a serializer class in Python that is used for
 # serializing and deserializing data related to material management.
@@ -256,7 +266,7 @@ class materialManagementSerializer(GeoFeatureModelSerializer):
         fields = ('id','quarter','month','packages','dateOfMonitoring',
          'typeOfMaterial','source','sourceOfQuarry','materialStorageType','storageLocation',
          'materialStorageCondition','materialStoragePhotograph','approvals' ,'photographs',
-          'documents','remarks')
+          'documents','remarks','material_source_location','material_storage_location')
         geo_field= ('location')
 
 class materialManagementExcelSerializer(serializers.ModelSerializer):
@@ -265,7 +275,7 @@ class materialManagementExcelSerializer(serializers.ModelSerializer):
         fields = ('id','quarter','month','packages','dateOfMonitoring',
          'typeOfMaterial','source','sourceOfQuarry','materialStorageType','storageLocation',
          'materialStorageCondition','materialStoragePhotograph','approvals' ,'photographs',
-          'documents','remarks')
+          'documents','remarks','material_source_location','material_storage_location')
         # geo_field= ('location')
 # The `treeManagementSerializer` class is a serializer for the `ExistingTreeManagment` model with
 # specific fields and a geo field.
@@ -274,7 +284,7 @@ class PreConstructionStageComplianceReportSerializer(serializers.ModelSerializer
     class Meta:
         model = PreConstructionStage
         fields = ('id',
-            'ShiftingofUtilities', 'ResponsibilityOfShiftingofUtilities', 'CurrentStatusOfShiftingofUtilities', 'ShiftingofUtilitiesDocuments',
+            'ShiftingofUtilities','packages', 'ResponsibilityOfShiftingofUtilities', 'CurrentStatusOfShiftingofUtilities', 'ShiftingofUtilitiesDocuments',
             'PermissionForFellingOfTrees', 'ResponsibilityOfPermissionForFellingOfTrees', 'CurrentStatusPermissionForFellingOfTrees', 'PermissionForFellingOfTreesDocuments',
             'CRZClearance', 'ResponsibilityOfCRZClearance', 'CurrentStatusCRZClearance', 'CRZClearanceDocuments',
             'ForestClearance', 'ResponsibilityOfForestClearance', 'CurrentStatusOfForestClearance', 'ForestClearanceDocuments'
@@ -285,7 +295,7 @@ class ConstructionStageComplianceReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = ConstructionStage
         exclude = ('user',
-            'RulesOfConsenttToEstablishOoperate', 'RulesOfSandMiningFromRiverbed', 'RulesForGroundWaterWithdrawal', 'RulesForCollectionDisposalManagement',
+            'RulesOfConsenttToEstablishOoperate','packages',  'RulesOfSandMiningFromRiverbed', 'RulesForGroundWaterWithdrawal', 'RulesForCollectionDisposalManagement',
             'RulesForSolidWaste', 'RulesForDisposalOfBituminousAndOtherWaste', 'RulesForDisposalOfsewagefromLabourCamps', 'RulesForPollutionUnderControl',
             'RulesForRoofTopRainWaterHarvesting',
         )

@@ -351,10 +351,13 @@ class WasteTreatmentsSerializer(serializers.ModelSerializer):
     photographs = serializers.ImageField(allow_empty_file=True, use_url=False,write_only=True ,  required=False)
     GISPermitsTransportationDocuments = serializers.FileField(allow_empty_file=True, use_url=False,write_only=True ,  required=False)
     TransportationVechicalHasPermissionDocuments = serializers.FileField(allow_empty_file=True, use_url=False,write_only=True ,  required=False)
+    waste_collecting_location = models.CharField(max_length=255, null=True, blank=True)
+    waste_handlingLocation = models.PointField(null=True, blank=True)
+    waste_disposing_location = models.CharField(max_length=255, null=True, blank=True)
     class Meta:
         model  = WasteTreatments
-        fields = ('quarter','month','packages','longitude','latitude'  ,'dateOfMonitoring' , 'wastetype' , 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'iswasteOilQnt', 'isCCPCPaintSludgeQnt', 'isfilterQnt', 'isairFiltersQnt', 'isusedCartridgesQnt', 'isplasticQnt', 'ispaperQnt', 'iswoodQnt', 'isbottlesQnt', 'isrubberQnt', 'isbioDegradableQuantity', 'isbioMedicalQuantity', 'ismetalScrapeQuantity', 'iseWasteQuantity', 'isconstructionWasteQuantity', 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments',
-         'wastehandling' , 'waste_longitude' ,'waste_latitude', 'photographs' , 'documents','remarks')
+        fields = ('quarter','month','packages','longitude','latitude'  ,'dateOfMonitoring' ,'waste_collecting_location', 'wasteOilQnt', 'waste_handlingLocation','CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'iswasteOilQnt', 'isCCPCPaintSludgeQnt', 'isfilterQnt', 'isairFiltersQnt', 'isusedCartridgesQnt', 'isplasticQnt', 'ispaperQnt', 'iswoodQnt', 'isbottlesQnt', 'isrubberQnt', 'isbioDegradableQuantity', 'isbioMedicalQuantity', 'ismetalScrapeQuantity', 'iseWasteQuantity', 'isconstructionWasteQuantity', 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments',
+        'waste_disposing_location', 'waste_longitude' ,'waste_latitude', 'photographs' , 'documents','remarks')#'wastetype' ,
 
     def validate(self,data):
         long = data['longitude'].split('.')[-1]
@@ -393,19 +396,26 @@ class WasteTreatmentsUpdateSerializer(serializers.ModelSerializer):
     photographs = serializers.ImageField(allow_empty_file=True, use_url=False, write_only=True, required=False)
     GISPermitsTransportationDocuments = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
     TransportationVechicalHasPermissionDocuments = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
+    waste_collecting_location= models.CharField(max_length=255, null=True, blank=True)
+    waste_handlingLocation = models.PointField(null=True, blank=True)
+    waste_disposing_location = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
-        model = WasteTreatments
-        fields = ('quarter', 'month', 'packages', 'longitude', 'latitude', 'dateOfMonitoring', 'wastetype', 
-                  'wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 
-                  'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 
-                  'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 
-                  'iswasteOilQnt', 'isCCPCPaintSludgeQnt', 'isfilterQnt', 'isairFiltersQnt', 'isusedCartridgesQnt', 
-                  'isplasticQnt', 'ispaperQnt', 'iswoodQnt', 'isbottlesQnt', 'isrubberQnt', 'isbioDegradableQuantity', 
-                  'isbioMedicalQuantity', 'ismetalScrapeQuantity', 'iseWasteQuantity', 'isconstructionWasteQuantity', 
-                  'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 
-                  'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments', 
-                  'wastehandling', 'waste_longitude', 'waste_latitude', 'photographs', 'documents', 'remarks')
+        model  = WasteTreatments
+        fields = ('quarter','month','packages','longitude','latitude'  ,'dateOfMonitoring' ,'waste_collecting_location', 'wasteOilQnt', 'waste_handlingLocation','CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'iswasteOilQnt', 'isCCPCPaintSludgeQnt', 'isfilterQnt', 'isairFiltersQnt', 'isusedCartridgesQnt', 'isplasticQnt', 'ispaperQnt', 'iswoodQnt', 'isbottlesQnt', 'isrubberQnt', 'isbioDegradableQuantity', 'isbioMedicalQuantity', 'ismetalScrapeQuantity', 'iseWasteQuantity', 'isconstructionWasteQuantity', 'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments',
+        'waste_disposing_location', 'waste_longitude' ,'waste_latitude', 'photographs' , 'documents','remarks')#'wastetype' ,
+
+    # #class Meta:
+    #     model = WasteTreatments
+    #     fields = ('quarter', 'month', 'packages', 'longitude', 'latitude', 'dateOfMonitoring',         'waste_collecting_location','wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 
+    #               'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 
+    #               'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 
+    #               'iswasteOilQnt', 'isCCPCPaintSludgeQnt', 'isfilterQnt', 'isairFiltersQnt', 'isusedCartridgesQnt', 
+    #               'isplasticQnt', 'ispaperQnt', 'iswoodQnt', 'isbottlesQnt', 'isrubberQnt', 'isbioDegradableQuantity', 
+    #               'isbioMedicalQuantity', 'ismetalScrapeQuantity', 'iseWasteQuantity', 'isconstructionWasteQuantity', 
+    #               'isGISPermitsTransportation', 'GISPermitsTransportationDocuments', 
+    #               'isTransportationVechicalHasPermission', 'TransportationVechicalHasPermissionDocuments', 
+    #                'waste_longitude', 'waste_latitude', 'photographs', 'documents', 'remarks','waste_handlingLocation','waste_disposing_location')#'wastetype',
 
     def validate(self, data):
         if 'longitude' in data:
@@ -551,7 +561,8 @@ class NoiseWhihinLimitSerializer(serializers.ModelSerializer):
 class WasteSerializer(serializers.ModelSerializer):
     class Meta:
         model = WasteTreatments
-        fields = ['wastetype','wastehandling','location','packages','quarter','photographs','remarks']
+        fields = [#'wastetype',
+                  'location','packages','quarter','photographs','waste_disposing_location','remarks']
 
 class MaterialSerializer(serializers.ModelSerializer):
     class Meta:

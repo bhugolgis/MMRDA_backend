@@ -1,0 +1,48 @@
+=~=~=~=~=~=~=~=~=~=~=~= MobaXterm log 2024.09.17 10:51:04 =~=~=~=~=~=~=~=~=~=~=~=
+     
+                      MobaXterm Personal Edition v24.2                 
+                   (X server, SSH client and network tools)              
+                                                                         
+       Your computer drives are accessible through the /drives path     
+       Your DISPLAY is set to 10.202.100.205:0.0                        
+       When using SSH, your remote DISPLAY is automatically forwarded   
+       Each command status is specified by a special symbol ( or )    
+                                                                         
+       Important:                                                       
+      This is MobaXterm Personal Edition. The Professional edition       
+      allows you to customize MobaXterm for your company: you can add    
+      your own logo, your parameters, your welcome message and generate  
+      either an MSI installation package or a portable executable.       
+      We can also modify MobaXterm or develop the plugins you need.      
+      For more information: https://mobaxterm.mobatek.net/download.html  
+     
+
+  17/09/2024   10:51.04   /home/mobaxterm  cd
+
+
+  17/09/2024   10:51.08   /home/mobaxterm  giy
+giy: command not found
+
+
+  17/09/2024   10:51.13   /home/mobaxterm  git --
+unknown option: --
+usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]
+           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]
+           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--bare]
+           [--git-dir=<path>] [--work-tree=<path>] [--namespace=<name>]
+           [--super-prefix=<path>] [--config-env=<name>=<envvar>]
+           <command> [<args>]
+
+
+  17/09/2024   10:51.16   /home/mobaxterm   ^Vssh
+usage: ssh [-46AaCfGgKkMNnqsTtVvXxYy] [-B bind_interface] [-b bind_address]
+           [-c cipher_spec] [-D [bind_address:]port] [-E log_file]
+           [-e escape_char] [-F configfile] [-I pkcs11] [-i identity_file]
+           [-J destination] [-L address] [-l login_name] [-m mac_spec]
+           [-O ctl_cmd] [-o option] [-P tag] [-p port] [-R address]
+           [-S ctl_path] [-W host:port] [-w local_tun[:remote_tun]]
+           destination [command [argument ...]]
+       ssh [-Q query_option]
+
+
+  17/09/2024   10:52.15   /home/mobaxterm  

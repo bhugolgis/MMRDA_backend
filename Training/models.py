@@ -140,6 +140,7 @@ class ContactusImage(models.Model):
 # fields for various permissions and clearances required.
 class PreConstructionStage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
+    packages = models.CharField(max_length=255,   null=True, blank=True)
     ShiftingofUtilities = models.BooleanField(default=False)
     RulesOfShiftingofUtilities = models.CharField(max_length=255, default='''High tension power line, water supply pipeline, sewer line, gas pipeline etc. as per MCGM guide lines''')
     ResponsibilityOfShiftingofUtilities = models.CharField(max_length=255, blank=True)
@@ -171,6 +172,7 @@ class ConstructionStage(models.Model):
     #guideline is rules
     user = models.ForeignKey(User,  on_delete=models.CASCADE,
                              related_name='user_ConstructionStage', null=True)  # User profile
+    packages = models.CharField(max_length=255,   null=True, blank=True)
     
     ConsenttToEstablishOoperate = models.BooleanField(default=False)
     RulesOfConsenttToEstablishOoperate = models.CharField(

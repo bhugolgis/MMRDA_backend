@@ -25,33 +25,33 @@ class MetroLine4AlignmentSerializer(GeoFeatureModelSerializer):
 
 class Package54AlignmentSerializer(GeoFeatureModelSerializer):
     class Meta:
-        model = Package54Alignment
+        model = MmrdaCa54Alignment4326
         fields = ('gid' ,'name' )
         geo_field= ('geom')
 
 class Package12AlignmentSerializer(GeoFeatureModelSerializer):
     class Meta:
-        model = Package12Alignment
+        model = MmrdaCa12Alignment4326
         fields = ('gid' ,'name')
         geo_field= ('geom')
 
 class Package11AlignmentSerializer(GeoFeatureModelSerializer):
     class Meta:
-        model = Package11Alignment
+        model = MmrdaCa11Alignment4326
         fields = ('gid' ,'name' )
         geo_field= ('geom')
 
 
 class Package10AlignmentSerializer(GeoFeatureModelSerializer):
     class Meta:
-        model = Package10Alignment
+        model = MmrdaCa10Alignment4326
         fields = ('gid' ,'name' )
         geo_field= ('geom')
 
 
 class Package09AlignmentSerializer(GeoFeatureModelSerializer):
     class Meta:
-        model = Package09Alignment
+        model = MmrdaCa09Alignment4326
         fields = ('gid' ,'name' ,)
         geo_field= ('geom')
 
@@ -59,9 +59,112 @@ class Package09AlignmentSerializer(GeoFeatureModelSerializer):
 
 class Package08AlignmentSerializer(GeoFeatureModelSerializer):
     class Meta:
-        model = Package08Alignment
+        model =  MmrdaCa08Alignment4326
         fields = ('gid' ,'name')
         geo_field= ('geom')
+
+
+
+class Start_end_points_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  StartEndPoints
+        fields = ('gid' ,'fid')#, 'name')
+        geo_field= ('geom')
+
+
+class All_start_end_point_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  AllStartEndPoints
+        fields = ('gid' ,'id','names')
+        geo_field= ('geom')
+
+class Package08_start_end_point_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  PackageCa08StartEndPoint
+        fields = ('gid' ,'id')
+        geo_field= ('geom')
+
+
+
+class Package09_start_end_point_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  PackageCa09StartEndPoint
+        fields = ('gid' ,'id')
+        geo_field= ('geom')
+
+
+
+
+class Package10_start_end_point_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  PackageCa10StartEndPoint
+        fields = ('gid' ,'id')
+        geo_field= ('geom')
+
+
+class Package11_start_end_point_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  PackageCa11StartEndPoint
+        fields = ('gid' ,'id')
+        geo_field= ('geom')
+
+
+class Package12_start_end_point_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  PackageCa12StartEndPoint
+        fields = ('gid' ,'id')
+        geo_field= ('geom')
+
+
+class Package54_start_end_point_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  PackageCa54StartEndPoint
+        fields = ('gid' ,'id')
+        geo_field= ('geom')
+
+
+
+
+class PackageCa08_metroStations_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  PackageCa08MetroStations
+        fields = ('gid' ,'id' )#,'name')
+        geo_field= ('geom')
+
+
+class PackageCa09_metroStations_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  PackageCa09MetroStations
+        fields = ('gid' ,'id' )#,'name')
+        geo_field= ('geom')
+    
+class PackageCa10_metroStations_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  PackageCa10MetroStations
+        fields = ('gid' ,'id' )#,'name')
+        geo_field= ('geom')
+
+
+class PackageCa11_metroStations_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  PackageCa11MetroStations
+        fields = ('gid' ,'id' )#,'name')
+        geo_field= ('geom')
+
+
+class PackageCa12_metroStations_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  PackageCa12MetroStations
+        fields = ('gid' ,'id' )#,'name')
+        geo_field= ('geom')        
+
+
+class PackageCa54_metroStations_Serializer(GeoFeatureModelSerializer):
+    class Meta:
+        model =  PackageCa54MetroStations
+        fields = ('gid' ,'id' )#,'name')
+        geo_field= ('geom')
+
 
 
 class MetroStationSerializer(GeoFeatureModelSerializer):

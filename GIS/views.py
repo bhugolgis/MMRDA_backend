@@ -49,20 +49,23 @@ class Package54AlignmentView(generics.GenericAPIView):
     #permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
        
-            package54 = Package54Alignment.objects.all()
-            serializers = Package54AlignmentSerializer(package54 , many = True).data
+            package_ca_54 = MmrdaCa54Alignment4326.objects.all()
+            serializers = Package54AlignmentSerializer(package_ca_54 , many = True).data
             return Response({'status': 'success',
                                 'message' : 'data was successfully fetched',
                                 'data': serializers},
                                 status= 200)
         
-class package12AlignmentView(generics.GenericAPIView):
-    serializer_class = Package12AlignmentSerializer 
+
+class package12AlignmentView(generics.GenericAPIView):    
+    # serializer_class = Package12AlignmentSerializer 
     #permission_classes = [IsAuthenticated]
+    
     def get(self, request, *args, **kwargs):
-   
-            package12 = Package12Alignment.objects.all()
-            serializers = Package12AlignmentSerializer(package12 , many = True).data
+            
+            package_ca_12 = MmrdaCa12Alignment4326.objects.all()
+            serializers = Package12AlignmentSerializer(package_ca_12 , many = True).data
+            # serializers = self.get_serializer(package_ca_12 , many = True).data
             return Response({'status': 'success',
                             'message' : 'data was successfully fetched',
                             'data': serializers},
@@ -73,8 +76,8 @@ class package11AlignmentView(generics.GenericAPIView):
     #permission_classes = [IsAuthenticated]
     def get(self, request, *args, **kwargs):
     
-            package11 = Package11Alignment.objects.all()
-            serializer = Package11AlignmentSerializer(package11 , many = True).data
+            package_ca_11 = MmrdaCa11Alignment4326.objects.all()
+            serializer = Package11AlignmentSerializer(package_ca_11 , many = True).data
             return Response({'status': 'success',
                             'message' : 'data was successfully fetched',
                             'data': serializer},
@@ -85,8 +88,8 @@ class package10AlignmentView(generics.GenericAPIView):
     #permission_classes = [IsAuthenticated]
     def get(self , request):
 
-            package10 = Package10Alignment.objects.all()
-            serializer = Package10AlignmentSerializer(package10 , many = True).data
+            package_ca_10 = MmrdaCa10Alignment4326.objects.all()
+            serializer = Package10AlignmentSerializer(package_ca_10 , many = True).data
     
             return Response({'status': 'success',
                             'message' : 'data was successfully fetched',
@@ -97,8 +100,8 @@ class package09AlignmentView(generics.GenericAPIView):
     #permission_classes = [IsAuthenticated]
     def get(self , request):
       
-            package09 = Package09Alignment.objects.all()
-            serializer = Package09AlignmentSerializer(package09 , many = True).data
+            package_ca_09 = MmrdaCa09Alignment4326.objects.all()
+            serializer = Package09AlignmentSerializer(package_ca_09 , many = True).data
             return Response({'status': 'success',
                             'message' : 'data was successfully fetched',
                             'data': serializer},
@@ -109,15 +112,211 @@ class package08AlignmentView(generics.GenericAPIView):
     #permission_classes = [IsAuthenticated]
     def get(self , request):
         
-            package08 = Package08Alignment.objects.all()
-            serializer = Package08AlignmentSerializer(package08 , many = True)
+            package_ca_08 = MmrdaCa08Alignment4326.objects.all()
+            serializer = Package08AlignmentSerializer(package_ca_08 , many = True)
             return Response({'status': 'success',
                             'message' : 'data was successfully fetched',
                             'data': serializer.data},
                              status= 200)
 
+class Start_end_points(generics.GenericAPIView):
+    serializer_class = Start_end_points_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            Start_end_points = StartEndPoints.objects.all()
+            serializers = self.get_serializer(Start_end_points , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
 
 
+class All_start_end_points(generics.GenericAPIView):
+    serializer_class = All_start_end_point_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            All_StartEndPoint = AllStartEndPoints.objects.all()
+            serializers = self.get_serializer(All_StartEndPoint , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+
+
+
+
+class Package08_start_end_points(generics.GenericAPIView):
+    serializer_class = Package08_start_end_point_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            PackageCa08_StartEndPoint = PackageCa08StartEndPoint.objects.all()
+            serializers = self.get_serializer(PackageCa08_StartEndPoint , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+
+class Package09_start_end_points(generics.GenericAPIView):
+    serializer_class = Package09_start_end_point_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            PackageCa09_StartEndPoint = PackageCa09StartEndPoint.objects.all()
+            serializers = self.get_serializer(PackageCa09_StartEndPoint , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+
+
+class Package10_start_end_points(generics.GenericAPIView):
+    serializer_class = Package10_start_end_point_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            PackageCa10_StartEndPoint = PackageCa10StartEndPoint.objects.all()
+            serializers = self.get_serializer(PackageCa10_StartEndPoint , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+    
+
+class Package11_start_end_points(generics.GenericAPIView):
+    serializer_class = Package11_start_end_point_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            PackageCa11_StartEndPoint = PackageCa11StartEndPoint.objects.all()
+            serializers = self.get_serializer(PackageCa11_StartEndPoint , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+
+
+
+class Package12_start_end_points(generics.GenericAPIView):
+    serializer_class = Package12_start_end_point_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            PackageCa12_StartEndPoint = PackageCa12StartEndPoint.objects.all()
+            serializers = self.get_serializer(PackageCa12_StartEndPoint , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+
+
+class Package54_start_end_points(generics.GenericAPIView):
+    serializer_class = Package54_start_end_point_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            PackageCa54_StartEndPoint = PackageCa54StartEndPoint.objects.all()
+            serializers = self.get_serializer(PackageCa54_StartEndPoint , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+    
+class PackageCa08_metroStations(generics.GenericAPIView):
+    serializer_class = PackageCa08_metroStations_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            PackageCa08_metroStations = PackageCa08MetroStations.objects.all()
+            serializers = self.get_serializer(PackageCa08_metroStations , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+    
+
+
+class PackageCa09_metroStations(generics.GenericAPIView):
+    serializer_class = PackageCa09_metroStations_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            PackageCa09_metroStations = PackageCa09MetroStations.objects.all()
+            serializers = self.get_serializer(PackageCa09_metroStations , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+
+
+
+class PackageCa10_metroStations(generics.GenericAPIView):
+    serializer_class = PackageCa10_metroStations_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            PackageCa10_metroStations = PackageCa10MetroStations.objects.all()
+            serializers = self.get_serializer(PackageCa10_metroStations , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+
+
+class PackageCa11_metroStations(generics.GenericAPIView):
+    serializer_class = PackageCa11_metroStations_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            PackageCa11_metroStations = PackageCa11MetroStations.objects.all()
+            serializers = self.get_serializer(PackageCa11_metroStations , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+    
+class PackageCa12_metroStations(generics.GenericAPIView):
+    serializer_class = PackageCa12_metroStations_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            PackageCa12_metroStations = PackageCa12MetroStations.objects.all()
+            serializers = self.get_serializer(PackageCa12_metroStations , many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+    
+
+class PackageCa54_metroStations(generics.GenericAPIView):
+    serializer_class = PackageCa54_metroStations_Serializer
+    #permission_classes = [IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+       
+            PackageCa54_metroStations = PackageCa54MetroStations.objects.all()
+            serializers = self.get_serializer(PackageCa54_metroStations, many = True).data
+
+            return Response({'status': 'success',
+                                'message' : 'data was successfully fetched',
+                                'data': serializers},
+                                status= 200)
+    
+    
 class GISPortalExistingTreeManagmentView(generics.GenericAPIView):
     serializer_class = GISPortalExistingTreeManagmentSerailizer
     # permission_classes = [IsAuthenticated]

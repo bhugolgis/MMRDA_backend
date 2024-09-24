@@ -883,7 +883,7 @@ class WasteTreatmentsView(generics.GenericAPIView):
                             file_mapping[field] = []
                             save_multiple_files(files, file_mapping, file_path , field)
 
-                        waste_data =serializer.save(location=location , wasteHandlingLocation = waste_location , user = request.user, **file_mapping)
+                        waste_data =serializer.save(location=location , waste_handlingLocation = waste_location , user = request.user, **file_mapping)
                         data = wastetreatmentsViewserializer(waste_data).data
                         return Response({'status': 'success' ,
                                         'Message' : 'data saved successfully',
@@ -918,7 +918,7 @@ class WasteTreatmentsView(generics.GenericAPIView):
                         file_mapping[field] = []
                         save_multiple_files(files, file_mapping, file_path , field)
 
-                    waste_data =serializer.save(location=location , wasteHandlingLocation = waste_location , user = request.user, **file_mapping)
+                    waste_data =serializer.save(location=location , waste_handlingLocation = waste_location , user = request.user, **file_mapping)
 
                     data = wastetreatmentsViewserializer(waste_data).data
                     return Response({'status': 'success' ,
@@ -957,7 +957,7 @@ class WasteTreatmentsGetUpdateDeleteView(generics.UpdateAPIView):
         if 'waste_latitude' in request.data and 'waste_longitude' in request.data:
             waste_lat = float(request.data['waste_latitude'])
             waste_long = float(request.data['waste_longitude'])
-            instance.wasteHandlingLocation = Point(waste_long, waste_lat, srid=4326)
+            instance.waste_handlingLocation = Point(waste_long, waste_lat, srid=4326)
         
         # Handle file fields
         file_fields = {
