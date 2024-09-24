@@ -46,6 +46,9 @@ class  Air(Baseclass):
     Remarks = models.TextField(blank=True, max_length=255, null=True)
     place_location = models.CharField(max_length=255, null=True, blank=True)
 
+
+    
+
 # there are two types of water parameters, ground water and surface water, we have used ground water and calculated wqi for ground water
 class water(Baseclass):
     dateOfMonitoring = None
@@ -84,6 +87,7 @@ class water(Baseclass):
     totalColiform = models.CharField(max_length=255, null=True, blank=True) # not added in the forms
     eColi = models.CharField(max_length=255, null=True, blank=True) # not added in the forms
     WQI = models.FloatField(blank=True, default=0, null=True)
+    place_location = models.CharField(max_length=255, null=True, blank=True)
 
 
 class Noise(Baseclass):
@@ -99,6 +103,7 @@ class Noise(Baseclass):
     typeOfArea = models.CharField( max_length = 255, null=True, blank=True)
     isWithinLimit_day = models.CharField( max_length = 255, null=True, blank=True)
     isWithinLimit_night = models.CharField( max_length = 255, null=True, blank=True)
+    place_location = models.CharField(max_length=255, null=True, blank=True)
 
 
 # Also known as Identified Tree (in portal only existing tree existing)
@@ -113,6 +118,8 @@ class ExistingTreeManagment(Baseclass):
     documents =ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     remarks = models.TextField(blank=True, null=True )
+    place_location = models.CharField(max_length=255, null=True, blank=True)
+
 
 
 class NewTreeManagement(Baseclass):
@@ -125,21 +132,19 @@ class NewTreeManagement(Baseclass):
     documents =ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     remarks = models.TextField(max_length= 255 , null = True , blank = True)
+    place_location = models.CharField(max_length=255, null=True, blank=True)
 
 
 # Also known as Waste Management
 class WasteTreatments(Baseclass):
+    #wastetype = models.CharField(max_length=255,  null=True, blank=True)
     user = models.ForeignKey(User, related_name="waste_treatments", on_delete=models.CASCADE, blank=True)
-    wastetype = models.CharField(max_length=255,  null=True, blank=True)
-    
-
     isGISPermitsTransportation = models.BooleanField(blank=True, null=True)
     GISPermitsTransportationDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
-
     isTransportationVechicalHasPermission = models.BooleanField(blank=True, null=True)
     TransportationVechicalHasPermissionDocuments = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
-
-
+    waste_collecting_location = models.CharField(max_length=255, null=True, blank=True)
+    
     # Hazardous Waste
     iswasteOilQnt = models.BooleanField(blank=True, null=True)
     wasteOilQnt = models.FloatField(null=True, blank=True) # liter
@@ -176,42 +181,46 @@ class WasteTreatments(Baseclass):
     # Metal Scrape
     ismetalScrapeQuantity = models.BooleanField(blank=True, null=True)
     metalScrapeQuantity = models.FloatField(null=True, blank=True) # Kg
-
-    # E Waste
-    iseWasteQuantity = models.BooleanField(blank=True, null=True)
-    eWasteQuantity = models.FloatField(null=True, blank=True) # Kg
-
+    
     # Construction Waste
     isconstructionWasteQuantity = models.BooleanField(blank=True, null=True)
     constructionWasteQuantity = models.FloatField(null=True, blank=True) # Kg
-
-    wastehandling = models.CharField(max_length=255, blank=True, null=True)
-    wasteHandlingLocation = models.PointField(null=True, blank=True)
-
+    
+    # E Waste
+    iseWasteQuantity = models.BooleanField(blank=True, null=True)
+    eWasteQuantity = models.FloatField(null=True, blank=True) # Kg
+    waste_handlingLocation = models.PointField(null=True, blank=True)
+   
+    waste_disposing_location = models.CharField(max_length=255, null=True, blank=True)
     # Documents and Remarks
     documents =ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     remarks = models.CharField(max_length=255, null=True, blank=True)
+    
+    
 
 
 class MaterialManegmanet(Baseclass):
+    
     user = models.ForeignKey(User, related_name="MaterialSourcing", on_delete=models.CASCADE, blank=True)
-    typeOfMaterial = models.CharField(max_length=255,  null=True, blank=True)
-    source = models.CharField(max_length=255,  null=True, blank=True)
-    sourceOfQuarry = models.CharField(max_length=255,  null=True, blank=True)
-    storageLocation = models.PointField(blank = True , null = True)
+    material_source_location = models.CharField(max_length=255, null=True, blank=True)
 
+    
+    #Material Management Details
+    typeOfMaterial = models.CharField(max_length=255,  null=True, blank=True)
     materialStorageType = models.CharField(max_length=255 , blank = True , null = True)
     materialStorageCondition = models.CharField(max_length = 255 , blank = True , null = True)
-    # materialStoragePhotograph = models.ImageField(upload_to = 'MaterialManegment/materailStorage_Photograph' , blank = True , null = True)
+    source = models.CharField(max_length=255,  null=True, blank=True)
+    sourceOfQuarry = models.CharField(max_length=255,  null=True, blank=True)
     materialStoragePhotograph = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
-
-    # approvals = models.FileField(null=True, blank=True)
     approvals = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
+    
+    storageLocation = models.PointField(blank = True , null = True)
+    material_storage_location = models.CharField(max_length=255, null=True, blank=True)
+    
+   
 
-    # photographs = models.ImageField(upload_to='MaterialManegment/materialsourcing_photographs/',null=True, blank=True)
-    # documents = models.FileField(upload_to='MaterialManegment/materialsourcing_documents', null=True, blank=True)
-
+    #Documents and Remarks
     documents =ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     photographs = ArrayField(models.CharField( max_length=255, blank=True, null=True), default=list, blank=True)
     remarks = models.CharField(max_length=255, null=True, blank=True)

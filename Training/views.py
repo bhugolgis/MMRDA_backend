@@ -5,7 +5,7 @@ from rest_framework.parsers import MultiPartParser , FormParser
 from rest_framework.response import Response
 from django.contrib.gis.geos import Point 
 from .models import *
-# from .models import traning, photographs
+from .models import traning, photographs
 from .permission import IsConsultant, IsContractor
 from rest_framework import filters
 from rest_framework import status
@@ -47,9 +47,12 @@ class TraningView(generics.GenericAPIView):
                 file_mapping[field] = []
                 save_multiple_files(files, file_mapping, file_path , field)
 
-            serializer.save(location = location , user = request.user , **file_mapping) 
+            training_instance = serializer.save(location = location , user = request.user , **file_mapping)
+            data = TrainingViewSerializer(training_instance).data
+            
             return Response({'status': 'success',
                                         'message' : 'data saved successfully',
+                                        'data' : data
                                         }, status= status.HTTP_200_OK)
         else:
             key, value =list(serializer.errors.items())[0]
@@ -371,8 +374,11 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
     
     def post(self, request):
         if "contractor" in request.user.groups.values_list("name", flat=True):
-            serializer = self.get_serializer(data=request.data)
+            serializer = PreConstructionStageComplianceSerializer(data=request.data)
             if serializer.is_valid():
+                packages = serializer.validated_data['packages']
+                data = PreConstructionStage.objects.filter(  packages = packages ).exists()
+                
                 file_fields = {
                     'ShiftingofUtilitiesDocuments': 'env_monitoring/compliance/pre_construction',
                     'PermissionForFellingOfTreesDocuments': 'env_monitoring/compliance/pre_construction',
@@ -387,7 +393,7 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
                     save_multiple_files(files, file_mapping, file_path, field)
 
                 compliance_details = serializer.save(user=request.user, **file_mapping)
-                data = PreConstructionStageComplianceSerializer(compliance_details).data
+                data = PreConstructionStageComplianceViewSerializer(compliance_details).data
 
                 return Response({'Message': 'Data saved successfully', 'status': 'success', 'data': data}, status=200)
             else:
@@ -396,7 +402,7 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
                 return Response({'status': 'error', 'Message': error_message}, status=status.HTTP_400_BAD_REQUEST)
 
         elif "consultant" in request.user.groups.values_list("name", flat=True):
-            serializer = self.get_serializer(data=request.data)
+            serializer = PreConstructionStageComplianceSerializer(data=request.data)
             if serializer.is_valid():
                 file_fields = {
                     'ShiftingofUtilitiesDocuments': 'env_monitoring/compliance/pre_construction/shifting_of_utilities_documents',
@@ -412,8 +418,8 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
                     save_multiple_files(files, file_mapping, file_path, field)
 
                 compliance_details = serializer.save(user=request.user, **file_mapping)
-                data = PreConstructionStageComplianceSerializer(compliance_details).data
-
+                data = PreConstructionStageComplianceViewSerializer(compliance_details).data
+                
                 return Response({'Message': 'Data saved successfully', 'status': 'success', 'data': data}, status=200)
             else:
                 key, value = list(serializer.errors.items())[0]
@@ -467,10 +473,11 @@ class PreConstructionStageComplianceGetUpdateDeleteView(generics.GenericAPIView)
 
             file_mapping = {}
             for field, file_path in file_fields.items():
-                if field in request.FILES:
+                #if field in request.FILES:
                     files = request.FILES.getlist(field)
-                    file_mapping[field] = []
-                    save_multiple_files(files, file_mapping, file_path, field)
+                    if files:
+                        file_mapping[field] = []
+                        save_multiple_files(files, file_mapping, file_path, field)
 
             compliance_details = serializer.save(**file_mapping)
             data = PreConstructionStageComplianceSerializer(compliance_details).data
@@ -510,6 +517,8 @@ class ConstructionStageComplainceView(generics.GenericAPIView):
         if "contractor" in request.user.groups.values_list("name", flat=True) or "consultant" in request.user.groups.values_list("name", flat=True):
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
+                packages = serializer.validated_data['packages']
+                data = ConstructionStage.objects.filter(packages = packages ).exists()
                 file_fields = {
                     'ConsenttToEstablishOoperateDocuments': 'env_monitoring/compliance/construction/consent_to_establish_operate_documents',
                     'PermissionForSandMiningFromRiverbedDocuments': 'env_monitoring/compliance/construction/permission_for_sand_mining_from_riverbed_documents',
@@ -529,7 +538,7 @@ class ConstructionStageComplainceView(generics.GenericAPIView):
                     save_multiple_files(files, file_mapping, file_path, field)
 
                 compliance_details = serializer.save(user=request.user, **file_mapping)
-                data = ConstructionStageComplianceSerializer(compliance_details).data
+                data = ConstructionStageComplianceViewSerializer(compliance_details).data
 
                 return Response({'Message': 'Data saved successfully', 'status': 'success', 'data': data}, status=200)
             else:
@@ -578,8 +587,9 @@ class ConstructionStageComplianceUpdateView(generics.GenericAPIView):
             file_mapping = {}
             for field, file_path in file_fields.items():
                 files = request.FILES.getlist(field)
-                file_mapping[field] = []
-                save_multiple_files(files, file_mapping, file_path, field)
+                if files:
+                    file_mapping[field] = []
+                    save_multiple_files(files, file_mapping, file_path, field)
 
             serializer.save(**file_mapping)
             return Response({'Message': 'Data updated successfully', 'status': 'success', 'data': serializer.data}, status=status.HTTP_200_OK)

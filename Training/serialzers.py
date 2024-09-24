@@ -198,7 +198,7 @@ class PreConstructionStageComplianceSerializer(serializers.ModelSerializer):
     class Meta:
         model = PreConstructionStage
         fields = (
-            'ShiftingofUtilities', 'ResponsibilityOfShiftingofUtilities', 'CurrentStatusOfShiftingofUtilities', 'ShiftingofUtilitiesDocuments',
+            'ShiftingofUtilities', 'packages','ResponsibilityOfShiftingofUtilities', 'CurrentStatusOfShiftingofUtilities', 'ShiftingofUtilitiesDocuments',
             'PermissionForFellingOfTrees', 'ResponsibilityOfPermissionForFellingOfTrees', 'CurrentStatusPermissionForFellingOfTrees', 'PermissionForFellingOfTreesDocuments',
             'CRZClearance', 'ResponsibilityOfCRZClearance', 'CurrentStatusCRZClearance', 'CRZClearanceDocuments',
             'ForestClearance', 'ResponsibilityOfForestClearance', 'CurrentStatusOfForestClearance', 'ForestClearanceDocuments'
@@ -209,7 +209,7 @@ class PreConstructionStageComplianceViewSerializer(serializers.ModelSerializer):
     class Meta:
         model = PreConstructionStage
         fields = (
-            'ShiftingofUtilities', 'ResponsibilityOfShiftingofUtilities', 'CurrentStatusOfShiftingofUtilities', 'ShiftingofUtilitiesDocuments',
+            'ShiftingofUtilities', 'packages','ResponsibilityOfShiftingofUtilities', 'CurrentStatusOfShiftingofUtilities', 'ShiftingofUtilitiesDocuments',
             'PermissionForFellingOfTrees', 'ResponsibilityOfPermissionForFellingOfTrees', 'CurrentStatusPermissionForFellingOfTrees', 'PermissionForFellingOfTreesDocuments',
             'CRZClearance', 'ResponsibilityOfCRZClearance', 'CurrentStatusCRZClearance', 'CRZClearanceDocuments',
             'ForestClearance', 'ResponsibilityOfForestClearance', 'CurrentStatusOfForestClearance', 'ForestClearanceDocuments'
@@ -231,11 +231,13 @@ class ConstructionStageComplianceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConstructionStage
-        exclude = ('RulesOfConsenttToEstablishOoperate', 'RulesOfSandMiningFromRiverbed',
-                   'RulesForGroundWaterWithdrawal', 'RulesForCollectionDisposalManagement', 'RulesForSolidWaste',
-                   'RulesForDisposalOfBituminousAndOtherWaste', 'RulesForDisposalOfsewagefromLabourCamps', 'RulesForPollutionUnderControl',
-                   'RulesForRoofTopRainWaterHarvesting', 'user')
+        fields = '__all__'
+ 
 
+class ConstructionStageComplianceViewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ConstructionStage
+        fields = '__all__'
 
 
 class ContactusImagesSeilizer(serializers.ModelSerializer):

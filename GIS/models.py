@@ -17,6 +17,16 @@ class Projectaffectedperson(models.Model):
         db_table = 'projectAffectedPerson'
 
 
+class StartEndPoints(models.Model):
+    gid = models.AutoField(primary_key=True)
+    fid = models.FloatField(blank=True, null=True)
+    geom = models.PointField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'start_end_points'
+        
+
 class AllStartEndPoints(models.Model):
     gid = models.AutoField(primary_key=True)
     id = models.FloatField(blank=True, null=True)
