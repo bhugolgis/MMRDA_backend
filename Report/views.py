@@ -3118,6 +3118,28 @@ class PreConstructionStageComplianceExcel(generics.ListAPIView):
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
 
+            # Rename columns to more appropriate names
+            df = df.rename(columns={
+                'id': 'ID',
+                'ShiftingofUtilities': 'Shifting of Utilities',
+                'packages': 'Package',
+                'ResponsibilityOfShiftingofUtilities': 'Responsibility for Shifting of Utilities',
+                'CurrentStatusOfShiftingofUtilities': 'Current Status of Shifting of Utilities',
+                'ShiftingofUtilitiesDocuments': 'Documents for Shifting of Utilities',
+                'PermissionForFellingOfTrees': 'Permission for Felling of Trees',
+                'ResponsibilityOfPermissionForFellingOfTrees': 'Responsibility for Permission for Felling of Trees',
+                'CurrentStatusPermissionForFellingOfTrees': 'Current Status of Permission for Felling of Trees',
+                'PermissionForFellingOfTreesDocuments': 'Documents for Felling of Trees',
+                'CRZClearance': 'CRZ Clearance',
+                'ResponsibilityOfCRZClearance': 'Responsibility for CRZ Clearance',
+                'CurrentStatusCRZClearance': 'Current Status of CRZ Clearance',
+                'CRZClearanceDocuments': 'Documents for CRZ Clearance',
+                'ForestClearance': 'Forest Clearance',
+                'ResponsibilityOfForestClearance': 'Responsibility for Forest Clearance',
+                'CurrentStatusOfForestClearance': 'Current Status of Forest Clearance',
+                'ForestClearanceDocuments': 'Documents for Forest Clearance'
+            })
+            
             # Create a response with the appropriate content type
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
             response['Content-Disposition'] = 'attachment; filename=Pre_Construction_Stage_Compliance.xlsx'
