@@ -371,13 +371,14 @@ class PreConstructionStageComplianceView(generics.GenericAPIView):
     serializer_class = PreConstructionStageComplianceSerializer
     parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
-    
+
+    # check or reconfirm weather we want to capture date of monitoring field for compliance(pre const and const)
     def post(self, request):
         if "contractor" in request.user.groups.values_list("name", flat=True):
             serializer = PreConstructionStageComplianceSerializer(data=request.data)
             if serializer.is_valid():
-                packages = serializer.validated_data['packages']
-                data = PreConstructionStage.objects.filter(  packages = packages ).exists()
+                # packages = serializer.validated_data['packages']
+                # data = PreConstructionStage.objects.filter(  packages = packages ).exists()
                 
                 file_fields = {
                     'ShiftingofUtilitiesDocuments': 'env_monitoring/compliance/pre_construction',
@@ -513,12 +514,14 @@ class ConstructionStageComplainceView(generics.GenericAPIView):
     parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
 
+    # check or reconfirm weather we want to capture date of monitoring field for compliance(pre const and const)
     def post(self, request):
         if "contractor" in request.user.groups.values_list("name", flat=True) or "consultant" in request.user.groups.values_list("name", flat=True):
             serializer = self.get_serializer(data=request.data)
             if serializer.is_valid():
-                packages = serializer.validated_data['packages']
-                data = ConstructionStage.objects.filter(packages = packages ).exists()
+                # if 'packages' not in serializer.validated_data:
+                #     return Response({'status': 'error', 'Message': 'Packages field is missing'}, status=status.HTTP_400_BAD_REQUEST)
+
                 file_fields = {
                     'ConsenttToEstablishOoperateDocuments': 'env_monitoring/compliance/construction/consent_to_establish_operate_documents',
                     'PermissionForSandMiningFromRiverbedDocuments': 'env_monitoring/compliance/construction/permission_for_sand_mining_from_riverbed_documents',

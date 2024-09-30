@@ -228,7 +228,7 @@ class ConstructionStageComplianceSerializer(serializers.ModelSerializer):
     ConsentToDisposalOfsewagefromLabourCampsDocuments = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
     PollutionUnderControlCertificateDocuments = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
     RoofTopRainWaterHarvestingDocuments = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
-
+    # packages = serializers.CharField(required=True)
     class Meta:
         model = ConstructionStage
         fields = '__all__'
