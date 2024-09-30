@@ -115,7 +115,7 @@ class labourcampreportpackageExcelDownloadView(generics.ListAPIView):
 
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values(
-            'id','quarter', 'packages','Monitoringdate', 'labourCampName', 'labourCampId',
+            'id','quarter', 'packages','dateOfMonitoring', 'labourCampName', 'labourCampId',
                   'isToilet', 'toiletCondition','toiletPhotograph','toiletRemarks',
                   'isDrinkingWater','drinkingWaterCondition' ,'drinkingWaterPhotographs','drinkingWaterRemarks',
                     'isDemarkationOfPathways','demarkationOfPathwaysCondition','demarkationOfPathwaysPhotographs','demarkationOfPathwaysRemark' ,
