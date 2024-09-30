@@ -498,10 +498,10 @@ class PreConstructionStageComplianceGetUpdateDeleteView(generics.GenericAPIView)
         """
         pre_construction_stage= self.get_object()
         if not pre_construction_stage:
-             return Response({'status': 'error', 'Message': 'training  data not found'}, status=status.HTTP_404_NOT_FOUND)
+             return Response({'status': 'error', 'Message': 'Pre Construction Stage data not found'}, status=status.HTTP_404_NOT_FOUND)
         
         pre_construction_stage.delete()
-        return Response({'status': 'success', 'Message': 'Training data deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        return Response({'status': 'success', 'Message': 'Pre Construction Stage data deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
 
     
 
@@ -554,7 +554,7 @@ class ConstructionStageComplainceView(generics.GenericAPIView):
 
 
 # Update (PATCH)
-class ConstructionStageComplianceUpdateView(generics.GenericAPIView):
+class ConstructionStageComplianceGetUpdateDeleteView(generics.GenericAPIView):
     serializer_class = ConstructionStageComplianceSerializer
     parser_classes = [MultiPartParser]
     permission_classes = [IsAuthenticated & (IsConsultant | IsContractor)]
@@ -567,6 +567,16 @@ class ConstructionStageComplianceUpdateView(generics.GenericAPIView):
             return ConstructionStage.objects.get(id=self.kwargs['id'])
         except ConstructionStage.DoesNotExist:
             return None
+
+    def get(self, request, id):
+        try:
+            construction_stage = ConstructionStage.objects.get(id=id)
+            data = ConstructionStageComplianceViewSerializer(construction_stage).data
+            return Response({'status': 'success',
+                             'data': data}, status=200)
+        except ConstructionStage.DoesNotExist:
+            return Response({'status': 'error',
+                             'Message': 'Construction Stage data not found'}, status=404)
 
     def patch(self, request, *args, **kwargs):
         construction_stage_instance = self.get_object()
@@ -600,3 +610,14 @@ class ConstructionStageComplianceUpdateView(generics.GenericAPIView):
             key, value = list(serializer.errors.items())[0]
             error_message = key + " ," + value[0]
             return Response({'status': 'error', 'Message': error_message}, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Handle DELETE requests for deleting the LabourCamp instance.
+        """
+        construction_stage= self.get_object()
+        if not construction_stage:
+             return Response({'status': 'error', 'Message': 'Construction Stage data not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        construction_stage.delete()
+        return Response({'status': 'success', 'Message': 'Construction Stage data deleted successfully'}, status=status.HTTP_204_NO_CONTENT)

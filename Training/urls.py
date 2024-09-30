@@ -19,7 +19,7 @@ urlpatterns = [
     path('PreConstructionStageCompliance' , PreConstructionStageComplianceView.as_view() , name = ' PreConstructionStageCompliance'),
     path('pre-construction-stage-compliance/<int:id>' , PreConstructionStageComplianceGetUpdateDeleteView.as_view() , name = 'get-update-delete-pre-construction-stage'),
     path('ConstructionStageComplaince' , ConstructionStageComplainceView.as_view() , name = ' ConstructionStageCompliance'),
-    path('ConstructionStageComplaince/<int:id>' , ConstructionStageComplianceUpdateView.as_view() , name = ' ConstructionStageCompliance'),
+    path('ConstructionStageComplaince/<int:id>' , ConstructionStageComplianceGetUpdateDeleteView.as_view() , name = ' get-update-delete-construction-stage'),
    
     
     # path(' ContactUsimagesCompress' , ContactUsimagesCompress.as_view() , name = ' PreConstructionStageCompliance'),
