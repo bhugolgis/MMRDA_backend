@@ -1773,9 +1773,13 @@ class NewTreeReportPackage(ListAPIView):
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
-            # new_tree_data = NewTreeManagementSerializer(data, many=True).data
-            new_tree_data = self.get_serializer(data, many=True).data
-            # for feature in new_tree_data['features']:
+            new_tree_data = NewTreeManagementSerializer(data, many=True).data
+            print(new_tree_data)
+            # new_tree_data = self.get_serializer(data, many=True).data
+            for feature in new_tree_data['features']:
+                feature['properties']['id'] = feature['id']
+
+            # for feature in new_tree_data['new_tree_data']['features']:
             #     feature['properties']['id'] = feature['id']
             
             return Response({'message': 'data Fetched Successfully',
@@ -3209,6 +3213,57 @@ class ConstructionStageComplianceExcel(generics.ListAPIView):
             
             # Create a Pandas DataFrame
             df = pd.DataFrame(data)
+
+            # Rename columns to more appropriate names
+            df = df.rename(columns={
+                'id': 'ID',
+                'ConsenttToEstablishOoperate': 'Consent to Establish/Operate',
+                'packages': 'Package',
+                'RulesOfConsenttToEstablishOoperate': 'Rules for Consent to Establish/Operate',
+                'ResponsibilityOfConsenttToEstablishOoperate': 'Responsibility for Consent to Establish/Operate',
+                'CurrentStatusOfConsenttToEstablishOoperate': 'Current Status of Consent to Establish/Operate',
+                'ConsenttToEstablishOoperateDocuments': 'Documents for Consent to Establish/Operate',
+                'PermissionForSandMiningFromRiverbed': 'Permission for Sand Mining from Riverbed',
+                'RulesOfSandMiningFromRiverbed': 'Rules for Sand Mining from Riverbed',
+                'ResponsibilityOfSandMiningFromRiverbed': 'Responsibility for Sand Mining from Riverbed',
+                'CurrentStatusOfSandMiningFromRiverbed': 'Current Status of Sand Mining from Riverbed',
+                'PermissionForSandMiningFromRiverbedDocuments': 'Documents for Sand Mining from Riverbed',
+                'PermissionForGroundWaterWithdrawal': 'Permission for Groundwater Withdrawal',
+                'RulesForGroundWaterWithdrawal': 'Rules for Groundwater Withdrawal',
+                'ResponsibilityForGroundWaterWithdrawal': 'Responsibility for Groundwater Withdrawal',
+                'CurrentStatusOfGroundWaterWithdrawal': 'Current Status of Groundwater Withdrawal',
+                'PermissionForGroundWaterWithdrawalDocuments': 'Documents for Groundwater Withdrawal',
+                'AuthorizationForCollectionDisposalManagement': 'Authorization for Collection & Disposal Management',
+                'RulesForCollectionDisposalManagement': 'Rules for Collection & Disposal Management',
+                'ResponsibilityForCollectionDisposalManagement': 'Responsibility for Collection & Disposal Management',
+                'CurrentStatusOfCollectionDisposalManagement': 'Current Status of Collection & Disposal Management',
+                'AuthorizationForCollectionDisposalManagementDocuments': 'Documents for Collection & Disposal Management',
+                'AuthorizationForSolidWaste': 'Authorization for Solid Waste',
+                'RulesForSolidWaste': 'Rules for Solid Waste',
+                'ResponsibilityOfSolidWaste': 'Responsibility for Solid Waste',
+                'CurrentStatusOfSolidWaste': 'Current Status of Solid Waste',
+                'AuthorizationForSolidWasteDocuments': 'Documents for Solid Waste',
+                'DisposalOfBituminousAndOtherWaste': 'Disposal of Bituminous & Other Waste',
+                'RulesForDisposalOfBituminousAndOtherWaste': 'Rules for Disposal of Bituminous & Other Waste',
+                'ResponsibilityOfDisposalOfBituminousAndOtherWaste': 'Responsibility for Disposal of Bituminous & Other Waste',
+                'CurrentStatusOfDisposalOfBituminousAndOtherWaste': 'Current Status of Disposal of Bituminous & Other Waste',
+                'DisposalOfBituminousAndOtherWasteDocuments': 'Documents for Disposal of Bituminous & Other Waste',
+                'ConsentToDisposalOfsewagefromLabourCamps': 'Consent to Disposal of Sewage from Labour Camps',
+                'RulesForDisposalOfsewagefromLabourCamps': 'Rules for Disposal of Sewage from Labour Camps',
+                'ResponsibilityOfDisposalOfsewagefromLabourCamps': 'Responsibility for Disposal of Sewage from Labour Camps',
+                'CurrentStatusOfDisposalOfsewagefromLabourCamps': 'Current Status of Sewage Disposal from Labour Camps',
+                'ConsentToDisposalOfsewagefromLabourCampsDocuments': 'Documents for Sewage Disposal from Labour Camps',
+                'PollutionUnderControlCertificate': 'Pollution Under Control Certificate',
+                'RulesForPollutionUnderControl': 'Rules for Pollution Under Control',
+                'ResponsibilityOfPollutionUnderControl': 'Responsibility for Pollution Under Control',
+                'CurrentStatusPollutionUnderControl': 'Current Status of Pollution Under Control',
+                'PollutionUnderControlCertificateDocuments': 'Documents for Pollution Under Control Certificate',
+                'RoofTopRainWaterHarvesting': 'Rooftop Rainwater Harvesting',
+                'RulesForRoofTopRainWaterHarvesting': 'Rules for Rooftop Rainwater Harvesting',
+                'ResponsibilityOfRoofTopRainWaterHarvesting': 'Responsibility for Rooftop Rainwater Harvesting',
+                'CurrentStatusRoofTopRainWaterHarvesting': 'Current Status of Rooftop Rainwater Harvesting',
+                'RoofTopRainWaterHarvestingDocuments': 'Documents for Rooftop Rainwater Harvesting'
+            })
 
             # Create a response with the appropriate content type
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
