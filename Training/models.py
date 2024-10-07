@@ -39,18 +39,25 @@ class Baseclass(models.Model):
 # Training spelling is wrong
 class traning(Baseclass):
     user = models.ForeignKey(User, related_name='training_User', on_delete=models.CASCADE)
+    
+    # training details
+    
     category = models.CharField(max_length=255, null=True, blank=True)
     traningTitle = models.CharField(max_length=255, null=True, blank=True)
-    noOfAttends = models.IntegerField(null=True, blank=True)
     noOfTimesTrainingConducted = models.IntegerField(default= 0)
+    
     male = models.CharField(max_length=255, null=True, blank=True)
     female = models.CharField(max_length=255, null=True, blank=True)
     inchargePerson = models.CharField(max_length=253, null=True, blank=True)
     traninigInitiatedBy = models.CharField(max_length=255, null=True, blank=True)
-    conductDate = models.DateField(auto_now=True, null=True, blank=True)
-    traningDate = models.DateField(auto_now=True, null=True, blank=True)
-    photographs = ArrayField(models.CharField(max_length=255, blank=True, null=True), blank=True, null=True)
+    
+    noOfAttends = models.IntegerField(null=True, blank=True)
+
+    # Documents and Remarks
+
     documents = ArrayField(models.CharField(max_length=255, blank=True, null=True), blank=True, null=True)
+    photographs = ArrayField(models.CharField(max_length=255, blank=True, null=True), blank=True, null=True)
+    remarks = models.TextField(max_length=255, blank=True, null=True)
 
 
 # #----------------------------- PHOTOGRAPHS MODEL-----------------------------------------
