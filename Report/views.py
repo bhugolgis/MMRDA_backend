@@ -2786,8 +2786,7 @@ class TrainningManagementQuarterExcelDownload(generics.ListAPIView):
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('quarter' , 'packages' , 'dateOfMonitoring',
                   'category' , 'traningTitle' , 'noOfAttends' , 'noOfTimesTrainingConducted',
-                  'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
-                  'traningDate' , 'photographs' , 'documents', 'remarks')
+                  'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'photographs' , 'documents', 'remarks')
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
@@ -2809,8 +2808,6 @@ class TrainningManagementQuarterExcelDownload(generics.ListAPIView):
                 'female': 'Number of Female Attendees',
                 'inchargePerson': 'In-Charge Person',
                 'traninigInitiatedBy': 'Training Initiated By',
-                'conductDate': 'Conduct Date',
-                'traningDate': 'Training Date',
                 'photographs': 'Photographs',
                 'documents': 'Documents',
                 'remarks': 'Remarks'
@@ -2861,8 +2858,7 @@ class TrainnigReportPackageExcelDownload(generics.ListAPIView):
         # Use values to convert the queryset to a list of dictionaries
         data = queryset.values('quarter' , 'packages' , 'dateOfMonitoring',
                   'category' , 'traningTitle' , 'noOfAttends' , 'noOfTimesTrainingConducted',
-                  'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
-                  'traningDate' , 'photographs' , 'documents', 'remarks')
+                  'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'photographs' , 'documents', 'remarks')
 
 
         if not data:
@@ -2883,8 +2879,6 @@ class TrainnigReportPackageExcelDownload(generics.ListAPIView):
                 'female': 'Number of Female Attendees',
                 'inchargePerson': 'In-Charge Person',
                 'traninigInitiatedBy': 'Training Initiated By',
-                'conductDate': 'Conduct Date',
-                'traningDate': 'Training Date',
                 'photographs': 'Photographs',
                 'documents': 'Documents',
                 'remarks': 'Remarks'
