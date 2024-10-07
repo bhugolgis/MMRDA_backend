@@ -18,7 +18,7 @@ class TraningSerializer(serializers.ModelSerializer):
         model = traning
         fields =( 'quarter' , 'packages' , 'dateOfMonitoring' ,'category' , 'traningTitle' , 'noOfAttends' ,'noOfTimesTrainingConducted' ,  'male' , 'female' ,
                  'longitude' , 'latitude' ,'inchargePerson' , 'traninigInitiatedBy' , 
-                 'conductDate' , 'traningDate' ,  'photographs' , 'documents')
+                 'photographs' , 'documents', 'remarks')
 
     def create(self,data):
         data.pop('longitude')
@@ -43,8 +43,8 @@ class TrainingUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = traning
         fields = ('quarter', 'packages', 'dateOfMonitoring', 'category', 'traningTitle', 'noOfAttends', 'noOfTimesTrainingConducted',
-                  'male', 'female', 'longitude', 'latitude', 'inchargePerson', 'traninigInitiatedBy', 'conductDate',
-                  'traningDate', 'photographs', 'documents')
+                  'male', 'female', 'longitude', 'latitude', 'inchargePerson', 'traninigInitiatedBy', 
+                  'photographs', 'documents', 'remarks')
 
     def validate(self, data):
         if 'longitude' in data:

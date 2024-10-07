@@ -379,7 +379,7 @@ class TrainnigReportSerializer(GeoFeatureModelSerializer):
         fields = ('id', 'quarter' , 'packages' , 'dateOfMonitoring',
                   'category' , 'traningTitle' , 'noOfAttends' , 'noOfTimesTrainingConducted',
                   'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
-                  'traningDate' , 'photographs' , 'documents')
+                  'traningDate' , 'photographs' , 'documents', 'remarks')
         geo_field = ('location')
 
 
@@ -389,7 +389,7 @@ class TrainnigReportExcelSerializer(serializers.ModelSerializer):
         fields = ('quarter' , 'packages' , 'dateOfMonitoring',
                   'category' , 'traningTitle' , 'noOfAttends' , 'noOfTimesTrainingConducted',
                   'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
-                  'traningDate' , 'photographs' , 'documents')
+                  'traningDate' , 'photographs' , 'documents', 'remarks')
         # geo_field = ('location')
 
 class OccupationalHealthQuarterSeialzier(GeoFeatureModelSerializer):

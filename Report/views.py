@@ -1252,7 +1252,8 @@ class NoiseReportReportPackageExcelDownload(generics.ListAPIView):
                 'monitoringPeriod_night': 'Night Monitoring Period',
                 'typeOfArea': 'Area Type',
                 'isWithinLimit_day': 'Within Limit (Day)',
-                'isWithinLimit_night': 'Within Limit (Night)'
+                'isWithinLimit_night': 'Within Limit (Night)',
+                'place_location': 'Location'
             })
 
             # Create a response with the appropriate content type
@@ -1348,7 +1349,8 @@ class NoiseReportQuarterExcelDownload(generics.ListAPIView):
                 'monitoringPeriod_night': 'Night Monitoring Period',
                 'typeOfArea': 'Area Type',
                 'isWithinLimit_day': 'Within Limit (Day)',
-                'isWithinLimit_night': 'Within Limit (Night)'
+                'isWithinLimit_night': 'Within Limit (Night)',
+                'place_location': 'Location'
             })
             # Create a response with the appropriate content type
             response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
@@ -1449,7 +1451,8 @@ class waterReportReportPackageExcelDownload(generics.ListAPIView):
                 'lead': 'Lead (mg/L)',
                 'mercury': 'Mercury (mg/L)',
                 'totalArsenic': 'Total Arsenic (mg/L)',
-                'totalChromium': 'Total Chromium (mg/L)'
+                'totalChromium': 'Total Chromium (mg/L)',
+                'place_location': 'Location'
             })
             
             # Create a response with the appropriate content type
@@ -1567,7 +1570,8 @@ class WaterReportQuarterExcelDownload(generics.ListAPIView):
                 'lead': 'Lead (mg/L)',
                 'mercury': 'Mercury (mg/L)',
                 'totalArsenic': 'Total Arsenic (mg/L)',
-                'totalChromium': 'Total Chromium (mg/L)'
+                'totalChromium': 'Total Chromium (mg/L)',
+                'place_location': 'Location'
             })
 
             # Create a response with the appropriate content type
@@ -2783,7 +2787,7 @@ class TrainningManagementQuarterExcelDownload(generics.ListAPIView):
         data = queryset.values('quarter' , 'packages' , 'dateOfMonitoring',
                   'category' , 'traningTitle' , 'noOfAttends' , 'noOfTimesTrainingConducted',
                   'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
-                  'traningDate' , 'photographs' , 'documents')
+                  'traningDate' , 'photographs' , 'documents', 'remarks')
 
         if not data:
             return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
@@ -2808,7 +2812,8 @@ class TrainningManagementQuarterExcelDownload(generics.ListAPIView):
                 'conductDate': 'Conduct Date',
                 'traningDate': 'Training Date',
                 'photographs': 'Photographs',
-                'documents': 'Documents'
+                'documents': 'Documents',
+                'remarks': 'Remarks'
             })
 
             # Create a response with the appropriate content type
@@ -2857,7 +2862,7 @@ class TrainnigReportPackageExcelDownload(generics.ListAPIView):
         data = queryset.values('quarter' , 'packages' , 'dateOfMonitoring',
                   'category' , 'traningTitle' , 'noOfAttends' , 'noOfTimesTrainingConducted',
                   'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
-                  'traningDate' , 'photographs' , 'documents')
+                  'traningDate' , 'photographs' , 'documents', 'remarks')
 
 
         if not data:
@@ -2881,7 +2886,8 @@ class TrainnigReportPackageExcelDownload(generics.ListAPIView):
                 'conductDate': 'Conduct Date',
                 'traningDate': 'Training Date',
                 'photographs': 'Photographs',
-                'documents': 'Documents'
+                'documents': 'Documents',
+                'remarks': 'Remarks'
             })
 
 
@@ -3091,459 +3097,6 @@ class PreConstructionStageComplianceReportView(ListAPIView):
             return Response({'message': 'There is no data available for Pre Construction Stage Compliance',
                             'status' : 'Failed'},
                             status=status.HTTP_400_BAD_REQUEST)
-
-
-class PreConstructionStageComplianceExcel(generics.ListAPIView):
-    # filter_backends = [DjangoFilterBackend] # discuss if we want filters of package and quarter or not
-    serializer_class = PreConstructionStageComplianceReportSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['packages']
-    # filterset_class = ConstructionCampFilter
-    def get_queryset(self):
-        queryset = PreConstructionStage.objects.all()
-        return queryset
-
-    def get(self, request, *args, **kwargs):
-         if 'packages' not in request.GET:
-            return JsonResponse({'status': 'error', 'message': 'Please provide filters'}, status=400)
-         queryset = self.filter_queryset(self.get_queryset())
-        # Use values to convert the queryset to a list of dictionaries
-         data = queryset.values('id',
-        'ShiftingofUtilities', 'packages','ResponsibilityOfShiftingofUtilities', 'CurrentStatusOfShiftingofUtilities', 'ShiftingofUtilitiesDocuments',
-        'PermissionForFellingOfTrees', 'ResponsibilityOfPermissionForFellingOfTrees', 'CurrentStatusPermissionForFellingOfTrees', 'PermissionForFellingOfTreesDocuments',
-        'CRZClearance', 'ResponsibilityOfCRZClearance', 'CurrentStatusCRZClearance', 'CRZClearanceDocuments',
-        'ForestClearance', 'ResponsibilityOfForestClearance', 'CurrentStatusOfForestClearance', 'ForestClearanceDocuments')
-
-
-         if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
-         else:
-            
-            # Create a Pandas DataFrame
-            df = pd.DataFrame(data)
-
-            # Rename columns to more appropriate names
-            df = df.rename(columns={
-                'id': 'ID',
-                'ShiftingofUtilities': 'Shifting of Utilities',
-                'packages': 'Package',
-                'ResponsibilityOfShiftingofUtilities': 'Responsibility for Shifting of Utilities',
-                'CurrentStatusOfShiftingofUtilities': 'Current Status of Shifting of Utilities',
-                'ShiftingofUtilitiesDocuments': 'Documents for Shifting of Utilities',
-                'PermissionForFellingOfTrees': 'Permission for Felling of Trees',
-                'ResponsibilityOfPermissionForFellingOfTrees': 'Responsibility for Permission for Felling of Trees',
-                'CurrentStatusPermissionForFellingOfTrees': 'Current Status of Permission for Felling of Trees',
-                'PermissionForFellingOfTreesDocuments': 'Documents for Felling of Trees',
-                'CRZClearance': 'CRZ Clearance',
-                'ResponsibilityOfCRZClearance': 'Responsibility for CRZ Clearance',
-                'CurrentStatusCRZClearance': 'Current Status of CRZ Clearance',
-                'CRZClearanceDocuments': 'Documents for CRZ Clearance',
-                'ForestClearance': 'Forest Clearance',
-                'ResponsibilityOfForestClearance': 'Responsibility for Forest Clearance',
-                'CurrentStatusOfForestClearance': 'Current Status of Forest Clearance',
-                'ForestClearanceDocuments': 'Documents for Forest Clearance'
-            })
-            
-            # Create a response with the appropriate content type
-            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = 'attachment; filename=Pre_Construction_Stage_Compliance.xlsx'
-
-            # Write the DataFrame to the Excel response
-            df.to_excel(response, index=False, sheet_name='Sheet1')
-
-           
-            return response         
-
-
-# geopackage serializer is not used as no location data is used, so no need to specifically add id
-class ConstructionStageComplianceReportView(ListAPIView):
-    serializer_class = ConstructionStageComplianceReportSerializer
-    parser_classes = [MultiPartParser]
-
-    def get(self, request, packages, *args, **kwargs):
-        try:
-            data = ConstructionStage.objects.filter(packages=packages).order_by('-id')
-            if not data.exists():
-                return Response({'message': 'Construction Stage Compliance data not found','status' : '400'},  status=status.HTTP_400_BAD_REQUEST)
-
-            construction_stage_compliance_data = ConstructionStageComplianceReportSerializer(data, many=True).data
-                 
-            return Response({'message': 'data Fetched Successfully',
-                            'status' : 'success' , 
-                            "construction_stage_compliance_data": construction_stage_compliance_data},
-                            status=status.HTTP_200_OK)
-        except:
-            return Response({'message': 'There is no data available for Construction Stage Compliance',
-                            'status' : 'Failed'},
-                            status=status.HTTP_400_BAD_REQUEST)
-
-
-class ConstructionStageComplianceExcel(generics.ListAPIView):
-    # filter_backends = [DjangoFilterBackend] # discuss if we want filters of package and quarter or not
-    serializer_class = ConstructionStageComplianceReportSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['packages']
-    def get_queryset(self):
-        queryset = ConstructionStage.objects.all()
-        return queryset
-
-    def get(self, request, *args, **kwargs):
-        if 'packages' not in request.GET:
-            return JsonResponse({'status': 'error', 'message': 'Please provide filters'}, status=400)
-        queryset = self.filter_queryset(self.get_queryset())
-        
-
-        # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('id',
-            'ConsenttToEstablishOoperate', 'packages','RulesOfConsenttToEstablishOoperate', 'ResponsibilityOfConsenttToEstablishOoperate', 'CurrentStatusOfConsenttToEstablishOoperate', 'ConsenttToEstablishOoperateDocuments',
-            'PermissionForSandMiningFromRiverbed', 'RulesOfSandMiningFromRiverbed', 'ResponsibilityOfSandMiningFromRiverbed', 'CurrentStatusOfSandMiningFromRiverbed', 'PermissionForSandMiningFromRiverbedDocuments',
-            'PermissionForGroundWaterWithdrawal', 'RulesForGroundWaterWithdrawal', 'ResponsibilityForGroundWaterWithdrawal', 'CurrentStatusOfGroundWaterWithdrawal', 'PermissionForGroundWaterWithdrawalDocuments',
-            'AuthorizationForCollectionDisposalManagement', 'RulesForCollectionDisposalManagement', 'ResponsibilityForCollectionDisposalManagement', 'CurrentStatusOfCollectionDisposalManagement', 'AuthorizationForCollectionDisposalManagementDocuments',
-            'AuthorizationForSolidWaste', 'RulesForSolidWaste', 'ResponsibilityOfSolidWaste', 'CurrentStatusOfSolidWaste', 'AuthorizationForSolidWasteDocuments',
-            'DisposalOfBituminousAndOtherWaste', 'RulesForDisposalOfBituminousAndOtherWaste', 'ResponsibilityOfDisposalOfBituminousAndOtherWaste', 'CurrentStatusOfDisposalOfBituminousAndOtherWaste', 'DisposalOfBituminousAndOtherWasteDocuments',
-            'ConsentToDisposalOfsewagefromLabourCamps', 'RulesForDisposalOfsewagefromLabourCamps', 'ResponsibilityOfDisposalOfsewagefromLabourCamps', 'CurrentStatusOfDisposalOfsewagefromLabourCamps', 'ConsentToDisposalOfsewagefromLabourCampsDocuments',
-            'PollutionUnderControlCertificate', 'RulesForPollutionUnderControl', 'ResponsibilityOfPollutionUnderControl', 'CurrentStatusPollutionUnderControl', 'PollutionUnderControlCertificateDocuments',
-            'RoofTopRainWaterHarvesting', 'RulesForRoofTopRainWaterHarvesting', 'ResponsibilityOfRoofTopRainWaterHarvesting', 'CurrentStatusRoofTopRainWaterHarvesting', 'RoofTopRainWaterHarvestingDocuments'
-        )
-
-
-        if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
-        else:
-            
-            # Create a Pandas DataFrame
-            df = pd.DataFrame(data)
-
-            # Rename columns to more appropriate names
-            df = df.rename(columns={
-                'id': 'ID',
-                'ConsenttToEstablishOoperate': 'Consent to Establish/Operate',
-                'packages': 'Package',
-                'RulesOfConsenttToEstablishOoperate': 'Rules for Consent to Establish/Operate',
-                'ResponsibilityOfConsenttToEstablishOoperate': 'Responsibility for Consent to Establish/Operate',
-                'CurrentStatusOfConsenttToEstablishOoperate': 'Current Status of Consent to Establish/Operate',
-                'ConsenttToEstablishOoperateDocuments': 'Documents for Consent to Establish/Operate',
-                'PermissionForSandMiningFromRiverbed': 'Permission for Sand Mining from Riverbed',
-                'RulesOfSandMiningFromRiverbed': 'Rules for Sand Mining from Riverbed',
-                'ResponsibilityOfSandMiningFromRiverbed': 'Responsibility for Sand Mining from Riverbed',
-                'CurrentStatusOfSandMiningFromRiverbed': 'Current Status of Sand Mining from Riverbed',
-                'PermissionForSandMiningFromRiverbedDocuments': 'Documents for Sand Mining from Riverbed',
-                'PermissionForGroundWaterWithdrawal': 'Permission for Groundwater Withdrawal',
-                'RulesForGroundWaterWithdrawal': 'Rules for Groundwater Withdrawal',
-                'ResponsibilityForGroundWaterWithdrawal': 'Responsibility for Groundwater Withdrawal',
-                'CurrentStatusOfGroundWaterWithdrawal': 'Current Status of Groundwater Withdrawal',
-                'PermissionForGroundWaterWithdrawalDocuments': 'Documents for Groundwater Withdrawal',
-                'AuthorizationForCollectionDisposalManagement': 'Authorization for Collection & Disposal Management',
-                'RulesForCollectionDisposalManagement': 'Rules for Collection & Disposal Management',
-                'ResponsibilityForCollectionDisposalManagement': 'Responsibility for Collection & Disposal Management',
-                'CurrentStatusOfCollectionDisposalManagement': 'Current Status of Collection & Disposal Management',
-                'AuthorizationForCollectionDisposalManagementDocuments': 'Documents for Collection & Disposal Management',
-                'AuthorizationForSolidWaste': 'Authorization for Solid Waste',
-                'RulesForSolidWaste': 'Rules for Solid Waste',
-                'ResponsibilityOfSolidWaste': 'Responsibility for Solid Waste',
-                'CurrentStatusOfSolidWaste': 'Current Status of Solid Waste',
-                'AuthorizationForSolidWasteDocuments': 'Documents for Solid Waste',
-                'DisposalOfBituminousAndOtherWaste': 'Disposal of Bituminous & Other Waste',
-                'RulesForDisposalOfBituminousAndOtherWaste': 'Rules for Disposal of Bituminous & Other Waste',
-                'ResponsibilityOfDisposalOfBituminousAndOtherWaste': 'Responsibility for Disposal of Bituminous & Other Waste',
-                'CurrentStatusOfDisposalOfBituminousAndOtherWaste': 'Current Status of Disposal of Bituminous & Other Waste',
-                'DisposalOfBituminousAndOtherWasteDocuments': 'Documents for Disposal of Bituminous & Other Waste',
-                'ConsentToDisposalOfsewagefromLabourCamps': 'Consent to Disposal of Sewage from Labour Camps',
-                'RulesForDisposalOfsewagefromLabourCamps': 'Rules for Disposal of Sewage from Labour Camps',
-                'ResponsibilityOfDisposalOfsewagefromLabourCamps': 'Responsibility for Disposal of Sewage from Labour Camps',
-                'CurrentStatusOfDisposalOfsewagefromLabourCamps': 'Current Status of Sewage Disposal from Labour Camps',
-                'ConsentToDisposalOfsewagefromLabourCampsDocuments': 'Documents for Sewage Disposal from Labour Camps',
-                'PollutionUnderControlCertificate': 'Pollution Under Control Certificate',
-                'RulesForPollutionUnderControl': 'Rules for Pollution Under Control',
-                'ResponsibilityOfPollutionUnderControl': 'Responsibility for Pollution Under Control',
-                'CurrentStatusPollutionUnderControl': 'Current Status of Pollution Under Control',
-                'PollutionUnderControlCertificateDocuments': 'Documents for Pollution Under Control Certificate',
-                'RoofTopRainWaterHarvesting': 'Rooftop Rainwater Harvesting',
-                'RulesForRoofTopRainWaterHarvesting': 'Rules for Rooftop Rainwater Harvesting',
-                'ResponsibilityOfRoofTopRainWaterHarvesting': 'Responsibility for Rooftop Rainwater Harvesting',
-                'CurrentStatusRoofTopRainWaterHarvesting': 'Current Status of Rooftop Rainwater Harvesting',
-                'RoofTopRainWaterHarvestingDocuments': 'Documents for Rooftop Rainwater Harvesting'
-            })
-
-            # Create a response with the appropriate content type
-            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = 'attachment; filename=Construction_Stage_Compliance.xlsx'
-
-            # Write the DataFrame to the Excel response
-            df.to_excel(response, index=False, sheet_name='Sheet1')
-
-            return response         
-
-            
-# OHS
-
-# Training
-
-class TrainnigReportQuarterView(APIView):
-    def get(self , request , quarter , year):
-   
-        data = traning.objects.filter(quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
-        if not data.exists():
-            return Response({'Message': 'No data found',
-                                },  status=status.HTTP_400_BAD_REQUEST)
-        
-        training_data = TrainnigReportSerializer(data, many=True).data
-        for feature in training_data['features']:
-                feature['properties']['id'] = feature['id']
-                 
-        return Response({'Message': 'data Fetched Successfully',
-                            'status' : 'success' , 
-                             "training_data": training_data},
-                            status=200)
-
-
-class TrainingQuarterFilter(django_filters.FilterSet):
-    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
-    month = django_filters.CharFilter(method='filter_by_month', label='Month')
-
-    def filter_by_month(self, queryset, name, value):
-        if value.isdigit():
-            # If the value is a digit, return the queryset as is
-            return queryset
-
-        try:
-            month_number = list(calendar.month_name).index(value.capitalize())
-            return queryset.filter(dateOfMonitoring__month=month_number)
-        except ValueError:
-            # If the value is not a valid month name, return an empty queryset
-            return queryset.none()
-    class Meta:
-        model = traning
-        fields = ['month', 'year']
-
-
-
-class TrainningManagementQuarterExcelDownload(generics.ListAPIView):
-    serializer_class = TrainnigReportExcelSerializer
-    filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['packages', 'constructionSiteName']
-    filterset_class = TrainingQuarterFilter
-
-    def get_queryset(self):
-        queryset = traning.objects.all()
-        # Customize the queryset based on your specific requirements
-        return queryset
-
-    def get(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-
-        # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('quarter' , 'packages' , 'dateOfMonitoring',
-                  'category' , 'traningTitle' , 'noOfAttends' , 'noOfTimesTrainingConducted',
-                  'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
-                  'traningDate' , 'photographs' , 'documents')
-
-        if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
-
-        else:
-                
-            # Create a Pandas DataFrame
-            df = pd.DataFrame(data)
-
-            # Create a response with the appropriate content type
-            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = 'attachment; filename=TrainningQuater.xlsx'
-
-            # Write the DataFrame to the Excel response
-            df.to_excel(response, index=False, sheet_name='Sheet1')
-
-            return response
-
-
-
-class TrainnigReportPackageView(APIView):
-    def get(self , request , packages):
-   
-        data = traning.objects.filter(packages=packages ).order_by('-id')
-        if not data.exists():
-                return Response({'Message': 'No data found',
-                                 },  status=status.HTTP_400_BAD_REQUEST)
-        
-        training_data = TrainnigReportSerializer(data, many=True).data
-        for feature in training_data['features']:
-                feature['properties']['id'] = feature['id']   
-        return Response({'Message': 'data Fetched Successfully',
-                            'status' : 'success' , 
-                             "training_data": training_data},
-                            status=200)
-
-
-
-class TrainnigReportPackageExcelDownload(generics.ListAPIView):
-    serializer_class = TrainnigReportExcelSerializer
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['packages']
-    # filterset_class = ConstructionCampFilter
-
-    def get_queryset(self):
-        queryset = traning.objects.all()
-        # Customize the queryset based on your specific requirements
-        return queryset
-
-    def get(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-
-        # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('quarter' , 'packages' , 'dateOfMonitoring',
-                  'category' , 'traningTitle' , 'noOfAttends' , 'noOfTimesTrainingConducted',
-                  'male','female' , 'inchargePerson', 'traninigInitiatedBy' , 'conductDate' ,
-                  'traningDate' , 'photographs' , 'documents')
-
-
-        if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
-        else:
-            
-            # Create a Pandas DataFrame
-            df = pd.DataFrame(data)
-
-            # Create a response with the appropriate content type
-            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = 'attachment; filename=training.xlsx'
-
-            # Write the DataFrame to the Excel response
-            df.to_excel(response, index=False, sheet_name='Sheet1')
-
-            return response
-
-
-
-
-
-    
-class OccupationalHealthQuarterView(generics.GenericAPIView):
-    serializer_class = OccupationalHealthQuarterSeialzier
-    def get(self , request , quarter , year):
-        data = occupationalHealthSafety.objects.filter(
-            quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
-        if not data.exists():
-            return Response({'Message': 'No data found',
-                                },  status=status.HTTP_400_BAD_REQUEST)
-        
-        occupational_health_data = OccupationalHealthQuarterSeialzier(data, many=True).data
-        for feature in occupational_health_data['features']:
-                feature['properties']['id'] = feature['id']
-                  
-        return Response({'Message': 'data Fetched Successfully',
-                            'status' : 'success' , 
-                             "training_data": occupational_health_data},
-                            status=200)
-
-
-
-
-
-
-class OccupationalWellnessPackageExcelDownload(generics.ListAPIView):
-    serializer_class = ExcelOccupationalHealthQuarterSeialzier
-    filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['packages']
-    # filterset_class = ConstructionCampFilter
-
-    def get_queryset(self):
-        queryset = occupationalHealthSafety.objects.all()
-        # Customize the queryset based on your specific requirements
-        return queryset
-
-    def get(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-
-        # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values()
-
-
-        if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
-        else:
-            # Create a Pandas DataFrame
-            df = pd.DataFrame(data)
-
-            # Get the package filter from the request
-            package = request.GET.get('packages', 'all_packages')
-
-            # Create a response with the appropriate content type
-            filename = f'Occupational_Wellness_{package}.xlsx'
-            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = f'attachment; filename={filename}'
-            
-            # Write the DataFrame to the Excel response
-            df.to_excel(response, index=False, sheet_name='Sheet1')
-
-            return response
-
-
-class OccupationalHealthPackageView(generics.GenericAPIView):
-    serializer_class = OccupationalHealthQuarterSeialzier
-    def get(self , request , packages):
-        data = occupationalHealthSafety.objects.filter(
-            packages=packages ).order_by('-id')
-        if not data.exists():
-                return Response({'Message': 'No data found',
-                                 },  status=status.HTTP_400_BAD_REQUEST)
-        
-        occupational_health_data = OccupationalHealthQuarterSeialzier(data, many=True).data
-        for feature in occupational_health_data['features']:
-                feature['properties']['id'] = feature['id']   
-        return Response({'Message': 'data Fetched Successfully',
-                            'status' : 'success' , 
-                             "training_data": occupational_health_data},
-                            status=200)
-
-
-
-
-class OccupationalWellnessQuarterFilter(django_filters.FilterSet):
-    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
-
-    class Meta:
-        model = occupationalHealthSafety
-        fields = ['quarter', 'year']
-
-
-
-class OccupationalWellnessQuarterExcelDownload(generics.ListAPIView):
-    serializer_class = ExcelOccupationalHealthQuarterSeialzier
-    filter_backends = [DjangoFilterBackend]
-    # filterset_fields = ['packages', 'constructionSiteName']
-    filterset_class = OccupationalWellnessQuarterFilter
-
-    def get_queryset(self):
-        queryset = occupationalHealthSafety.objects.all()
-        # Customize the queryset based on your specific requirements
-        return queryset
-
-    def get(self, request, *args, **kwargs):
-        queryset = self.filter_queryset(self.get_queryset())
-
-        # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values()
-        if not data:
-            return JsonResponse({'status':'error','message':'Data Not Found'}, status=400)
-        else:
-            
-            # Create a Pandas DataFrame
-            df = pd.DataFrame(data)
-
-            # Get the quarter and year filter from the request
-            quarter = request.GET.get('quarter', 'all_quarters')
-            year = request.GET.get('year', 'all_years')
-
-            # Create a response with the appropriate content type
-            filename = f'Occupational_Wellness_{year}_{quarter}.xlsx'
-            response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-            response['Content-Disposition'] = f'attachment; filename={filename}'
-
-            # Write the DataFrame to the Excel response
-            df.to_excel(response, index=False, sheet_name='Sheet1')
-
-            return response
-
 
 
 class ExcelWorkbook(generics.GenericAPIView):
