@@ -96,8 +96,8 @@ class TrainingGetUpdateDeleteView(generics.UpdateAPIView):
             lat = float(request.data['latitude'])
             long = float(request.data['longitude'])
             instance.location = Point(long, lat, srid=4326)
-        
-        # Handle file fields
+
+        # Handle file fields - only update fields provided in the request
         file_fields = {
             'photographs': 'training/photographs',
             'documents': 'training/documents'
@@ -105,14 +105,22 @@ class TrainingGetUpdateDeleteView(generics.UpdateAPIView):
 
         file_mapping = {}
         for field, file_path in file_fields.items():
-            files = request.FILES.getlist(field)
-            file_mapping[field] = []
-            save_multiple_files(files, file_mapping, file_path, field)
+            if field in request.FILES:
+                # Clear previous value of the field (i.e., replace with new files)
+                files = request.FILES.getlist(field)
+                file_mapping[field] = []  # Clear existing files
+                save_multiple_files(files, file_mapping, file_path, field)
+            else:
+                # Keep the existing files unchanged if not provided in the request
+                file_mapping[field] = getattr(instance, field)
 
+        # Save updated instance with new files or existing files
         updated_instance = serializer.save(**file_mapping)
         data = TrainingUpdateSerializer(updated_instance).data
 
         return Response({'status': 'success', 'message': 'Data updated successfully', 'data': data}, status=status.HTTP_200_OK)
+
+
 
 
     def delete(self, request, *args, **kwargs):
