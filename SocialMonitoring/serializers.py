@@ -133,6 +133,7 @@ class PapUpdateSerailzer(serializers.ModelSerializer):
     cadastralMapDocuments = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
     documents = serializers.FileField(allow_empty_file=True, use_url=False, write_only=True, required=False)
     cadastralMapID = serializers.CharField(required=False)  # Optional in PATCH
+    PAPID = serializers.CharField(required=False)  # Marking it as optional for PATCH
 
     class Meta:
         model = PAP
