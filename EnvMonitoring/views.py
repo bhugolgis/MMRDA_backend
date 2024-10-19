@@ -104,7 +104,7 @@ class AirView(generics.GenericAPIView):
             if "contractor" in request.user.groups.values_list("name",flat=True):
                 Serializer = self.get_serializer(data = request.data , context={'request': request})
                 if Serializer.is_valid():
-                    date = str(Serializer.validated_data['dateOfMonitoringTwo']).split('-')
+                    date = str(Serializer.validated_data['dateOfMonitoring']).split('-')
                     month  = Serializer.validated_data['month']
                     packages = Serializer.validated_data['packages']
                     data = self.get_queryset().filter( dateOfMonitoring__year = int(date[0]) , month = month , packages = packages ,  user = request.user.id , ).exists()
