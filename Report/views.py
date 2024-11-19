@@ -904,7 +904,7 @@ class RehabilitationReportQuarterView(ListAPIView):
 
 
 class RehabilitationReportQuarterFilter(django_filters.FilterSet):
-    year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
+    year = django_filters.NumberFilter(field_name='dateOfRehabilitation__year', label='Year')
 
     class Meta:
         model = Rehabilitation
@@ -927,7 +927,7 @@ class RehabilitationReportQuarterExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('quarter','longitude', 'latitude','packages','dateOfRehabilitation' ,'PAPID',
+        data = queryset.values('quarter','packages','dateOfRehabilitation' ,'PAPID',
                    'firstName', 'middleName', 'lastName', 'compensationStatus', 'agreedUpon', 'processStatus',
                    'cashCompensationAmount',
                    'typeOfCompensation', 'otherCompensationType' ,
@@ -1150,7 +1150,7 @@ class AirReportQuarterExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('id','quarter','packages','month','Monitoringdate','PM10','PM2_5',
+        data = queryset.values('id','quarter','packages','month','dateOfMonitoring','PM10','PM2_5',
                  'SO2','NOx','CO','AQI', 'place_location')
 
 
@@ -2000,7 +2000,7 @@ class wasteTreatmentReportPackageExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('id','quarter','month','packages','dateOfMonitoring', 'GISPermitsTransportationDocuments', 'TransportationVechicalHasPermissionDocuments', 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
+        data = queryset.values('id','quarter','month','packages','dateOfMonitoring', 'GISPermitsTransportationDocuments', 'TransportationVechicalHasPermissionDocuments', 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'waste_handlingLocation', 'photographs' , 'documents','remarks')
 
 
         if not data:
@@ -2034,7 +2034,7 @@ class wasteTreatmentReportPackageExcelDownload(generics.ListAPIView):
                 'metalScrapeQuantity': 'Metal Scrap Quantity (kg)',
                 'eWasteQuantity': 'E-waste Quantity (kg)',
                 'constructionWasteQuantity': 'Construction Waste Quantity (kg)',
-                'wasteHandlingLocation': 'Waste Handling Location',
+                'waste_handlingLocation': 'Waste Handling Location',
                 'photographs': 'Photographs',
                 'documents': 'Documents',
                 'remarks': 'Remarks'
@@ -2087,7 +2087,7 @@ class wasteTreatmentQuarterExcelDownload(generics.ListAPIView):
         queryset = self.filter_queryset(self.get_queryset())
 
         # Use values to convert the queryset to a list of dictionaries
-        data = queryset.values('id','quarter','month','packages','dateOfMonitoring', 'GISPermitsTransportationDocuments', 'TransportationVechicalHasPermissionDocuments', 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'wasteHandlingLocation', 'photographs' , 'documents','remarks')
+        data = queryset.values('id','quarter','month','packages','dateOfMonitoring', 'GISPermitsTransportationDocuments', 'TransportationVechicalHasPermissionDocuments', 'wasteOilQnt', 'CCPCPaintSludgeQnt', 'filterQnt', 'airFiltersQnt', 'usedCartridgesQnt', 'plasticQnt', 'paperQnt', 'woodQnt', 'bottlesQnt', 'rubberQnt', 'bioDegradableQuantity', 'bioMedicalQuantity', 'metalScrapeQuantity', 'eWasteQuantity', 'constructionWasteQuantity', 'waste_handlingLocation', 'photographs' , 'documents','remarks')
 
 
         if not data:
@@ -2122,7 +2122,7 @@ class wasteTreatmentQuarterExcelDownload(generics.ListAPIView):
                 'metalScrapeQuantity': 'Metal Scrap Quantity (kg)',
                 'eWasteQuantity': 'E-waste Quantity (kg)',
                 'constructionWasteQuantity': 'Construction Waste Quantity (kg)',
-                'wasteHandlingLocation': 'Waste Handling Location',
+                'waste_handlingLocation': 'Waste Handling Location',
                 'photographs': 'Photographs',
                 'documents': 'Documents',
                 'remarks': 'Remarks'

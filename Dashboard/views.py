@@ -649,13 +649,13 @@ class NoiseChartDashboardView(APIView):
         # Iterate through serializer data
         for item in serializer_data:
             # Count occurrences for isWithinLimit_day
-            if item['isWithinLimit_day'] == 'Within Limit':
+            if item['isWithinLimit_day'] == 'Whithin Limit':
                 day_within_limit_count += 1
             elif item['isWithinLimit_day'] == 'Out of Limit':
                 day_out_of_limit_count += 1
 
             # Count occurrences for isWithinLimit_night
-            if item['isWithinLimit_night'] == 'Within Limit':
+            if item['isWithinLimit_night'] == 'Whithin Limit':
                 night_within_limit_count += 1
             elif item['isWithinLimit_night'] == 'Out of Limit':
                 night_out_of_limit_count += 1
