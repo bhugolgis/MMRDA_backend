@@ -108,36 +108,29 @@ class PapView(generics.GenericAPIView):
         if "RNR" in request.user.groups.values_list("name", flat=True):
             serializer = self.get_serializer(data=request.data, context={'request': request})
             if serializer.is_valid():
-                papid = serializer.validated_data["PAPID"]
-                data = PAP.objects.filter(PAPID=papid).exists()
-                if data == True:
-                    return Response({'Message': 'already data filled for this PAP-ID',
-                                    'status' : 'success',
-                                    }, status=400)
-                else:
-                    lat = float(serializer.validated_data['latitude'])
-                    long = float(serializer.validated_data['longitude'])
-                    location = Point(long, lat, srid=4326)
+                  lat = float(serializer.validated_data['latitude'])
+                  long = float(serializer.validated_data['longitude'])
+                  location = Point(long, lat, srid=4326)
 
-    
-                    file_fields = {
-                        'cadastralMapDocuments': 'PAP/PAP_cadastralMapDocuments',
-                        'legalDocuments': 'PAP/PAP_legalDocuments',
-                        'presentPhotograph': 'PAP/presentphotograph' , 
-                        'documents': 'PAP/documents' , }
-                    file_mapping = {}
-                    for field, file_path in file_fields.items():
-                        files = request.FILES.getlist(field)
-                        file_mapping[field] = []
-                        save_multiple_files(files, file_mapping, file_path , field)
-                    pap = serializer.save(location=location, user=request.user , **file_mapping)
+  
+                  file_fields = {
+                      'cadastralMapDocuments': 'PAP/PAP_cadastralMapDocuments',
+                      'legalDocuments': 'PAP/PAP_legalDocuments',
+                      'presentPhotograph': 'PAP/presentphotograph' , 
+                      'documents': 'PAP/documents' , }
+                  file_mapping = {}
+                  for field, file_path in file_fields.items():
+                      files = request.FILES.getlist(field)
+                      file_mapping[field] = []
+                      save_multiple_files(files, file_mapping, file_path , field)
+                  pap = serializer.save(location=location, user=request.user , **file_mapping)
 
-                    data = papviewserialzer(pap).data
-                    print(request.data)
-                    return Response ({'Message': 'data saved successfully',
-                                    'status' : 'success' , 
-                                    'data': data
-                                    }, status=200)
+                  data = papviewserialzer(pap).data
+                  print(request.data)
+                  return Response ({'Message': 'data saved successfully',
+                                  'status' : 'success' , 
+                                  'data': data
+                                  }, status=200)
             else:    
                 key, value =list(serializer.errors.items())[0]
                 error_message = key+" ,"+value[0]
@@ -723,39 +716,32 @@ class constructionSiteView(generics.GenericAPIView):
         if "contractor" in request.user.groups.values_list("name", flat=True):
             serialzier = constructionSiteSerializer( data=request.data, context={'request': request})
             if serialzier.is_valid():
-                constructionSiteId = serialzier.validated_data['constructionSiteId']
-                constructionSiteName = serialzier.validated_data['constructionSiteName']
-                data = ConstructionSiteDetails.objects.filter(constructionSiteId = constructionSiteId, constructionSiteName=constructionSiteName).exists()
-                if data == True:
-                    return Response({'message': 'already data filled for this Construction Site',
-                                    'status': 'success'}, status=400)
-                else:
-                    lat = float(serialzier.validated_data['latitude'])
-                    long = float(serialzier.validated_data['longitude'])
-                    location = Point(long, lat, srid=4326)
+                  lat = float(serialzier.validated_data['latitude'])
+                  long = float(serialzier.validated_data['longitude'])
+                  location = Point(long, lat, srid=4326)
 
-                    file_fields = {
-                        'demarkationOfPathwaysPhotographs' : 'constructionSite/demarkingPathways_photographs' ,
-                        'signagesLabelingPhotographs' : 'constructionSite/signagesLabeling_Photographs' ,
-                        'regularHealthCheckupPhotographs' : 'constructionSite/RegularHealthCheckup_Photographs' ,
-                        'availabilityOfDoctorPhotographs' : 'constructionSite/AvailabilityOfDoctor_photographs' ,
-                        'firstAidKitPhotographs' :  'constructionSite/FirstAidKit_photographs' ,
-                        'drinkingWaterPhotographs' : 'constructionSite/drinkingWater_photographs' ,
-                        'toiletPhotograph' : 'constructionSite/toilet_photographs' ,
-                        'documents': 'constructionSite/documents', 
-                        'genralphotographs': 'constructionSite/genral_photograph' , }
+                  file_fields = {
+                      'demarkationOfPathwaysPhotographs' : 'constructionSite/demarkingPathways_photographs' ,
+                      'signagesLabelingPhotographs' : 'constructionSite/signagesLabeling_Photographs' ,
+                      'regularHealthCheckupPhotographs' : 'constructionSite/RegularHealthCheckup_Photographs' ,
+                      'availabilityOfDoctorPhotographs' : 'constructionSite/AvailabilityOfDoctor_photographs' ,
+                      'firstAidKitPhotographs' :  'constructionSite/FirstAidKit_photographs' ,
+                      'drinkingWaterPhotographs' : 'constructionSite/drinkingWater_photographs' ,
+                      'toiletPhotograph' : 'constructionSite/toilet_photographs' ,
+                      'documents': 'constructionSite/documents', 
+                      'genralphotographs': 'constructionSite/genral_photograph' , }
 
-                    file_mapping = {}
-                    for field, file_path in file_fields.items():
-                        files = request.FILES.getlist(field)
-                        file_mapping[field] = []
-                        save_multiple_files(files, file_mapping, file_path , field)
+                  file_mapping = {}
+                  for field, file_path in file_fields.items():
+                      files = request.FILES.getlist(field)
+                      file_mapping[field] = []
+                      save_multiple_files(files, file_mapping, file_path , field)
 
-                    construction = serialzier.save(location=location , user = request.user , **file_mapping)
-                    data = ConstructionSiteDetailsViewSerializer(construction).data
-                    return  Response({'Message': 'data saved successfully',
-                                'status' : 'success',
-                                'data': data}, status=200)
+                  construction = serialzier.save(location=location , user = request.user , **file_mapping)
+                  data = ConstructionSiteDetailsViewSerializer(construction).data
+                  return  Response({'Message': 'data saved successfully',
+                              'status' : 'success',
+                              'data': data}, status=200)
             else:
                 key, value =list(serialzier.errors.items())[0]
                 error_message = key+" ,"+value[0]

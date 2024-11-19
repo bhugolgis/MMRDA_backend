@@ -100,7 +100,7 @@ class WaterSerializer(serializers.ModelSerializer):
     class Meta:
         model = water
         fields = ('quarter','packages','month', 'dateOfMonitoringTwo','longitude','latitude',
-                    'qualityOfWater' , 'sourceOfWater' ,'waterDisposal','pH', 'trueColor', 'turbidity', 'odour', 'totalDissolvedSolids', 'totalAlkalinityAsCaCO3', 'totalHardnessAsCaCO3', 'calcium', 'magnesium', 'chlorides', 'fluoride', 'sulphate', 'nitrate', 'iron', 'zinc', 'copper', 'aluminum', 'nickel', 'manganese', 'phenolicCompounds', 'sulphide', 'cadmium', 'cyanide', 'lead', 'mercury', 'totalArsenic', 'totalChromium', 'totalColiform', 'eColi', 'WQI')
+                    'qualityOfWater' , 'sourceOfWater' ,'waterDisposal','pH', 'trueColor', 'turbidity', 'odour', 'totalDissolvedSolids', 'totalAlkalinityAsCaCO3', 'totalHardnessAsCaCO3', 'calcium', 'magnesium', 'chlorides', 'fluoride', 'sulphate', 'nitrate', 'iron', 'zinc', 'copper', 'aluminum', 'nickel', 'manganese', 'phenolicCompounds', 'sulphide', 'cadmium', 'cyanide', 'lead', 'mercury', 'totalArsenic', 'totalChromium', 'totalColiform', 'eColi', 'WQI', 'place_location')
 
 
     def validate(self,data):
@@ -170,7 +170,7 @@ class NoiseSerializer(serializers.ModelSerializer):
     latitude=serializers.CharField(max_length=50,required=False)
     class Meta:
         model = Noise
-        fields = ('quarter','month','packages','longitude','latitude' ,'dateOfMonitoringThree','noiseLevel_day', 'noiseLevel_night' , 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea','isWithinLimit_day', 'isWithinLimit_night')
+        fields = ('quarter','month','packages','longitude','latitude' ,'dateOfMonitoringThree','noiseLevel_day', 'noiseLevel_night' , 'monitoringPeriod_day', 'monitoringPeriod_night', 'typeOfArea','isWithinLimit_day', 'isWithinLimit_night', 'place_location')
 
     def validate(self,data):
         required_fields = ['quarter', 'month', 'packages', 'longitude', 'latitude', 'dateOfMonitoringThree']

@@ -104,22 +104,14 @@ class AirView(generics.GenericAPIView):
             if "contractor" in request.user.groups.values_list("name",flat=True):
                 Serializer = self.get_serializer(data = request.data , context={'request': request})
                 if Serializer.is_valid():
-                    date = str(Serializer.validated_data['dateOfMonitoring']).split('-')
-                    month  = Serializer.validated_data['month']
-                    packages = Serializer.validated_data['packages']
-                    data = self.get_queryset().filter( dateOfMonitoring__year = int(date[0]) , month = month , packages = packages ,  user = request.user.id , ).exists()
-                    if data == True:
-                        return Response({'status': 'success',
-                                        'message':'already data filled for this Month'} , status=status.HTTP_400_BAD_REQUEST)
-                    else:
-                        lat=float(Serializer.validated_data['latitude'])
-                        long=float(Serializer.validated_data['longitude'])
-                        location=Point(long,lat,srid=4326)
-                        air=Serializer.save(location=location ,  user = request.user)
-                        data=AirViewSerializer(air).data
-                        return Response({'status': 'success',
-                                        'message' : 'data saved successfully',
-                                        'data': data}, status= status.HTTP_200_OK)
+                      lat=float(Serializer.validated_data['latitude'])
+                      long=float(Serializer.validated_data['longitude'])
+                      location=Point(long,lat,srid=4326)
+                      air=Serializer.save(location=location ,  user = request.user)
+                      data=AirViewSerializer(air).data
+                      return Response({'status': 'success',
+                                      'message' : 'data saved successfully',
+                                      'data': data}, status= status.HTTP_200_OK)
                 else:
                     key, value =list(Serializer.errors.items())[0]
                     error_message = str(key)+" ," + str(value[0])
@@ -239,22 +231,14 @@ class WaterView(generics.GenericAPIView):
         if "contractor" in request.user.groups.values_list("name",flat=True) :
             serializer = WaterSerializer(data = request.data , context={'request': request})
             if serializer.is_valid():
-                date = str(serializer.validated_data['dateOfMonitoringTwo']).split('-')
-                quarter = serializer.validated_data['quarter']
-                packages = serializer.validated_data['packages']
-                data = self.get_queryset().filter( dateOfMonitoringTwo__year = int(date[0]) , quarter = quarter ,  packages = packages ).exists()
-                if data == True:
-                    return Response({'status':'success' ,
-                                    'Message': 'already data filled for this Quarter'} , status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    lat=float(serializer.validated_data['latitude'])
-                    long=float(serializer.validated_data['longitude'])
-                    location=Point(long,lat,srid=4326)
-                    water_data =serializer.save(location=location , user = request.user)
-                    data = waterviewserializer(water_data).data
-                    return Response({'status': 'success' ,
-                                    'Message' : 'data saved successfully',
-                                    'data' : data }, status = 200)
+                  lat=float(serializer.validated_data['latitude'])
+                  long=float(serializer.validated_data['longitude'])
+                  location=Point(long,lat,srid=4326)
+                  water_data =serializer.save(location=location , user = request.user)
+                  data = waterviewserializer(water_data).data
+                  return Response({'status': 'success' ,
+                                  'Message' : 'data saved successfully',
+                                  'data' : data }, status = 200)
             else:
                 key, value =list(serializer.errors.items())[0]
                 error_message = str(key)+" ," + str(value[0])
@@ -374,22 +358,14 @@ class NoiseView(generics.GenericAPIView):
         if "contractor" in request.user.groups.values_list("name",flat=True):
             serializer = NoiseSerializer(data = request.data , context={'request': request})
             if serializer.is_valid():
-                date = str(serializer.validated_data['dateOfMonitoringThree']).split('-')
-                month  = serializer.validated_data['month']
-                packages = serializer.validated_data['packages']
-                data = Noise.objects.filter( dateOfMonitoringThree__year = int(date[0]) , month = month ,  packages = packages).exists()
-                if data == True:
-                    return Response({'status':'success' ,
-                                    'Message': 'already data filled for this Month'} , status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    lat=float(serializer.validated_data['latitude'])
-                    long=float(serializer.validated_data['longitude'])
-                    location=Point(long,lat,srid=4326)
-                    water_data =serializer.save(location=location , user = request.user)
-                    data = Noiseviewserializer(water_data).data
-                    return Response({'status': 'success' ,
-                                    'Message' : 'data saved successfully',
-                                    'data' : data }, status = 200)
+                  lat=float(serializer.validated_data['latitude'])
+                  long=float(serializer.validated_data['longitude'])
+                  location=Point(long,lat,srid=4326)
+                  water_data =serializer.save(location=location , user = request.user)
+                  data = Noiseviewserializer(water_data).data
+                  return Response({'status': 'success' ,
+                                  'Message' : 'data saved successfully',
+                                  'data' : data }, status = 200)
             else:
                 key, value =list(serializer.errors.items())[0]
                 error_message = str(key)+" ," + str(value[0])
@@ -509,33 +485,26 @@ class ExistingTreeManagementView(generics.GenericAPIView):
         if "contractor" in request.user.groups.values_list("name",flat=True):
             serializer = TreeManagementSerailizer(data = request.data )
             if serializer.is_valid():
-                date = str(serializer.validated_data['dateOfMonitoring']).split('-')
-                month  = serializer.validated_data['month']
-                packages = serializer.validated_data['packages']
-                data = ExistingTreeManagment.objects.filter( dateOfMonitoring__year = int(date[0]) , month = month ,  packages = packages ).exists()
-                if data == True:
-                    return Response({'message':'already data filled for this Month'} , status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    lat=float(serializer.validated_data['latitude'])
-                    long=float(serializer.validated_data['longitude'])
-                    Plocation=Point(long,lat,srid=4326)
-                    
-                    file_fields = {
-                        'photographs' : 'ExistingTreeManagement/Photographs',
-                        'documents' : 'ExistingTreeManagement/documents'
-                        }
+                  lat=float(serializer.validated_data['latitude'])
+                  long=float(serializer.validated_data['longitude'])
+                  Plocation=Point(long,lat,srid=4326)
+                  
+                  file_fields = {
+                      'photographs' : 'ExistingTreeManagement/Photographs',
+                      'documents' : 'ExistingTreeManagement/documents'
+                      }
 
-                    file_mapping = {}
-                    for field, file_path in file_fields.items():
-                        files = request.FILES.getlist(field)
-                        file_mapping[field] = []
-                        save_multiple_files(files, file_mapping, file_path , field)
+                  file_mapping = {}
+                  for field, file_path in file_fields.items():
+                      files = request.FILES.getlist(field)
+                      file_mapping[field] = []
+                      save_multiple_files(files, file_mapping, file_path , field)
 
-                    tree_data =serializer.save(location=Plocation , user = request.user, **file_mapping)
-                    data = TreeManagmentviewserializer(tree_data).data
-                    return Response({'status': 'success' ,
-                                    'Message' : 'data saved successfully',
-                                    'data' : data }, status = 200)
+                  tree_data =serializer.save(location=Plocation , user = request.user, **file_mapping)
+                  data = TreeManagmentviewserializer(tree_data).data
+                  return Response({'status': 'success' ,
+                                  'Message' : 'data saved successfully',
+                                  'data' : data }, status = 200)
             else:
                 key, value =list(serializer.errors.items())[0]
                 error_message = str(key)+" ," + str(value[0])
