@@ -1693,19 +1693,7 @@ class treeManagementReportPackageExcelDownload(generics.ListAPIView):
 class ExistingTreeManagmentQuarterFilter(django_filters.FilterSet):
     year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
     quarter = django_filters.CharFilter(field_name='quarter', label='quarter')
-    # month = django_filters.CharFilter(method='filter_by_month', label='Month')
 
-    # def filter_by_month(self, queryset, name, value):
-    #     # if value.isdigit():
-    #     #     # If the value is a digit, return the queryset as is
-    #     #     return queryset
-
-    #     try:
-    #         month_number = list(calendar.month_name).index(value.capitalize())
-    #         return queryset.filter(dateOfMonitoring__month=month_number)
-    #     except ValueError:
-    #         # If the value is not a valid month name, return an empty queryset
-    #         return queryset.none()
     class Meta:
         model = ExistingTreeManagment
         fields = ['quarter', 'year']
@@ -2750,22 +2738,11 @@ class TrainnigReportQuarterView(APIView):
 
 class TrainingQuarterFilter(django_filters.FilterSet):
     year = django_filters.NumberFilter(field_name='dateOfMonitoring__year', label='Year')
-    month = django_filters.CharFilter(method='filter_by_month', label='Month')
+    quarter = django_filters.CharFilter(field_name='quarter', label='quarter')
 
-    def filter_by_month(self, queryset, name, value):
-        if value.isdigit():
-            # If the value is a digit, return the queryset as is
-            return queryset
-
-        try:
-            month_number = list(calendar.month_name).index(value.capitalize())
-            return queryset.filter(dateOfMonitoring__month=month_number)
-        except ValueError:
-            # If the value is not a valid month name, return an empty queryset
-            return queryset.none()
     class Meta:
         model = traning
-        fields = ['month', 'year']
+        fields = ['quarter', 'year']
 
 
 
