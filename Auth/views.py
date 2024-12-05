@@ -15,6 +15,7 @@ from rest_framework_simplejwt.views import TokenBlacklistView
 from rest_framework_simplejwt.token_blacklist.models import OutstandingToken , BlacklistedToken
 from django.contrib.auth import authenticate
 import rsa
+from rest_framework_simplejwt.views import TokenRefreshView
 
 private_key_data = '''-----BEGIN RSA PRIVATE KEY-----
 MIICXwIBAAKBgQCluRMe6phGca/YradMu0QU5YrqJ8Z0PnwJBf1HxpVNlNPp+FfY
@@ -202,6 +203,16 @@ class NewLoginView(generics.GenericAPIView):
 
 
 
+# Refresh token
+class CustomTokenRefreshView(TokenRefreshView):
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+            return Response(serializer.validated_data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({"error": "Invalid or expired refresh token"}, status=status.HTTP_401_UNAUTHORIZED)
+    
 
 
 # The `ChangePasswordView` class is a view in a Python Django application that handles the logic for
