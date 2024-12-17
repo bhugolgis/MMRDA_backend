@@ -1239,17 +1239,17 @@ class NoiseWhithinLimitAPI(generics.GenericAPIView):
             # typeOfAreaList = ["Industrial Area", "Commercial Area", "Residential Area", "Residential Area"]
 
             if typeOfArea == "Industrial Area":
-                isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 75 else "Whithin Limit"
-                isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 70 else "Whithin Limit"
+                isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 75 else "Within Limit"
+                isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 70 else "Within Limit"
             if typeOfArea == "Commercial Area":
-                isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 65 else "Whithin Limit"
-                isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 55 else "Whithin Limit"
+                isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 65 else "Within Limit"
+                isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 55 else "Within Limit"
             if typeOfArea == "Residential Area":
-                isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 55 else "Whithin Limit"
-                isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 45 else "Whithin Limit"
+                isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 55 else "Within Limit"
+                isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 45 else "Within Limit"
             if typeOfArea == "Sensitive Area":
-                isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 50 else "Whithin Limit"
-                isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 40 else "Whithin Limit"
+                isWhithinLimit['day'] = "Out of Limit" if noiseLevel_day > 50 else "Within Limit"
+                isWhithinLimit['night'] = "Out of Limit" if noiseLevel_night > 40 else "Within Limit"
 
             print(isWhithinLimit)
 
