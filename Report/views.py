@@ -88,6 +88,11 @@ class LabourCampReportQuarterView(generics.ListAPIView):
             previousData = self.serializer_class(previous, many=True).data
             latestData = self.serializer_class(latest).data
 
+
+            latestData['properties']['id'] = latestData['id'] 
+            for feature in previousData['features']:
+                feature['properties']['id'] = feature['id']  
+
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
                             'Previous': previousData,
@@ -333,10 +338,8 @@ class ConstructionCampReportPackageView(ListAPIView):
 
     def get(self, request, packages, constructionSiteName,*args, **kwargs):
         try:
-            previous = ConstructionSiteDetails.objects.filter(
-                packages=packages, constructionSiteName=constructionSiteName  ).order_by('-id')[1:]
-            latest = ConstructionSiteDetails.objects.filter(
-                packages=packages, constructionSiteName=constructionSiteName).latest('id')
+            previous = ConstructionSiteDetails.objects.filter(packages=packages, constructionSiteName=constructionSiteName  ).order_by('-id')[1:]
+            latest = ConstructionSiteDetails.objects.filter(packages=packages, constructionSiteName=constructionSiteName).latest('id')
             previous_data = ConstructionCampReportSerializer(previous, many=True).data
             latest_data = ConstructionCampReportSerializer(latest).data
 
@@ -363,18 +366,19 @@ class ConstructionCampReportQuarterView(ListAPIView):
 
     def get(self, request, quarter, constructionSiteName, year ,*args, **kwargs):
         try:
-            previous = ConstructionSiteDetails.objects.filter(
-                quarter=quarter, constructionSiteName=constructionSiteName ,dateOfMonitoring__year=year).order_by('-id')[1:]
-            latest = latest = ConstructionSiteDetails.objects.filter(
-                quarter=quarter, constructionSiteName=constructionSiteName , dateOfMonitoring__year=year).latest('id')
-            previousData = ConstructionCampReportSerializer(
-                previous, many=True)
-            latestData = ConstructionCampReportSerializer(latest)
+            previous = ConstructionSiteDetails.objects.filter(quarter=quarter, constructionSiteName=constructionSiteName ,dateOfMonitoring__year=year).order_by('-id')[1:]
+            latest = latest = ConstructionSiteDetails.objects.filter(quarter=quarter, constructionSiteName=constructionSiteName , dateOfMonitoring__year=year).latest('id')
+            previousData = self.serializer_class(previous, many=True).data
+            latestData = self.serializer_class(latest).data
+
+            latestData['properties']['id'] = latestData['id'] 
+            for feature in previousData['features']:
+                feature['properties']['id'] = feature['id'] 
 
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
-                            'Previous': previousData.data,
-                            'latest': latestData.data},
+                            'Previous': previousData,
+                            'latest': latestData},
                             status=status.HTTP_200_OK)
         except Exception:
             return Response({'Message': 'There is no data available for the Package or Quarter',
@@ -666,12 +670,16 @@ class PAPReportQuarterView(ListAPIView):
 
     def get(self, request, quarter, year):
         try:
-            data = PAP.objects.filter(
-                quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
+            data = PAP.objects.filter(quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
-            papdata = PAPReportSerializer(data, many=True).data
+            papdata = self.serializer_class(data, many=True).data
+
+            for feature in papdata['features']:
+                feature['properties']['id'] = feature['id'] 
+
+            
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
                             "PAP": papdata},
@@ -884,13 +892,14 @@ class RehabilitationReportQuarterView(ListAPIView):
 
     def get(self, request, quarter, year, *args, **kwargs):
         try:
-            data = Rehabilitation.objects.filter(
-                quarter=quarter, dateOfRehabilitation__year=year).order_by('-id')
+            data = Rehabilitation.objects.filter(quarter=quarter, dateOfRehabilitation__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
-            Rehabilitation_data = RehabilitationReportSerializer(
-                data, many=True).data
+            Rehabilitation_data = self.serializer_class(data, many=True).data
+
+            for feature in Rehabilitation_data['features']:
+                feature['properties']['id'] = feature['id'] 
 
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
@@ -1094,13 +1103,16 @@ class AirReportQuarterView(ListAPIView):
 
     def get(self, request, month, year, *args, **kwargs):
         try:
-            data = Air.objects.filter(
-                month=month, dateOfMonitoring__year=year).order_by('-id')
+            data = Air.objects.filter(month=month, dateOfMonitoring__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
-            airdata = AirReportSerializer(data, many=True).data
+            airdata = self.serializer_class(data, many=True).data
+
+            for feature in airdata['features']:
+                feature['properties']['id'] = feature['id'] 
+                
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
                             "Air_data": airdata},
@@ -1272,13 +1284,16 @@ class NoiseReportQuarterView(ListAPIView):
 
     def get(self, request, month, year, *args, **kwargs):
         try:
-            data = Noise.objects.filter(
-                month=month, dateOfMonitoringThree__year=year).order_by('-id')
+            data = Noise.objects.filter(month=month, dateOfMonitoringThree__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
-            Noise_data = NoiseReportSerializer(data, many=True).data
+            Noise_data = self.serializer_class(data, many=True).data
+
+            for feature in Noise_data['features']:
+                feature['properties']['id'] = feature['id'] 
+                
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
                             "Noise_data": Noise_data},
@@ -1476,7 +1491,11 @@ class waterReportQuarterView(ListAPIView):
                 return Response({'Message': 'No data found',
                                  'status' : 'success'},  status=status.HTTP_400_BAD_REQUEST)
 
-            water_data = waterReportSerializer(data, many=True).data
+            water_data = self.serializer_class(data, many=True).data
+
+            for feature in water_data['features']:
+                feature['properties']['id'] = feature['id'] 
+                
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
                             "water_data": water_data},
@@ -1961,7 +1980,11 @@ class WasteTreatmentsQuarterView(ListAPIView):
                 return Response({'Message': 'No data found',
                                  },  status=status.HTTP_400_BAD_REQUEST)
 
-            Waste_data = wasteTreatmentsSerializer(data, many=True).data
+            Waste_data = self.serializer_class(data, many=True).data
+
+            for feature in Waste_data['features']:
+                feature['properties']['id'] = feature['id'] 
+                
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
                              "wasteManagementData": Waste_data}, status=200)
@@ -2219,13 +2242,15 @@ class MaterialManagementReporetQuarterView(ListAPIView):
 
     def get(self, request, quarter, year, *args, **kwargs):
         try:
-            data = MaterialManegmanet.objects.filter(
-                quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
+            data = MaterialManegmanet.objects.filter(quarter=quarter, dateOfMonitoring__year=year).order_by('-id')
             if not data.exists():
                 return Response({'Message': 'No data found',
                                  'status' : 'success'},  status=status.HTTP_400_BAD_REQUEST)
 
-            Material_data = materialManagementSerializer(data, many=True).data
+            Material_data = self.serializer_class(data, many=True).data
+
+            for feature in Material_data['features']:
+                feature['properties']['id'] = feature['id'] 
             return Response({'Message': 'data Fetched Successfully',
                             'status' : 'success' , 
                              "materialManagementData": Material_data},
