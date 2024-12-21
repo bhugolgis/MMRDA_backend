@@ -32,11 +32,11 @@ urlpatterns = [
      path('PackageCa11_metroStations',PackageCa11_metroStations.as_view(),name='PackageCa11_metroStations'),
      path('PackageCa12_metroStations',PackageCa12_metroStations.as_view(),name='PackageCa12_metroStations'),
      path('PackageCa54_metroStations',PackageCa54_metroStations.as_view(),name='PackageCa54_metroStations'),
+
+     # gis portal labour camp rating page
+     path('labour-camp-rating/<str:quarter>/<str:labourCampName>/<int:year>',LabourCampRating.as_view(),name='labour-camp-rating'),
      
-     
-     
-     
-     
+
      
      path('projectAffectedPersons' , projectAffectedPersonsView.as_view() , name = 'projectAffectedPersons '),
      path('ProjectAffectedTrees' , ProjectAffectedTreesView.as_view() , name = 'MetroStationView '),

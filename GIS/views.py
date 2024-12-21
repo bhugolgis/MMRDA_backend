@@ -549,4 +549,75 @@ class LabourcampReportPackageView(ListAPIView):
 
         except Exception as e:
             return Response({'Message': 'There is no data available for this Package or Quarter',
-                            'status' : 'Failed'}, status=status.HTTP_400_BAD_REQUEST) 
+                            'status' : 'Failed'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# Labour camp ratings API
+class LabourCampRating(generics.ListAPIView):
+    serializer_class = LabourcampReportSerializer
+    parser_classes = [MultiPartParser]
+
+    def calculate_rating(self, condition):
+        """Convert condition into a rating out of 5."""
+        ratings_map = {'Good': 5, 'Average': 3, 'Poor': 1}
+        return ratings_map.get(condition, 0)
+
+    def get(self, request, quarter, labourCampName, year, *args, **kwargs):
+        """
+        Retrieves data from the LabourCamp model based on the specified quarter,
+        labour camp name, and year, and returns the previous and latest data in a response
+        with ratings and remarks.
+        """
+        try:
+            labour_camps = LabourCamp.objects.filter(
+                quarter=quarter,
+                labourCampName=labourCampName,
+                dateOfMonitoring__year=year
+            ).order_by('-id')
+
+            if not labour_camps.exists():
+                return Response(
+                    {'Message': 'There is no data available', 'status': 'Failed'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # Prepare ratings
+            facilities = [
+                'toiletCondition', 'drinkingWaterCondition', 'availabilityOfDoctorCondition',
+                'signagesLabelingCondition', 'kitchenAreaCondition', 'fireExtinguishCondition',
+                'roomsOrDomsCondition', 'segregationOfWasteCondition'
+            ]
+
+            facility_ratings = {}
+            overall_rating_sum = 0
+            total_facilities = len(facilities)
+
+            for facility in facilities:
+                conditions = labour_camps.values_list(facility, flat=True)
+                avg_rating = sum(self.calculate_rating(cond) for cond in conditions if cond) / len(conditions)
+                # Remove 'Condition' from the facility name
+                facility_name = facility.replace('Condition', '')
+                facility_ratings[facility_name] = round(avg_rating, 2)
+                overall_rating_sum += avg_rating
+
+            overall_rating = round(overall_rating_sum / total_facilities, 2)
+
+            # Prepare remarks and their dates
+            remarks_array = [
+                {'dateOfMonitoring': camp.dateOfMonitoring, 'remark': camp.remarks}
+                for camp in labour_camps
+            ]
+
+            return Response({
+                'Message': 'Data fetched successfully',
+                'status': 'success',
+                'facilityRatings': facility_ratings,
+                'overallRating': overall_rating,
+                'remarksArray': remarks_array,
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response(
+                {'Message': f'An error occurred: {str(e)}', 'status': 'Failed'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
