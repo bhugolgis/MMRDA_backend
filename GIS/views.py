@@ -590,17 +590,29 @@ class LabourCampRating(generics.ListAPIView):
 
             facility_ratings = {}
             overall_rating_sum = 0
-            total_facilities = len(facilities)
+            valid_facility_count = 0
 
             for facility in facilities:
-                conditions = labour_camps.values_list(facility, flat=True)
-                avg_rating = sum(self.calculate_rating(cond) for cond in conditions if cond) / len(conditions)
-                # Remove 'Condition' from the facility name
-                facility_name = facility.replace('Condition', '')
-                facility_ratings[facility_name] = round(avg_rating, 2)
-                overall_rating_sum += avg_rating
+                conditions = list(labour_camps.values_list(facility, flat=True))
+                valid_conditions = [cond for cond in conditions if cond and cond != '']
 
-            overall_rating = round(overall_rating_sum / total_facilities, 2)
+                if not valid_conditions:
+                    continue  # Skip if no valid data for this facility
+
+                avg_rating = sum(self.calculate_rating(cond) for cond in valid_conditions) / len(valid_conditions)
+                facility_name = facility.replace('Condition', '')
+                rating_text = 'Good' if avg_rating >= 4 else 'Average' if avg_rating >= 2 else 'Poor'
+
+                facility_ratings[facility_name] = {
+                    'rating': round(avg_rating, 2),
+                    'ratingText': rating_text,
+                }
+
+                overall_rating_sum += avg_rating
+                valid_facility_count += 1
+
+            overall_rating = round(overall_rating_sum / valid_facility_count, 2) if valid_facility_count > 0 else 0
+            overall_rating_text = 'Good' if overall_rating >= 4 else 'Average' if overall_rating >= 2 else 'Poor'
 
             # Prepare remarks and their dates
             remarks_array = [
@@ -612,7 +624,10 @@ class LabourCampRating(generics.ListAPIView):
                 'Message': 'Data fetched successfully',
                 'status': 'success',
                 'facilityRatings': facility_ratings,
-                'overallRating': overall_rating,
+                'overallRating': {
+                    'rating': overall_rating,
+                    'ratingText': overall_rating_text,
+                },
                 'remarksArray': remarks_array,
             }, status=status.HTTP_200_OK)
 
