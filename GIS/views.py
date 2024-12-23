@@ -614,9 +614,13 @@ class LabourCampRating(generics.ListAPIView):
             overall_rating = round(overall_rating_sum / valid_facility_count, 2) if valid_facility_count > 0 else 0
             overall_rating_text = 'Good' if overall_rating >= 4 else 'Average' if overall_rating >= 2 else 'Poor'
 
-            # Prepare remarks and their dates
+            # Prepare remarks, their dates, and usernames
             remarks_array = [
-                {'dateOfMonitoring': camp.dateOfMonitoring, 'remark': camp.remarks}
+                {
+                    'dateOfMonitoring': camp.dateOfMonitoring,
+                    'remark': camp.remarks,
+                    'submittedBy': camp.user.username if camp.user else 'Unknown'
+                }
                 for camp in labour_camps
             ]
 
